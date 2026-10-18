@@ -1,0 +1,20 @@
+{
+  "name": "santri",
+  "version": "1.0.0",
+  "description": "SANTRI — Sistem Aplikasi Notifikasi dan Tamu Religius Integritas (CodeIgniter 4 + Tailwind CSS)",
+  "private": true,
+  "scripts": {
+    "build:css": "@tailwindcss/cli -i themes/app.css -o public/css/app.css --minify",
+    "watch:css": "@tailwindcss/cli -i themes/app.css -o public/css/app.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinserafim93/santri.git"
+  },
+  "author": "Martinus Lukas",
+  "license": "MIT",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}
