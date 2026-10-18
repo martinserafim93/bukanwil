@@ -22,5 +22,14 @@ $routes->get('admin/tamu/(:num)', 'Admin\\TamuAdmin::detail/$1');
 $routes->post('admin/tamu/(:num)/baca', 'Admin\\TamuAdmin::tandaiBaca/$1');
 $routes->post('admin/tamu/baca-semua', 'Admin\\TamuAdmin::bacaSemua');
 
+// Admin user management routes (CRUD)
+$routes->get('admin/admin-user', 'Admin\\AdminUser::index');
+$routes->get('admin/admin-user/buat', 'Admin\\AdminUser::buat');
+$routes->post('admin/admin-user/buat', 'Admin\\AdminUser::simpan');
+$routes->get('admin/admin-user/(:num)/edit', 'Admin\\AdminUser::edit/$1');
+$routes->post('admin/admin-user/(:num)/edit', 'Admin\\AdminUser::update/$1');
+$routes->get('admin/admin-user/(:num)/hapus', 'Admin\\AdminUser::konfirmasi/$1');
+$routes->post('admin/admin-user/(:num)/hapus', 'Admin\\AdminUser::hapus/$1');
+
 // CI4 default home route — kept for reference, overridden above.
 $routes->get('/home', 'Home::index');

@@ -1,0 +1,82 @@
+<?php
+/**
+ * Admin user list — SANTRI
+ *
+ * @var array<int, array<string, mixed>> $admins
+ * @var int $jumlahSuperadmin
+ */
+
+$this->extend('layouts/admin');
+
+?>
+
+<?php $this->section('title'); ?>
+Kelola Admin
+<?php $this->endSection(); ?>
+
+<?php $this->section('content'); ?>
+
+<div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <h1 class="text-xl font-bold">Kelola Admin</h1>
+    <a href="<?= site_url('admin/admin-user/buat') ?>" class="btn-primary text-sm">
+        Tambah Admin
+    </a>
+</div>
+
+<?php if (session('sukses')): ?>
+    <div class="bg-success-bg border border-success text-success px-4 py-3 rounded mb-6" role="alert">
+        <?= esc((string) session('sukses')) ?>
+    </div>
+<?php endif; ?>
+
+<?php if (session('error')): ?>
+    <div class="bg-danger-bg border border-danger text-danger px-4 py-3 rounded mb-6" role="alert">
+        <?= esc((string) session('error')) ?>
+    </div>
+<?php endif; ?>
+
+<div class="bg-surface border border-border overflow-x-auto">
+    <table class="w-full text-left text-sm">
+        <thead class="bg-surface-raised border-b border-border">
+            <tr>
+                <th class="px-4 py-3 font-semibold text-ink-muted">#</th>
+                <th class="px-4 py-3 font-semibold text-ink-muted">Nama</th>
+                <th class="px-4 py-3 font-semibold text-ink-muted">Username</th>
+                <th class="px-4 py-3 font-semibold text-ink-muted">Role</th>
+                <th class="px-4 py-3 font-semibold text-ink-muted">Aksi</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-border">
+            <?php foreach ($admins as $index => $row): ?>
+                <?php
+                    $isSuperadmin = $row['role'] === 'superadmin';
+                    $badgeClass = $isSuperadmin
+                        ? 'bg-brand-100 text-brand-700'
+                        : 'bg-surface-raised text-ink-muted border border-border';
+                ?>
+                <tr class="hover:bg-surface-raised/50">
+                    <td class="px-4 py-3 text-ink-muted"><?= esc((string) ((int) $index + 1)) ?></td>
+                    <td class="px-4 py-3 font-medium text-ink"><?= esc((string) ($row['nama'] ?? '')) ?></td>
+                    <td class="px-4 py-3 text-ink"><?= esc((string) ($row['username'] ?? '')) ?></td>
+                    <td class="px-4 py-3">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= $badgeClass ?>">
+                            <?= esc((string) ($row['role'] ?? '')) ?>
+                        </span>
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="flex items-center gap-3">
+                            <a href="<?= site_url('admin/admin-user/' . ((int) $row['id']) . '/edit') ?>" class="text-brand-600 hover:text-brand-700 font-medium">
+                                Edit
+                            </a>
+                            <a href="<?= site_url('admin/admin-user/' . ((int) $row['id']) . '/hapus') ?>" class="text-danger hover:text-danger/80 font-medium">
+                                Hapus
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+<?php $this->endSection(); ?>
