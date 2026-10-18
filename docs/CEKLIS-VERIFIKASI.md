@@ -46,13 +46,13 @@ Poin: (1) File nyata · (2) Build/test lolos · (3) Review loop tertutup · (4) 
 - [x] 5. Secret aman — password bcrypt cost 12, tak pernah tampil di view
 - [x] 6. Push terverifikasi — `9723fa6` (4a), `804d0f8` (4b) — author Martinus Lukas
 
-## Fase 5 — Uji lokal (php -S + smoke test + keamanan)
-- [ ] 1. File nyata
-- [ ] 2. Build/test
-- [ ] 3. Review loop tertutup
-- [ ] 4. Tidak menggantung
-- [ ] 5. Secret aman
-- [ ] 6. Push terverifikasi
+## Fase 5 — Uji lokal (smoke test + keamanan)
+- [x] 1. File nyata — perbaikan Filters.php (auth /admin), detail.php (SRI Leaflet + CSS head), layouts/admin.php (slot styles), public/css/app.css (rebuild)
+- [x] 2. Build/test — smoke test semua route (publik 200, admin 302/200, 404 benar); build Tailwind ulang (h-80/h-72/h-64 masuk); upload finfo_file + .htaccess blokir eksekusi; CSRF aktif
+- [x] 3. Review loop tertutup — temuan runtime (3 bug: filter /admin, SRI Leaflet, CSS head) difix koding, DIVERIFIKASI ulang render peta (320px + marker + tile)
+- [x] 4. Tidak menggantung — pra-deploy TODO: cookieSecure=true saat HTTPS (Fase 6); audit-log sebagai enhancement
+- [x] 5. Secret aman — seed admin tetap superadmin/Admin@2026 (hash bcrypt), tak ada secret di commit
+- [x] 6. Push terverifikasi — `90abfca` (Martinus Lukas)
 
 ## Fase 6 — Paket & deploy FTP (InfinityFree)
 - [ ] 1. File nyata
