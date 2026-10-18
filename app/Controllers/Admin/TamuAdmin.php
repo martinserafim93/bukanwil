@@ -104,8 +104,20 @@ class TamuAdmin extends BaseController
      */
     public function detail(int $id): string
     {
-        // Implemented in Fase 3c-2.
-        return 'Detail tamu akan diimplementasikan di Fase 3c-2.';
+        $tamuModel = new TamuModel();
+        $tamu = $tamuModel->find($id);
+
+        if ($tamu === null) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $tamuModel->tandaiBaca($id);
+
+        return view('admin/tamu/detail', [
+            'pengaturan'  => $this->pengaturan,
+            'unreadCount' => $this->unreadCount,
+            'tamu'        => $tamu,
+        ]);
     }
 
     /**
@@ -113,8 +125,13 @@ class TamuAdmin extends BaseController
      */
     public function tandaiBaca(int $id): ResponseInterface
     {
-        // Implemented in Fase 3c-2.
-        return $this->response->setStatusCode(501);
+        (new TamuModel())->tandaiBaca($id);
+
+        if ($this->request->isAJAX() || strpos($this->request->getHeaderLine('Accept'), 'application/json') !== false) {
+            return $this->response->setJSON(['success' => true]);
+        }
+
+        return redirect()->back();
     }
 
     /**
@@ -122,7 +139,12 @@ class TamuAdmin extends BaseController
      */
     public function bacaSemua(): ResponseInterface
     {
-        // Implemented in Fase 3c-2.
-        return $this->response->setStatusCode(501);
+        (new TamuModel())->tandaiBacaSemua();
+
+        if ($this->request->isAJAX() || strpos($this->request->getHeaderLine('Accept'), 'application/json') !== false) {
+            return $this->response->setJSON(['success' => true]);
+        }
+
+        return redirect()->to('/admin/tamu');
     }
 }
