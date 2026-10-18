@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `pengaturan` (
 -- Seed pengaturan default
 INSERT INTO `pengaturan` (`key`, `value`) VALUES
     ('judul_aplikasi',    'SANTRI — Buku Tamu PTSP'),
-    ('nama_instansi_ptsp','PTSP Kanwil Kemenag Provinsi Kalimantan Utara'),
+    ('nama_instansi_ptsp','Kantor Wilayah Kementerian Agama Provinsi Kalimantan Utara'),
     ('teks_header',       'Selamat datang. Silakan isi buku tamu sebelum melanjutkan pelayanan.')
 ON DUPLICATE KEY UPDATE `value` = VALUES(`value`);
 

@@ -16,6 +16,10 @@ $this->extend('layouts/admin');
 
 <?php $this->section('content'); ?>
 
+<div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <h1 class="text-xl font-bold"><?= esc('Pengaturan Aplikasi') ?></h1>
+</div>
+
 <?php if (session('sukses')): ?>
     <div class="bg-success-bg border border-success text-success px-4 py-3 rounded mb-6" role="alert">
         <?= esc((string) session('sukses')) ?>
@@ -28,9 +32,7 @@ $this->extend('layouts/admin');
     </div>
 <?php endif; ?>
 
-<div class="bg-surface border border-border p-6 max-w-2xl">
-    <h1 class="text-xl font-bold mb-6"><?= esc('Pengaturan Aplikasi') ?></h1>
-
+<div class="bg-surface border border-border p-6">
     <form action="<?= site_url('admin/pengaturan') ?>" method="post" class="space-y-5">
         <?= csrf_field() ?>
 

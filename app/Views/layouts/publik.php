@@ -28,17 +28,18 @@
                     alt="Logo Kementerian Agama"
                     class="h-16 w-auto md:h-20 object-contain mb-4"
                 >
-                <h1 class="text-3xl md:text-4xl font-serif text-brand-700 leading-tight">
-                    <?= esc($pengaturan['judul_aplikasi'] ?? 'SANTRI') ?>
-                </h1>
-                <p class="text-sm md:text-base font-semibold text-ink mt-1">
-                    <?= esc($pengaturan['nama_instansi_ptsp'] ?? 'Kanwil Kemenag Provinsi Kalimantan Utara') ?>
+                <p class="text-xs font-sans font-semibold uppercase tracking-[0.2em] text-accent-300 mb-2">
+                    <?= esc('Buku Tamu') ?>
                 </p>
-                <?php if (! empty($pengaturan['teks_header'])): ?>
-                    <p class="text-sm text-ink-muted mt-1"><?= esc($pengaturan['teks_header']) ?></p>
-                <?php else: ?>
-                    <p class="text-sm text-ink-muted mt-1">Pelayanan Terpadu Satu Pintu</p>
-                <?php endif; ?>
+                <h1 class="text-3xl md:text-4xl font-serif text-brand-700 leading-tight">
+                    <?= esc('SANTRI') ?>
+                </h1>
+                <p class="text-base md:text-lg italic text-ink-muted mt-1">
+                    <?= esc('Sistem Aplikasi Notifikasi dan Tamu Religius Integritas') ?>
+                </p>
+                <p class="text-sm md:text-base font-semibold text-ink mt-1">
+                    <?= esc($pengaturan['nama_instansi_ptsp'] ?? 'Kantor Wilayah Kementerian Agama Provinsi Kalimantan Utara') ?>
+                </p>
             </div>
         </div>
     </header>
