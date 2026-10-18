@@ -31,5 +31,9 @@ $routes->post('admin/admin-user/(:num)/edit', 'Admin\\AdminUser::update/$1');
 $routes->get('admin/admin-user/(:num)/hapus', 'Admin\\AdminUser::konfirmasi/$1');
 $routes->post('admin/admin-user/(:num)/hapus', 'Admin\\AdminUser::hapus/$1');
 
+// Admin settings
+$routes->get('admin/pengaturan', 'Admin\\Pengaturan::index');
+$routes->post('admin/pengaturan', 'Admin\\Pengaturan::simpan');
+
 // CI4 default home route — kept for reference, overridden above.
 $routes->get('/home', 'Home::index');
