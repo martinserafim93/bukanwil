@@ -4,7 +4,7 @@ Jawaban atas "PERTANYAAN UNTUK LEAD" dari agen `arsitek` (docs/SPEC.md §9 dan b
 
 ## Keputusan final (disetujui Martinus, 2026-10-18)
 
-1. **Koordinat lokasi (lat/lng): OPSIONAL** (nullable). Geolokasi bisa ditolak browser — form tetap harus bisa disubmit tanpa koordinat. Bila tersedia, simpan; bila tidak, kosongkan.
+1. **Koordinat lokasi: DIHAPUS** (2026-10-18). Setelah review awal, fitur geolokasi dinilai tidak esensial untuk buku tamu PTSP — data kunjungan cukup dengan identitas tamu dan keperluan. Menghapus lat/lng menyederhanakan form publik (prinsip YAGNI) dan menghilangkan ketergantungan pada geolocation API browser yang bisa ditolak pengguna. Peta Leaflet juga dihapus dari halaman detail.
 2. **Foto: OPSIONAL** (nullable), sesuai skema DB (`foto` NULL). Boleh diisi, tidak wajib.
 3. **HTTPS: AKTIF** → set `$secure = true` di `app/Config/Cookie.php`. InfinityFree menyediakan SSL gratis. (Untuk lokal dev, `koding` boleh membuat `$secure` menyesuaikan `ENVIRONMENT`, tapi produksi wajib `true`.)
 4. **Rate limit form publik: berbasis SESSION** (FileHandler). Terima keterbatasannya; tanpa Redis (batasan hosting).

@@ -41,12 +41,12 @@ SANTRI hadir sebagai pengganti Google Form sekaligus CMS internal — tetap ring
 
 | Kode | Fitur |
 |------|-------|
-| F-01 | Form buku tamu publik dengan 10 field (termasuk foto dan koordinat lokasi) |
+| F-01 | Form buku tamu publik dengan 8 field (termasuk foto) |
 | F-02 | Anti-spam: honeypot field + rate limit form publik |
 | F-03 | Login/logout admin dengan proteksi CSRF dan session hardening |
 | F-04 | Dashboard admin: statistik ringkas dan grafik tren kunjungan |
 | F-05 | Daftar tamu: pagination, pencarian, filter, urutkan |
-| F-06 | Detail tamu: semua field + foto + peta lokasi (Leaflet + OpenStreetMap) |
+| F-06 | Detail tamu: semua field + foto |
 | F-07 | Export daftar tamu ke CSV sesuai filter aktif |
 | F-08 | Notifikasi in-app: badge tamu baru belum dibaca + tandai dibaca |
 | F-09 | Kelola admin: CRUD user admin, ubah password, role superadmin/admin |
@@ -68,7 +68,6 @@ SANTRI hadir sebagai pengganti Google Form sekaligus CMS internal — tetap ring
 - Tidak ada Redis/Memcached — rate limiting menggunakan session PHP.
 - Tidak ada queue/worker — semua proses sinkron.
 - Foto disimpan di filesystem (`public/uploads/foto/`), bukan blob DB.
-- Peta (Leaflet + OSM tile) membutuhkan koneksi internet saat viewing detail tamu.
 - Chart.js dimuat dari CDN (versi di-pin di view untuk stabilitas).
 - Aplikasi dalam Bahasa Indonesia.
 

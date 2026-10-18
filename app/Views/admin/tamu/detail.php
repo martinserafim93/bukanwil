@@ -91,38 +91,6 @@ Detail Tamu
             >
         </div>
     <?php endif; ?>
-
-    <?php if (! empty($tamu['lat']) && ! empty($tamu['lng'])): ?>
-        <div class="bg-surface border border-border p-6">
-            <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted mb-4">Lokasi</p>
-            <div id="map" class="h-80 w-full rounded border border-border"></div>
-            <p class="mt-2 text-xs text-ink-muted">
-                Koordinat: <?= esc((string) $tamu['lat']) ?>, <?= esc((string) $tamu['lng']) ?>
-            </p>
-        </div>
-    <?php endif; ?>
 </div>
 
 <?php $this->endSection(); ?>
-
-<?php if (! empty($tamu['lat']) && ! empty($tamu['lng'])): ?>
-    <?php $this->section('styles'); ?>
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    <?php $this->endSection(); ?>
-    <?php $this->section('scripts'); ?>
-        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const lat = <?= (float) $tamu['lat'] ?>;
-                const lng = <?= (float) $tamu['lng'] ?>;
-                const map = L.map('map').setView([lat, lng], 15);
-
-                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '© OpenStreetMap'
-                }).addTo(map);
-
-                L.marker([lat, lng]).addTo(map);
-            });
-        </script>
-    <?php $this->endSection(); ?>
-<?php endif; ?>

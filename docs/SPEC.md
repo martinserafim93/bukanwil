@@ -118,8 +118,6 @@ Lihat DDL lengkap di `database/schema.sql`. Ringkasan di bawah.
 | jenis_kelamin   | ENUM('Laki-laki','Perempuan')  | NO   | —                 |                                   |
 | asal_pengunjung | ENUM('perorangan','instansi','lembaga')  | NO   | —                 |                                   |
 | nama_instansi   | VARCHAR(255)                   | YES  | NULL              | Wajib diisi bila asal ∈ {instansi, lembaga}  |
-| lat             | DECIMAL(10,8)                  | YES  | NULL              | Koordinat lintang                 |
-| lng             | DECIMAL(11,8)                  | YES  | NULL              | Koordinat bujur                   |
 | alamat          | TEXT                           | NO   | —                 |                                   |
 | no_hp           | VARCHAR(20)                    | NO   | —                 | Format HP/WA Indonesia            |
 | keperluan       | TEXT                           | NO   | —                 |                                   |
@@ -218,7 +216,7 @@ santri/
         ├── css/
         │   └── app.css             (output Tailwind v4 compiled)
         └── js/
-            ├── form-publik.js      (geolocation + conditional field)
+            ├── form-publik.js      (conditional field, validasi sisi klien)
             └── admin.js            (misc: konfirmasi hapus, dll)
 ```
 
@@ -295,8 +293,6 @@ Input (multipart/form-data):
 | alamat          | string  | Ya       |                                  |
 | no_hp           | string  | Ya       | Regex format Indonesia           |
 | keperluan       | string  | Ya       |                                  |
-| lat             | string  | Tidak    | Desimal; kosong bila tidak ada   |
-| lng             | string  | Tidak    | Desimal; kosong bila tidak ada   |
 | foto            | file    | Ya       | jpg/jpeg/png/webp, max 2 MB      |
 | _hp             | string  | Tidak    | Honeypot — HARUS kosong          |
 | csrf_token      | string  | Ya       | CI4 CSRF                         |
@@ -359,7 +355,7 @@ Output:
 - Header: `Content-Disposition: attachment; filename="tamu_export_YYYYMMDD_HHiiss.csv"`
 - Body: BOM UTF-8 (\xEF\xBB\xBF) + baris header kolom + data via fputcsv
 - Kolom CSV: id, nama, jenis_kelamin, asal_pengunjung, nama_instansi, alamat, no_hp,
-             keperluan, lat, lng, foto, created_at
+             keperluan, foto, created_at
 
 ### 5.6 GET /admin/tamu/(:num) — Detail Tamu
 
@@ -446,8 +442,6 @@ Output sukses: `redirect('/admin/pengaturan')->with('sukses', 'Pengaturan berhas
 | alamat          | `required`                                                         |
 | no_hp           | `required\|regex_match[/^(0\|62\|\+62)[0-9]{8,13}$/]`             |
 | keperluan       | `required`                                                         |
-| lat             | `permit_empty\|decimal`                                            |
-| lng             | `permit_empty\|decimal`                                            |
 | foto            | `uploaded[foto]\|max_size[foto,2048]\|mime_in[foto,image/jpeg,image/png,image/webp]\|ext_in[foto,jpg,jpeg,png,webp]` |
 
 Tambahan non-CI4-Validation (cek manual di controller sebelum validate()):
@@ -572,25 +566,20 @@ Mobile-first: form publik didesain untuk layar 375px ke atas.
 
 ## PERTANYAAN UNTUK LEAD
 
-1. **Koordinat wajib atau opsional?**
-   Saat ini `lat` dan `lng` di skema DB adalah `NULL`-able. Jika koordinat dianggap
-   WAJIB (field required), form tidak bisa disubmit bila geolocation ditolak dan user
-   tidak isi manual. Konfirmasi: boleh kosong (NULL) atau harus ada?
-
-2. **HTTPS di InfinityFree?**
+1. **HTTPS di InfinityFree?**
    InfinityFree free tier menyediakan sertifikat SSL otomatis. Bila domain sudah
    dikonfigurasi dengan HTTPS, set `$secure = true` di Cookie.php. Konfirmasi status HTTPS.
 
-3. **Foto wajib atau opsional?**
+2. **Foto wajib atau opsional?**
    Spesifikasi menyebutkan upload foto tanpa keterangan "optional". Saat ini
    diperlakukan sebagai WAJIB di aturan validasi. Konfirmasi: apakah foto boleh
    dilewati?
 
-4. **Rate limit berbasis session vs. IP?**
+3. **Rate limit berbasis session vs. IP?**
    Saat ini rate limit form publik dan login menggunakan session PHP (tidak perlu
    Redis). Ini berarti pengguna yang membersihkan cookie bisa melewatinya. Untuk
    hosting shared tanpa Redis, ini batasan yang disadari. Terima?
 
-5. **Tandai dibaca: otomatis saat buka detail atau tombol manual?**
+4. **Tandai dibaca: otomatis saat buka detail atau tombol manual?**
    Saat ini spec: otomatis tandai is_read=1 saat admin membuka halaman detail.
    Alternatif: tombol eksplisit "Tandai Dibaca". Pilih salah satu.

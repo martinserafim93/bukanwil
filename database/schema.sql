@@ -19,9 +19,6 @@ CREATE TABLE IF NOT EXISTS `tamu` (
     `asal_pengunjung`  ENUM('perorangan','instansi','lembaga') NOT NULL,
     -- Wajib di level aplikasi bila asal_pengunjung IN ('instansi','lembaga')
     `nama_instansi`    VARCHAR(255)        NULL     DEFAULT NULL,
-    -- lat: DECIMAL(10,8) cukup untuk presisi ~1mm; lng perlu 11 digit untuk negatif
-    `lat`              DECIMAL(10,8)       NULL     DEFAULT NULL,
-    `lng`              DECIMAL(11,8)       NULL     DEFAULT NULL,
     `alamat`           TEXT                NOT NULL,
     `no_hp`            VARCHAR(20)         NOT NULL,
     `keperluan`        TEXT                NOT NULL,
@@ -87,12 +84,19 @@ CREATE TABLE IF NOT EXISTS `pengaturan` (
 -- Jalankan manual (mis. phpMyAdmin) hanya bila tabel `tamu` sudah ada
 -- dari versi sebelumnya. Instalasi baru: cukup jalankan DDL di atas.
 --
--- Perubahan: nilai enum `asal_pengunjung` ditambah 'lembaga'.
+-- Perubahan 1: nilai enum `asal_pengunjung` ditambah 'lembaga'.
 -- Aman dijalankan berulang (idempoten) — nilai lama tidak berubah,
 -- hanya daftar nilai yang diizinkan bertambah.
 -- ----------------------------------------------------------
 -- ALTER TABLE `tamu`
 --     MODIFY `asal_pengunjung` ENUM('perorangan','instansi','lembaga') NOT NULL;
+--
+-- Perubahan 2 (2026-10-18): hapus kolom lat dan lng (fitur koordinat dihapus).
+-- Aman dijalankan berulang — bila kolom sudah tidak ada, perintah gagal tanpa
+-- merusak tabel. Jalankan satu per satu bila ingin menangani error dengan aman.
+-- ----------------------------------------------------------
+-- ALTER TABLE `tamu` DROP COLUMN `lat`;
+-- ALTER TABLE `tamu` DROP COLUMN `lng`;
 -- ==========================================================
 
 

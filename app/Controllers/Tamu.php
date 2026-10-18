@@ -56,8 +56,6 @@ class Tamu extends BaseController
             'alamat'          => 'required',
             'no_hp'           => 'required|regex_match[/^(0|62|\+62)[0-9]{8,13}$/]',
             'keperluan'       => 'required',
-            'lat'             => 'permit_empty|decimal',
-            'lng'             => 'permit_empty|decimal',
             'foto'            => [
                 'rules' => 'permit_empty|max_size[foto,2048]|mime_in[foto,image/jpeg,image/png,image/webp]|ext_in[foto,jpg,jpeg,png,webp]',
             ],
@@ -82,9 +80,6 @@ class Tamu extends BaseController
         $fotoPath = $this->prosesUploadFoto();
 
         // 6. Prepare data and insert.
-        $lat = $this->request->getPost('lat');
-        $lng = $this->request->getPost('lng');
-
         $data = [
             'nama'            => $this->request->getPost('nama'),
             'jenis_kelamin'   => $this->request->getPost('jenis_kelamin'),
@@ -93,8 +88,6 @@ class Tamu extends BaseController
             'alamat'          => $this->request->getPost('alamat'),
             'no_hp'           => $this->request->getPost('no_hp'),
             'keperluan'       => $this->request->getPost('keperluan'),
-            'lat'             => is_numeric($lat) ? (float) $lat : null,
-            'lng'             => is_numeric($lng) ? (float) $lng : null,
             'foto'            => $fotoPath,
         ];
 

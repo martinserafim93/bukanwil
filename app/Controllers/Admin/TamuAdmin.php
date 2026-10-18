@@ -72,8 +72,6 @@ class TamuAdmin extends BaseController
             'alamat',
             'no_hp',
             'keperluan',
-            'lat',
-            'lng',
             'foto',
             'created_at',
         ];

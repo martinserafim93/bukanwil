@@ -95,24 +95,6 @@ $this->section('content');
                 </div>
 
                 <div>
-                    <span class="form-label block">Lokasi</span>
-                    <button type="button" id="btn-deteksi-lokasi" class="btn-secondary text-sm">Deteksi Lokasi Otomatis</button>
-                    <p id="status-lokasi" class="form-hint mt-2 text-sm text-ink-muted" aria-live="polite"></p>
-                    <input type="hidden" id="lat" name="lat" value="<?= esc(old('lat')) ?>">
-                    <input type="hidden" id="lng" name="lng" value="<?= esc(old('lng')) ?>">
-                    <div id="input-manual-lokasi" style="display: none;" class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label for="lat_manual" class="form-label">Latitude</label>
-                            <input type="text" id="lat_manual" name="lat_manual" class="form-field" placeholder="-2.xxxxxx">
-                        </div>
-                        <div>
-                            <label for="lng_manual" class="form-label">Longitude</label>
-                            <input type="text" id="lng_manual" name="lng_manual" class="form-field" placeholder="117.xxxxxx">
-                        </div>
-                    </div>
-                </div>
-
-                <div>
                     <label for="foto" class="form-label">Foto Kunjungan</label>
                     <input type="file" id="foto" name="foto" accept="image/jpeg,image/png,image/webp" class="form-field file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100">
                     <p class="form-hint">Maks 2 MB JPG/PNG/WebP (opsional)</p>

@@ -22,8 +22,8 @@ SANTRI hadir sebagai solusi pengganti: aplikasi buku tamu self-hosted yang tetap
 
 Aplikasi web full-stack sederhana dengan dua interface:
 
-1. **Form buku tamu publik** — pengunjung PTSP mengisi data (nama, jenis kelamin, asal, instansi, alamat, no HP, keperluan, foto, koordinat lokasi) sekali per kunjungan, tanpa akun.
-2. **CMS admin** — operator/admin PTSP login, melihat dashboard statistik, menelusuri daftar tamu dengan filter/pencarian/pagination, membuka detail lengkap (termasuk peta lokasi via Leaflet + OpenStreetMap), dan mengekspor data ke CSV.
+1. **Form buku tamu publik** — pengunjung PTSP mengisi data (nama, jenis kelamin, asal, instansi, alamat, no HP, keperluan, foto) sekali per kunjungan, tanpa akun.
+2. **CMS admin** — operator/admin PTSP login, melihat dashboard statistik, menelusuri daftar tamu dengan filter/pencarian/pagination, membuka detail lengkap, dan mengekspor data ke CSV.
 
 Fitur keamanan built-in: anti-spam (honeypot + rate limit), CSRF protection, upload file validation, session hardening, prepared statements.
 
@@ -57,8 +57,7 @@ Notifikasi in-app: badge jumlah tamu baru belum dibaca di topbar admin, otomatis
 | **Backend**          | CodeIgniter 4.7.5 + PHP 8.3         | Framework MVC ringan, kompatibel hosting shared     |
 | **Database**         | MySQL 8.0                           | Standar InfinityFree                                |
 | **Frontend (CSS)**   | Tailwind CSS v4.3.3 (CSS-first `@theme`) | Design tokens eksplisit, anti-slop, mobile-first |
-| **Frontend (JS)**    | JavaScript native                   | No build step di production (Leaflet + Chart.js CDN) |
-| **Peta**             | Leaflet + OpenStreetMap tile        | Open-source, no API key                             |
+| **Frontend (JS)**    | JavaScript native                   | No build step di production (Chart.js CDN)           |
 | **Chart**            | Chart.js 4.4.x (CDN)                | Dashboard statistik sederhana                       |
 | **Dependency Mgmt**  | Composer 2.x + npm                  | CI4 via Composer, Tailwind CLI via npm              |
 
@@ -72,7 +71,7 @@ Batasan yang harus diakomodasi:
 2. **Tidak ada Redis/Memcached** — rate limiting menggunakan session PHP (FileHandler).
 3. **Tidak ada queue/worker** — semua proses sinkron.
 4. **Upload file** disimpan di filesystem (`public/uploads/foto/`), bukan blob DB.
-5. **CDN eksternal** — Chart.js dan Leaflet dimuat dari CDN (versi di-pin untuk stabilitas).
+5. **CDN eksternal** — Chart.js dimuat dari CDN (versi di-pin untuk stabilitas).
 6. **Entry point** `public/index.php` — domain diarahkan ke folder `public/` via `.htaccess`.
 
 ---
@@ -83,12 +82,12 @@ Batasan yang harus diakomodasi:
 
 | Kode  | Fitur                                                                                      |
 |-------|--------------------------------------------------------------------------------------------|
-| F-01  | Form buku tamu publik dengan 10 field (termasuk foto dan koordinat lokasi)               |
+| F-01  | Form buku tamu publik dengan 8 field (termasuk foto)               |
 | F-02  | Anti-spam: honeypot field + rate limit form publik (3 submit per 10 menit)               |
 | F-03  | Login/logout admin dengan proteksi CSRF, rate limit login (5 gagal per 15 menit), session hardening |
 | F-04  | Dashboard admin: statistik ringkas (total tamu, hari ini, belum dibaca, per jenis kelamin, per asal, top 5 keperluan) + grafik tren 7 hari (Chart.js) |
 | F-05  | Daftar tamu: pagination (20/halaman), pencarian (nama/no_hp/instansi), filter (tanggal range, jenis_kelamin, asal, keperluan), urutkan (created_at/nama asc/desc) |
-| F-06  | Detail tamu: semua field + foto + peta lokasi (Leaflet + OpenStreetMap marker)           |
+| F-06  | Detail tamu: semua field + foto           |
 | F-07  | Export daftar tamu ke CSV sesuai filter aktif (BOM UTF-8 untuk Excel)                    |
 | F-08  | Notifikasi in-app: badge tamu baru belum dibaca + tandai dibaca (otomatis saat buka detail) + tandai semua dibaca |
 | F-09  | Kelola admin: CRUD user admin, ubah password, role superadmin/admin (hapus hanya superadmin) |
@@ -140,11 +139,10 @@ Warna brand Kemenag:
 
 Dicatat di SPEC.md §9 — belum ada jawaban final:
 
-1. **Koordinat wajib atau opsional?** Saat ini `lat`/`lng` nullable di DB. Jika wajib, form tidak bisa disubmit bila geolocation ditolak dan user tidak isi manual.
-2. **HTTPS di InfinityFree?** Bila domain sudah dikonfigurasi dengan SSL, set `$secure = true` di Cookie.php. Konfirmasi status HTTPS.
-3. **Foto wajib atau opsional?** Saat ini diperlakukan sebagai WAJIB di aturan validasi. Konfirmasi apakah foto boleh dilewati.
-4. **Rate limit berbasis session vs. IP?** Session PHP (tidak perlu Redis) — pengguna yang membersihkan cookie bisa melewatinya. Terima batasan ini?
-5. **Tandai dibaca: otomatis saat buka detail atau tombol manual?** Saat ini spec: otomatis set `is_read=1` saat admin membuka halaman detail. Alternatif: tombol eksplisit.
+1. **HTTPS di InfinityFree?** Bila domain sudah dikonfigurasi dengan SSL, set `$secure = true` di Cookie.php. Konfirmasi status HTTPS.
+2. **Foto wajib atau opsional?** Saat ini diperlakukan sebagai WAJIB di aturan validasi. Konfirmasi apakah foto boleh dilewati.
+3. **Rate limit berbasis session vs. IP?** Session PHP (tidak perlu Redis) — pengguna yang membersihkan cookie bisa melewatinya. Terima batasan ini?
+4. **Tandai dibaca: otomatis saat buka detail atau tombol manual?** Saat ini spec: otomatis set `is_read=1` saat admin membuka halaman detail. Alternatif: tombol eksplisit.
 
 ---
 

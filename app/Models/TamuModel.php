@@ -19,8 +19,6 @@ class TamuModel extends Model
         'alamat',
         'no_hp',
         'keperluan',
-        'lat',
-        'lng',
         'foto',
         'is_read',
     ];
