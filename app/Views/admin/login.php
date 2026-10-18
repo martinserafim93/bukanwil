@@ -1,10 +1,12 @@
 <?php
 /**
- * Shell halaman login admin — SANTRI
- * Belum ada logika autentikasi.
+ * Standalone admin login page — SANTRI
+ * Extends the public layout (no admin sidebar).
  */
-$this->extend('layouts/admin');
-$this->section('title'); echo 'Login'; $this->endSection();
+$this->extend('layouts/publik');
+$this->section('title');
+echo 'Login Administrator';
+$this->endSection();
 $this->section('content');
 ?>
 
@@ -15,15 +17,38 @@ $this->section('content');
             <p class="text-sm text-ink-muted">Masukkan akun untuk mengelola data tamu.</p>
         </div>
 
-        <form action="#" method="post" class="space-y-6">
+        <?php if (session('error')): ?>
+            <div class="mb-6 rounded-md bg-danger-bg border border-danger p-4 text-sm text-danger">
+                <?= esc(session('error')) ?>
+            </div>
+        <?php endif; ?>
+
+        <form action="<?= site_url('admin/login') ?>" method="post" class="space-y-6">
+            <?= csrf_field() ?>
+
             <div>
                 <label for="username" class="form-label">Username</label>
-                <input type="text" id="username" name="username" class="form-field" placeholder="Username admin" autocomplete="username">
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    value="<?= esc(old('username')) ?>"
+                    class="form-field"
+                    placeholder="Username admin"
+                    autocomplete="username"
+                >
             </div>
 
             <div>
                 <label for="password" class="form-label">Password</label>
-                <input type="password" id="password" name="password" class="form-field" placeholder="Password" autocomplete="current-password">
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="form-field"
+                    placeholder="Password"
+                    autocomplete="current-password"
+                >
             </div>
 
             <button type="submit" class="btn-primary w-full">Masuk</button>
