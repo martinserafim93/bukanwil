@@ -21,7 +21,8 @@ class Encryption extends BaseConfig
      * You need to ensure it is long enough for the cipher and mode you plan to use.
      * See the user guide for more info.
      */
-    public string $key = '';
+    // regenerate saat deploy produksi
+    public string $key = 'hex:070c74263b6382b2872ea355201d0b78078d76e66e70394fd1cf5327260cb552';
 
     /**
      * --------------------------------------------------------------------------

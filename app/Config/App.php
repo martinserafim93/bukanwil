@@ -16,7 +16,8 @@ class App extends BaseConfig
      *
      * E.g., http://example.com/
      */
-    public string $baseURL = 'http://localhost:8080/';
+    // TODO: ganti dengan URL produksi saat deploy
+    public string $baseURL = '/';
 
     /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.
@@ -40,7 +41,7 @@ class App extends BaseConfig
      * something else. If you have configured your web server to remove this file
      * from your site URIs, set this variable to an empty string.
      */
-    public string $indexPage = 'index.php';
+    public string $indexPage = '';
 
     /**
      * --------------------------------------------------------------------------
@@ -93,7 +94,7 @@ class App extends BaseConfig
      * strings (like currency markers, numbers, etc), that your program
      * should run under for this request.
      */
-    public string $defaultLocale = 'en';
+    public string $defaultLocale = 'id';
 
     /**
      * --------------------------------------------------------------------------
@@ -133,7 +134,7 @@ class App extends BaseConfig
      * @see https://www.php.net/manual/en/timezones.php for list of timezones
      *      supported by PHP.
      */
-    public string $appTimezone = 'UTC';
+    public string $appTimezone = 'Asia/Makassar';
 
     /**
      * --------------------------------------------------------------------------
@@ -198,5 +199,15 @@ class App extends BaseConfig
      * @see http://www.html5rocks.com/en/tutorials/security/content-security-policy/
      * @see http://www.w3.org/TR/CSP/
      */
+    // ------------------------------------------------------------------------
+    // Cross Site Request Forgery
+    // ------------------------------------------------------------------------
+    public bool   $CSRFProtection = true;
+    public string $CSRFTokenName  = 'csrf_token';
+    public string $CSRFCookieName = 'csrf_cookie';
+    public int    $CSRFExpire     = 7200;
+    public bool   $CSRFRegenerate  = true;
+    public array  $CSRFExcludeURIs = [];
+
     public bool $CSPEnabled = false;
 }

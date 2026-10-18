@@ -24,18 +24,19 @@ class Database extends Config
      *
      * @var array<string, mixed>
      */
+    // TODO: isi kredensial asli saat deploy
     public array $default = [
         'DSN'          => '',
         'hostname'     => 'localhost',
-        'username'     => '',
+        'username'     => 'root',
         'password'     => '',
-        'database'     => '',
+        'database'     => 'santri_db',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,
-        'DBDebug'      => true,
+        'DBDebug'      => false,
         'charset'      => 'utf8mb4',
-        'DBCollat'     => 'utf8mb4_general_ci',
+        'DBCollat'     => 'utf8mb4_unicode_ci',
         'swapPre'      => '',
         'encrypt'      => false,
         'compress'     => false,

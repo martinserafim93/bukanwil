@@ -8,42 +8,46 @@ use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use App\Models\PengaturanModel;
+use App\Models\TamuModel;
 
 /**
  * BaseController provides a convenient place for loading components
  * and performing functions that are needed by all your controllers.
- *
- * Extend this class in any new controllers:
- * ```
- *     class Home extends BaseController
- * ```
- *
- * For security, be sure to declare any new methods as protected or private.
  */
 abstract class BaseController extends Controller
 {
     /**
-     * Be sure to declare properties for any property fetch you initialized.
-     * The creation of dynamic property is deprecated in PHP 8.2.
+     * Loaded application settings (key => value).
+     *
+     * @var array<string, string>
      */
+    protected array $pengaturan = [];
 
-    // protected $session;
+    /**
+     * Current count of unread tamu records.
+     */
+    protected int $unreadCount = 0;
+
+    /**
+     * Helpers loaded globally.
+     *
+     * @var list<string>
+     */
+    protected $helpers = ['url', 'form', 'html'];
 
     /**
      * @param CLIRequest|IncomingRequest $request
-     *
-     * @return void
      */
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        // Load here all helpers you want to be available in your controllers that extend BaseController.
-        // Caution: Do not put the this below the parent::initController() call below.
-        // $this->helpers = ['form', 'url'];
-
-        // Caution: Do not edit this line.
+        // Load helpers before parent init so they are available in parent.
         parent::initController($request, $response, $logger);
 
-        // Preload any models, libraries, etc, here.
-        // $this->session = service('session');
+        $pengaturanModel = new PengaturanModel();
+        $this->pengaturan = $pengaturanModel->getAll();
+
+        $tamuModel = new TamuModel();
+        $this->unreadCount = $tamuModel->countUnread();
     }
 }
