@@ -450,9 +450,9 @@ Extends layouts/public.php
 Field yang dirender (urutan sesuai brief):
 1. nama — input text
 2. jenis_kelamin — radio button Laki-laki / Perempuan
-3. asal_pengunjung — radio button Perorangan / Instansi
+3. asal_pengunjung — radio button Perorangan / Instansi / Lembaga
 4. nama_instansi — input text; tersembunyi secara default (display:none via CSS/JS),
-   muncul HANYA bila asal_pengunjung = 'instansi'
+   muncul HANYA bila asal_pengunjung ∈ {instansi, lembaga}
 5. alamat — textarea
 6. no_hp — input tel
 7. keperluan — textarea
@@ -473,7 +473,7 @@ Field yang dirender (urutan sesuai brief):
 
 **Kriteria selesai:**
 - Form tampil di mobile (375px) tanpa overflow horizontal.
-- Field nama_instansi tersembunyi saat asal = perorangan, muncul saat asal = instansi.
+- Field nama_instansi tersembunyi saat asal = perorangan, muncul saat asal ∈ {instansi, lembaga}.
 - Honeypot tidak tampak secara visual di browser.
 - Validasi error dari server tampil di bawah field yang relevan.
 
@@ -508,7 +508,7 @@ submit():
 
   // 3. Validasi CI4 (rules sesuai SPEC §6.1)
 
-  // 4. Validasi manual: nama_instansi wajib bila asal = instansi
+  // 4. Validasi manual: nama_instansi wajib bila asal ∈ {instansi, lembaga}
 
   // 5. Upload foto (dipanggil setelah validasi dasar lolos)
   //    — lihat Task-15
@@ -613,8 +613,9 @@ private function prosesUploadFoto(): string|null
   document.querySelectorAll('input[name="asal_pengunjung"]').forEach(function(radio) {
     radio.addEventListener('change', function () {
       const instansiWrap = document.getElementById('wrap-nama-instansi');
-      instansiWrap.style.display = this.value === 'instansi' ? 'block' : 'none';
-      document.getElementById('nama_instansi').required = this.value === 'instansi';
+      const showInstansi = this.value === 'instansi' || this.value === 'lembaga';
+      instansiWrap.style.display = showInstansi ? 'block' : 'none';
+      document.getElementById('nama_instansi').required = showInstansi;
     });
   });
 

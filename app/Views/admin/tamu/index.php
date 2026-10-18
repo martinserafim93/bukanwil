@@ -21,7 +21,7 @@ Daftar Tamu
 $this->section('content');
 
 $opsiJenisKelamin = ['Laki-laki', 'Perempuan'];
-$opsiAsal         = ['perorangan', 'instansi'];
+$opsiAsal         = ['perorangan', 'instansi', 'lembaga'];
 
 $filterQueryString = http_build_query(
     array_filter($filter_aktif, fn ($v) => $v !== '' && $v !== null)

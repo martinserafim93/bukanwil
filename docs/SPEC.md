@@ -116,8 +116,8 @@ Lihat DDL lengkap di `database/schema.sql`. Ringkasan di bawah.
 | id              | BIGINT UNSIGNED AUTO_INCREMENT | NO   | —                 | PK                                |
 | nama            | VARCHAR(255)                   | NO   | —                 |                                   |
 | jenis_kelamin   | ENUM('Laki-laki','Perempuan')  | NO   | —                 |                                   |
-| asal_pengunjung | ENUM('perorangan','instansi')  | NO   | —                 |                                   |
-| nama_instansi   | VARCHAR(255)                   | YES  | NULL              | Wajib diisi bila asal = instansi  |
+| asal_pengunjung | ENUM('perorangan','instansi','lembaga')  | NO   | —                 |                                   |
+| nama_instansi   | VARCHAR(255)                   | YES  | NULL              | Wajib diisi bila asal ∈ {instansi, lembaga}  |
 | lat             | DECIMAL(10,8)                  | YES  | NULL              | Koordinat lintang                 |
 | lng             | DECIMAL(11,8)                  | YES  | NULL              | Koordinat bujur                   |
 | alamat          | TEXT                           | NO   | —                 |                                   |
@@ -290,8 +290,8 @@ Input (multipart/form-data):
 |-----------------|---------|----------|----------------------------------|
 | nama            | string  | Ya       |                                  |
 | jenis_kelamin   | string  | Ya       | 'Laki-laki' atau 'Perempuan'     |
-| asal_pengunjung | string  | Ya       | 'perorangan' atau 'instansi'     |
-| nama_instansi   | string  | Kondisional | Wajib bila asal = instansi    |
+| asal_pengunjung | string  | Ya       | 'perorangan', 'instansi', atau 'lembaga'     |
+| nama_instansi   | string  | Kondisional | Wajib bila asal ∈ {instansi, lembaga}    |
 | alamat          | string  | Ya       |                                  |
 | no_hp           | string  | Ya       | Regex format Indonesia           |
 | keperluan       | string  | Ya       |                                  |
@@ -316,7 +316,7 @@ $data = [
     'total_tamu'      => int,
     'tamu_hari_ini'   => int,
     'per_jenis'       => [['label'=>'Laki-laki','count'=>int], ['label'=>'Perempuan','count'=>int]],
-    'per_asal'        => [['label'=>'perorangan','count'=>int], ['label'=>'instansi','count'=>int]],
+    'per_asal'        => [['label'=>'perorangan','count'=>int], ['label'=>'instansi','count'=>int], ['label'=>'lembaga','count'=>int]],
     'top_keperluan'   => [['keperluan'=>string,'count'=>int], ...],  // top 5
     'tren_7hari'      => [['tanggal'=>'Y-m-d','count'=>int], ...],   // 7 hari terakhir
     'unread_count'    => int,
@@ -441,8 +441,8 @@ Output sukses: `redirect('/admin/pengaturan')->with('sukses', 'Pengaturan berhas
 |-----------------|--------------------------------------------------------------------|
 | nama            | `required\|max_length[255]`                                        |
 | jenis_kelamin   | `required\|in_list[Laki-laki,Perempuan]`                           |
-| asal_pengunjung | `required\|in_list[perorangan,instansi]`                           |
-| nama_instansi   | `permit_empty\|max_length[255]` + cek manual: required bila asal=instansi |
+| asal_pengunjung | `required\|in_list[perorangan,instansi,lembaga]`                           |
+| nama_instansi   | `permit_empty\|max_length[255]` + cek manual: required bila asal ∈ {instansi, lembaga} |
 | alamat          | `required`                                                         |
 | no_hp           | `required\|regex_match[/^(0\|62\|\+62)[0-9]{8,13}$/]`             |
 | keperluan       | `required`                                                         |
@@ -452,7 +452,7 @@ Output sukses: `redirect('/admin/pengaturan')->with('sukses', 'Pengaturan berhas
 
 Tambahan non-CI4-Validation (cek manual di controller sebelum validate()):
 - Honeypot: `if ($request->getPost('_hp') !== '') { // silent drop }`
-- nama_instansi wajib bila asal_pengunjung = 'instansi'
+- nama_instansi wajib bila asal_pengunjung ∈ {'instansi', 'lembaga'}
 
 ### 6.2 Login Admin
 

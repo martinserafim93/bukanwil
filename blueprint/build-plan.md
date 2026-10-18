@@ -328,8 +328,8 @@ File yang dibuat:
 - app/Views/tamu/form.php — extends layouts/public; 10 field dalam urutan benar:
   1. nama (text)
   2. jenis_kelamin (radio Laki-laki/Perempuan)
-  3. asal_pengunjung (radio Perorangan/Instansi)
-  4. nama_instansi (text, hidden secara default via CSS, muncul bila asal=instansi)
+  3. asal_pengunjung (radio Perorangan/Instansi/Lembaga)
+  4. nama_instansi (text, hidden secara default via CSS, muncul bila asal ∈ {instansi, lembaga})
   5. alamat (textarea)
   6. no_hp (text)
   7. keperluan (textarea)
@@ -374,8 +374,8 @@ File yang dibuat / diubah:
 Aturan validasi (SPEC §6.1 — kutip langsung, jangan diubah tanpa persetujuan Lead):
 - nama: required|max_length[255]
 - jenis_kelamin: required|in_list[Laki-laki,Perempuan]
-- asal_pengunjung: required|in_list[perorangan,instansi]
-- nama_instansi: permit_empty|max_length[255] + cek manual: wajib bila asal_pengunjung = 'instansi'
+- asal_pengunjung: required|in_list[perorangan,instansi,lembaga]
+- nama_instansi: permit_empty|max_length[255] + cek manual: wajib bila asal_pengunjung ∈ {instansi, lembaga}
 - alamat: required
 - no_hp: required|regex_match[/^(0|62|\+62)[0-9]{8,13}$/]
 - keperluan: required
@@ -423,7 +423,7 @@ File yang dibuat:
 - public/assets/js/form-publik.js
   IIFE, tidak ada dependensi eksternal
   Fungsi 1 — Geolocation: klik #btn-deteksi-lokasi → navigator.geolocation.getCurrentPosition; sukses: isi #lat dan #lng (hidden), tampilkan koordinat di #status-lokasi; gagal: sembunyikan tombol, tampilkan #input-manual-lokasi (div dengan dua input text lat+lng manual)
-  Fungsi 2 — Conditional field: change listener pada radio asal_pengunjung; bila 'instansi': tampilkan #wrap-nama-instansi, required=true; bila 'perorangan': sembunyikan, required=false, clear value
+  Fungsi 2 — Conditional field: change listener pada radio asal_pengunjung; bila nilai ∈ {instansi, lembaga}: tampilkan #wrap-nama-instansi, required=true; bila 'perorangan': sembunyikan, required=false, clear value
 
 Elemen HTML yang dibutuhkan di form.php (Task-13):
 - button#btn-deteksi-lokasi

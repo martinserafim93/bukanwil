@@ -28,12 +28,12 @@
 
         function update() {
             var selected = document.querySelector('input[name="asal_pengunjung"]:checked');
-            var isInstansi = selected && selected.value === 'instansi';
+            var isInstansiOrLembaga = selected && (selected.value === 'instansi' || selected.value === 'lembaga');
 
-            wrap.style.display = isInstansi ? 'block' : 'none';
-            input.required = isInstansi;
+            wrap.style.display = isInstansiOrLembaga ? 'block' : 'none';
+            input.required = isInstansiOrLembaga;
 
-            if (! isInstansi) {
+            if (! isInstansiOrLembaga) {
                 input.value = '';
             }
         }

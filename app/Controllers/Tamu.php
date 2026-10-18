@@ -51,7 +51,7 @@ class Tamu extends BaseController
         $rules = [
             'nama'            => 'required|max_length[255]',
             'jenis_kelamin'   => 'required|in_list[Laki-laki,Perempuan]',
-            'asal_pengunjung' => 'required|in_list[perorangan,instansi]',
+            'asal_pengunjung' => 'required|in_list[perorangan,instansi,lembaga]',
             'nama_instansi'   => 'permit_empty|max_length[255]',
             'alamat'          => 'required',
             'no_hp'           => 'required|regex_match[/^(0|62|\+62)[0-9]{8,13}$/]',
@@ -67,13 +67,13 @@ class Tamu extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // 4. Manual check: nama_instansi required when asal is instansi.
+        // 4. Manual check: nama_instansi required when asal is instansi or lembaga.
         $asal = $this->request->getPost('asal_pengunjung');
         $namaInstansi = (string) $this->request->getPost('nama_instansi');
 
-        if ($asal === 'instansi' && trim($namaInstansi) === '') {
+        if (in_array($asal, ['instansi', 'lembaga'], true) && trim($namaInstansi) === '') {
             $errors = $this->validator?->getErrors() ?? [];
-            $errors['nama_instansi'] = 'Nama instansi wajib diisi bila asal pengunjung adalah Instansi.';
+            $errors['nama_instansi'] = 'Nama instansi wajib diisi bila asal pengunjung adalah Instansi atau Lembaga.';
 
             return redirect()->back()->withInput()->with('errors', $errors);
         }
@@ -89,7 +89,7 @@ class Tamu extends BaseController
             'nama'            => $this->request->getPost('nama'),
             'jenis_kelamin'   => $this->request->getPost('jenis_kelamin'),
             'asal_pengunjung' => $asal,
-            'nama_instansi'   => $asal === 'instansi' ? $namaInstansi : null,
+            'nama_instansi'   => in_array($asal, ['instansi', 'lembaga'], true) ? $namaInstansi : null,
             'alamat'          => $this->request->getPost('alamat'),
             'no_hp'           => $this->request->getPost('no_hp'),
             'keperluan'       => $this->request->getPost('keperluan'),

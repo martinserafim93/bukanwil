@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS `tamu` (
     `id`               BIGINT UNSIGNED     NOT NULL AUTO_INCREMENT,
     `nama`             VARCHAR(255)        NOT NULL,
     `jenis_kelamin`    ENUM('Laki-laki','Perempuan') NOT NULL,
-    `asal_pengunjung`  ENUM('perorangan','instansi') NOT NULL,
+    `asal_pengunjung`  ENUM('perorangan','instansi','lembaga') NOT NULL,
+    -- Wajib di level aplikasi bila asal_pengunjung IN ('instansi','lembaga')
     `nama_instansi`    VARCHAR(255)        NULL     DEFAULT NULL,
     -- lat: DECIMAL(10,8) cukup untuk presisi ~1mm; lng perlu 11 digit untuk negatif
     `lat`              DECIMAL(10,8)       NULL     DEFAULT NULL,
@@ -79,6 +80,20 @@ CREATE TABLE IF NOT EXISTS `pengaturan` (
   DEFAULT CHARSET=utf8mb4
   COLLATE=utf8mb4_unicode_ci
   COMMENT='Konfigurasi tampilan aplikasi';
+
+
+-- ==========================================================
+-- MIGRASI untuk database yang SUDAH berjalan
+-- Jalankan manual (mis. phpMyAdmin) hanya bila tabel `tamu` sudah ada
+-- dari versi sebelumnya. Instalasi baru: cukup jalankan DDL di atas.
+--
+-- Perubahan: nilai enum `asal_pengunjung` ditambah 'lembaga'.
+-- Aman dijalankan berulang (idempoten) — nilai lama tidak berubah,
+-- hanya daftar nilai yang diizinkan bertambah.
+-- ----------------------------------------------------------
+-- ALTER TABLE `tamu`
+--     MODIFY `asal_pengunjung` ENUM('perorangan','instansi','lembaga') NOT NULL;
+-- ==========================================================
 
 
 -- ==========================================================

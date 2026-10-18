@@ -19,7 +19,7 @@ SANTRI hadir sebagai pengganti Google Form sekaligus CMS internal — tetap ring
 ## 2. Pengguna (User Persona)
 
 ### 2.1 Pengunjung PTSP (Tamu)
-- Masyarakat umum atau perwakilan instansi yang datang ke kantor PTSP.
+- Masyarakat umum, atau perwakilan instansi/lembaga yang datang ke kantor PTSP.
 - Mengakses halaman publik via perangkat apa pun (mobile-first).
 - Tidak perlu akun. Mengisi form satu kali per kunjungan.
 - Tingkat literasi digital bervariasi — form harus sesederhana mungkin.

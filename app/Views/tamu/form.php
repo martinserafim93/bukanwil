@@ -64,13 +64,17 @@ $this->section('content');
                                 <input type="radio" name="asal_pengunjung" value="instansi" <?= old('asal_pengunjung') === 'instansi' ? 'checked' : '' ?> class="h-4 w-4 text-brand-500 border-border-strong" required>
                                 <span class="text-sm text-ink">Instansi</span>
                             </label>
+                            <label class="inline-flex items-center gap-2">
+                                <input type="radio" name="asal_pengunjung" value="lembaga" <?= old('asal_pengunjung') === 'lembaga' ? 'checked' : '' ?> class="h-4 w-4 text-brand-500 border-border-strong" required>
+                                <span class="text-sm text-ink">Lembaga</span>
+                            </label>
                         </div>
                     </div>
                 </div>
 
                 <div id="wrap-nama-instansi" style="display: none;">
                     <label for="nama_instansi" class="form-label">Nama Instansi</label>
-                    <input type="text" id="nama_instansi" name="nama_instansi" value="<?= esc(old('nama_instansi')) ?>" class="form-field <?= session('errors.nama_instansi') ? 'form-field-error' : '' ?>" placeholder="Diisi jika asal instansi">
+                    <input type="text" id="nama_instansi" name="nama_instansi" value="<?= esc(old('nama_instansi')) ?>" class="form-field <?= session('errors.nama_instansi') ? 'form-field-error' : '' ?>" placeholder="Diisi jika asal instansi/lembaga">
                 </div>
 
                 <div>

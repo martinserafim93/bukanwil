@@ -134,7 +134,7 @@ class TamuModel extends Model
         foreach ($perAsalResult as $row) {
             $perAsal[] = ['label' => $row['label'], 'count' => (int) $row['count']];
         }
-        $perAsal = $this->normalizeCounts(['perorangan', 'instansi'], $perAsal);
+        $perAsal = $this->normalizeCounts(['perorangan', 'instansi', 'lembaga'], $perAsal);
 
         $topKeperluanRaw = $db->table($this->table)
             ->select('keperluan, COUNT(*) as count')
