@@ -28,9 +28,8 @@ class TamuModel extends Model
     /**
      * Apply common filters to a query builder for tamu table.
      */
-    protected function applyFilter(array $filter): \CodeIgniter\Database\BaseBuilder
+    protected function applyFilter(\CodeIgniter\Database\BaseBuilder $builder, array $filter): \CodeIgniter\Database\BaseBuilder
     {
-        $builder = $this->db->table($this->table);
 
         if (! empty($filter['q'])) {
             $q = (string) $filter['q'];
@@ -78,9 +77,9 @@ class TamuModel extends Model
      */
     public function getPaginasi(array $filter, int $perPage = 20): array
     {
-        $builder = $this->applyFilter($filter);
-        $items   = $builder->paginate($perPage, 'default');
-        $pager   = $builder->pager;
+        $this->applyFilter($this->builder(), $filter);
+        $items = $this->paginate($perPage, 'default');
+        $pager = $this->pager;
 
         return ['data' => $items, 'pager' => $pager];
     }
@@ -92,7 +91,7 @@ class TamuModel extends Model
      */
     public function getSemuaDenganFilter(array $filter): array
     {
-        $builder = $this->applyFilter($filter);
+        $builder = $this->applyFilter($this->db->table($this->table), $filter);
 
         return $builder->get()->getResultArray();
     }
