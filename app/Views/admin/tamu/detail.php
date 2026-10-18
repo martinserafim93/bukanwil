@@ -106,9 +106,11 @@ Detail Tamu
 <?php $this->endSection(); ?>
 
 <?php if (! empty($tamu['lat']) && ! empty($tamu['lng'])): ?>
+    <?php $this->section('styles'); ?>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <?php $this->endSection(); ?>
     <?php $this->section('scripts'); ?>
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIAV+oOT0W4O+o7ZpZm1gM74gC7iQ8e8bNqo=" crossorigin="">
-        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9coOWqGY0l1bM4tI+SYOqtgynYuWnWVwJW8E=" crossorigin=""></script>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const lat = <?= (float) $tamu['lat'] ?>;

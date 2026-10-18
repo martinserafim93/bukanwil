@@ -27,6 +27,8 @@ function isActive(string $path): string
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <?= $this->renderSection('styles') ?>
+
     <link rel="stylesheet" href="<?= base_url('css/app.css') ?>">
 </head>
 <body class="bg-ground text-ink antialiased min-h-screen flex">
