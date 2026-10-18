@@ -12,5 +12,8 @@ $routes->get('/admin/login', 'Admin\\Auth::login');
 $routes->post('/admin/login', 'Admin\\Auth::doLogin');
 $routes->get('/admin/logout', 'Admin\\Auth::logout');
 
+// Admin dashboard
+$routes->get('/admin', 'Admin\\Dashboard::index');
+
 // CI4 default home route — kept for reference, overridden above.
 $routes->get('/home', 'Home::index');

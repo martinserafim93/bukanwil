@@ -3,13 +3,25 @@
  * Layout Admin — SANTRI
  * Sidebar + topbar + area konten.
  */
+
+// Ambil data admin dari session
+$adminNama = session('admin_nama') ?? 'Administrator';
+$adminInisial = strtoupper(substr(trim($adminNama), 0, 2)) ?: 'AD';
+
+// Helper untuk menentukan apakah link aktif
+function isActive(string $path): string
+{
+    $current = service('request')->getPath();
+    return ($current === $path) ? 'bg-brand-50 text-brand-700' : 'text-ink-muted hover:bg-surface-raised hover:text-ink';
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= esc($this->renderSection('title')) ?? 'Admin' ?> — SANTRI</title>
+    <title><?= $this->renderSection('title', true) ?> — SANTRI</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,22 +47,22 @@
         </div>
 
         <nav class="flex-1 p-4 space-y-1">
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm font-medium bg-brand-50 text-brand-700">
+            <a href="<?= site_url('admin') ?>" class="flex items-center gap-3 px-4 py-3 text-sm font-medium <?= isActive('admin') ?>">
                 <span>Dashboard</span>
             </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-ink-muted hover:bg-surface-raised hover:text-ink transition-colors">
+            <a href="<?= site_url('admin/tamu') ?>" class="flex items-center gap-3 px-4 py-3 text-sm font-medium <?= isActive('admin/tamu') ?>">
                 <span>Daftar Tamu</span>
             </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-ink-muted hover:bg-surface-raised hover:text-ink transition-colors">
+            <a href="<?= site_url('admin/admin-user') ?>" class="flex items-center gap-3 px-4 py-3 text-sm font-medium <?= isActive('admin/admin-user') ?>">
                 <span>Kelola Admin</span>
             </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-ink-muted hover:bg-surface-raised hover:text-ink transition-colors">
+            <a href="<?= site_url('admin/pengaturan') ?>" class="flex items-center gap-3 px-4 py-3 text-sm font-medium <?= isActive('admin/pengaturan') ?>">
                 <span>Pengaturan</span>
             </a>
         </nav>
 
         <div class="p-4 border-t border-border">
-            <a href="#" class="block w-full text-center px-4 py-2 text-sm font-medium text-danger hover:bg-danger-bg rounded-full transition-colors">
+            <a href="<?= site_url('admin/logout') ?>" class="block w-full text-center px-4 py-2 text-sm font-medium text-danger hover:bg-danger-bg rounded-full transition-colors">
                 Logout
             </a>
         </div>
@@ -62,11 +74,18 @@
         <header class="bg-surface border-b border-border">
             <div class="brand-stripe" aria-hidden="true"></div>
             <div class="flex items-center justify-between px-6 py-4">
-                <h2 class="text-lg font-bold"><?= esc($this->renderSection('title')) ?? 'Dashboard' ?></h2>
+                <h2 class="text-lg font-bold"><?= $this->renderSection('title') ?></h2>
                 <div class="flex items-center gap-4">
-                    <span class="hidden sm:inline-block text-sm text-ink-muted">Administrator</span>
-                    <div class="h-8 w-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 font-bold text-xs" aria-hidden="true">
-                        AD
+                    <div class="relative inline-flex items-center">
+                        <span class="hidden sm:inline-block text-sm text-ink-muted"><?= esc((string) $adminNama) ?></span>
+                        <div class="h-8 w-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 font-bold text-xs ml-3" aria-hidden="true">
+                            <?= esc((string) $adminInisial) ?>
+                        </div>
+                        <?php if (($unreadCount ?? 0) > 0): ?>
+                            <span class="absolute -top-1 -right-2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-danger rounded-full" aria-label="<?= esc((string) $unreadCount) ?> notifikasi belum dibaca">
+                                <?= esc((string) ((int) $unreadCount)) ?>
+                            </span>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
