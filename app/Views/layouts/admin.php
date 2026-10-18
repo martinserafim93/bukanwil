@@ -38,12 +38,16 @@ function isActive(string $path): string
         <div class="brand-stripe" aria-hidden="true"></div>
         <div class="p-6 border-b border-border">
             <div class="flex items-center gap-3">
-                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-500 text-white font-bold text-sm" aria-hidden="true">
-                    Km
-                </div>
+                <img
+                    src="<?= base_url('images/logo-kemenag.jpg') ?>"
+                    alt="Logo Kementerian Agama"
+                    class="h-10 w-auto object-contain"
+                >
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted">SANTRI</p>
-                    <p class="text-sm font-bold leading-tight">Admin Panel</p>
+                    <p class="text-sm font-bold leading-tight text-brand-700">
+                        <?= esc($pengaturan['judul_aplikasi'] ?? 'SANTRI') ?>
+                    </p>
+                    <p class="text-xs text-ink-muted">Admin Panel</p>
                 </div>
             </div>
         </div>

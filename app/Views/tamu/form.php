@@ -12,7 +12,9 @@ $this->section('content');
 <section class="container-readable">
     <div class="card-surface p-6 md:p-8">
         <div class="mb-8 text-center">
-            <h2 class="text-2xl md:text-3xl font-bold text-ink mb-2 font-serif">Buku Tamu Digital PTSP</h2>
+            <h2 class="text-xl md:text-2xl font-bold text-brand-700 mb-2 font-serif">
+                Formulir Kunjungan
+            </h2>
             <p class="text-ink-muted">Silakan isi data kunjungan Anda dengan lengkap.</p>
         </div>
 

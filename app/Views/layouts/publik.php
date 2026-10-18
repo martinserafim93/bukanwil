@@ -21,22 +21,24 @@
 
     <header class="bg-surface border-b border-border">
         <div class="brand-stripe" aria-hidden="true"></div>
-        <div class="container-readable py-6">
-            <div class="flex items-center gap-3">
-                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-500 text-white font-bold text-sm" aria-hidden="true">
-                    Km
-                </div>
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted">Kementerian Agama RI</p>
-                    <h1 class="text-sm md:text-base font-bold leading-tight">
-                        <?= esc($pengaturan['nama_instansi_ptsp'] ?? 'Kanwil Kemenag Provinsi Kalimantan Utara') ?>
-                    </h1>
-                    <?php if (! empty($pengaturan['teks_header'])): ?>
-                        <p class="text-xs text-ink-muted mt-0.5"><?= esc($pengaturan['teks_header']) ?></p>
-                    <?php else: ?>
-                        <p class="text-xs text-ink-muted mt-0.5">Pelayanan Terpadu Satu Pintu</p>
-                    <?php endif; ?>
-                </div>
+        <div class="container-readable py-8 md:py-10">
+            <div class="flex flex-col items-center text-center">
+                <img
+                    src="<?= base_url('images/logo-kemenag.jpg') ?>"
+                    alt="Logo Kementerian Agama"
+                    class="h-16 w-auto md:h-20 object-contain mb-4"
+                >
+                <h1 class="text-3xl md:text-4xl font-serif text-brand-700 leading-tight">
+                    <?= esc($pengaturan['judul_aplikasi'] ?? 'SANTRI') ?>
+                </h1>
+                <p class="text-sm md:text-base font-semibold text-ink mt-1">
+                    <?= esc($pengaturan['nama_instansi_ptsp'] ?? 'Kanwil Kemenag Provinsi Kalimantan Utara') ?>
+                </p>
+                <?php if (! empty($pengaturan['teks_header'])): ?>
+                    <p class="text-sm text-ink-muted mt-1"><?= esc($pengaturan['teks_header']) ?></p>
+                <?php else: ?>
+                    <p class="text-sm text-ink-muted mt-1">Pelayanan Terpadu Satu Pintu</p>
+                <?php endif; ?>
             </div>
         </div>
     </header>
