@@ -24,7 +24,7 @@ class Tamu extends BaseController
     {
         // 1. Honeypot: silently drop suspected bots.
         if ($this->request->getPost('_hp') !== '') {
-            return redirect('/tamu/sukses');
+            return redirect()->to('/tamu/sukses');
         }
 
         // 2. Rate limit: max 3 submissions per 10 minutes per session.
@@ -44,7 +44,7 @@ class Tamu extends BaseController
 
         // Block if still within the window and limit reached.
         if ($count >= $maxAttempts && $time > 0) {
-            return redirect('/tamu/sukses'); // silent drop
+            return redirect()->to('/tamu/sukses'); // silent drop
         }
 
         // 3. Validation rules
@@ -108,7 +108,7 @@ class Tamu extends BaseController
         $session->set('form_submit_count', $count + 1);
 
         // 8. Redirect to success page.
-        return redirect('/tamu/sukses');
+        return redirect()->to('/tamu/sukses');
     }
 
     /**

@@ -36,7 +36,7 @@ class PengaturanModel extends Model
     /**
      * Set single setting value (upsert).
      */
-    public function set(string $key, string $value): void
+    public function setValue(string $key, string $value): void
     {
         $db = $this->db->table($this->table);
         $existing = $db->where('key', $key)->get()->getRowArray();
@@ -58,7 +58,7 @@ class PengaturanModel extends Model
     public function setMany(array $data): void
     {
         foreach ($data as $key => $value) {
-            $this->set((string) $key, (string) $value);
+            $this->setValue((string) $key, (string) $value);
         }
     }
 }

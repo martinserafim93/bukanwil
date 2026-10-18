@@ -3,7 +3,7 @@
  * Public guestbook success page — SANTRI
  */
 $this->extend('layouts/publik');
-$this->section('title', 'Terima Kasih');
+$this->section('title'); echo 'Terima Kasih'; $this->endSection();
 $this->section('content');
 ?>
 

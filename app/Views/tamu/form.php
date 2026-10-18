@@ -3,7 +3,9 @@
  * Public guestbook form — SANTRI
  */
 $this->extend('layouts/publik');
-$this->section('title', 'Form Buku Tamu');
+$this->section('title');
+echo 'Form Buku Tamu';
+$this->endSection();
 $this->section('content');
 ?>
 

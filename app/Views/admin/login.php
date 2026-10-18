@@ -4,7 +4,7 @@
  * Belum ada logika autentikasi.
  */
 $this->extend('layouts/admin');
-$this->section('title', 'Login');
+$this->section('title'); echo 'Login'; $this->endSection();
 $this->section('content');
 ?>
 
