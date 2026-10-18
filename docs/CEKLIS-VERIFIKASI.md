@@ -24,11 +24,11 @@ Poin: (1) File nyata · (2) Build/test lolos · (3) Review loop tertutup · (4) 
 
 ## Fase 2 — Form buku tamu publik
 - [x] 1. File nyata — Routes.php, Tamu.php (index/submit/sukses), layouts/publik.php, tamu/form.php, tamu/sukses.php, public/js/form-publik.js
-- [x] 2. Build/test — `php -l` semua lolos (runtime E2E tertunda: intl+MySQL belum ada, dicek di Fase 5/deploy)
-- [x] 3. Review loop tertutup — reviewer APPROVE (2 iterasi: perbaikan rate-limit persist reset)
+- [x] 2. Build/test — `php -l` lolos + runtime E2E TERVERIFIKASI (GET form 200, POST submit → insert MySQL → 303 → sukses 200, CSRF+upload aman)
+- [x] 3. Review loop tertutup — reviewer APPROVE (3 iterasi + review final perbaikan runtime)
 - [x] 4. Tidak menggantung — keputusan foto/koordinat opsional sudah dijalankan
 - [x] 5. Secret aman — tidak ada secret di commit (Encryption key dev + TODO regenerate)
-- [x] 6. Push terverifikasi — `fefd0c8` (Martinus Lukas)
+- [x] 6. Push terverifikasi — `8a17190` (Martinus Lukas)
 
 ## Fase 3 — CMS admin (auth + dashboard + daftar + detail + export)
 - [ ] 1. File nyata
