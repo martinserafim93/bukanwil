@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= esc($this->renderSection('title')) ?? 'Buku Tamu PTSP' ?> — SANTRI</title>
+    <title><?= esc($this->renderSection('title')) ?? 'Form Buku Tamu' ?> — SANTRI</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,7 +28,14 @@
                 </div>
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted">Kementerian Agama RI</p>
-                    <h1 class="text-sm md:text-base font-bold leading-tight">Kanwil Kemenag Provinsi Kalimantan Utara</h1>
+                    <h1 class="text-sm md:text-base font-bold leading-tight">
+                        <?= esc($pengaturan['nama_instansi_ptsp'] ?? 'Kanwil Kemenag Provinsi Kalimantan Utara') ?>
+                    </h1>
+                    <?php if (! empty($pengaturan['teks_header'])): ?>
+                        <p class="text-xs text-ink-muted mt-0.5"><?= esc($pengaturan['teks_header']) ?></p>
+                    <?php else: ?>
+                        <p class="text-xs text-ink-muted mt-0.5">Pelayanan Terpadu Satu Pintu</p>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -41,7 +48,7 @@
     <footer class="bg-surface border-t border-border mt-auto">
         <div class="container-readable py-6">
             <p class="text-center text-sm text-ink-muted">
-                &copy; <?= date('Y') ?> Kanwil Kemenag Kaltara. Sistem Buku Tamu Digital PTSP.
+                &copy; <?= date('Y') ?> <?= esc($pengaturan['nama_instansi_ptsp'] ?? 'Kanwil Kemenag Kaltara') ?>. Sistem Buku Tamu Digital PTSP.
             </p>
         </div>
     </footer>
