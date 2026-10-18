@@ -39,12 +39,12 @@ Poin: (1) File nyata · (2) Build/test lolos · (3) Review loop tertutup · (4) 
 - [x] 6. Push terverifikasi — `f6c0629` (3a), `4605681` (3b), `1cca251` (3c-1), `3a7e1c0` (3c-2) — author Martinus Lukas
 
 ## Fase 4 — Kelola admin + pengaturan + notifikasi in-app
-- [ ] 1. File nyata
-- [ ] 2. Build/test
-- [ ] 3. Review loop tertutup
-- [ ] 4. Tidak menggantung
-- [ ] 5. Secret aman
-- [ ] 6. Push terverifikasi
+- [x] 1. File nyata — Admin\AdminUser (CRUD), Admin\Pengaturan, views admin-user (index/form/hapus) + pengaturan/index; notifikasi in-app (badge + tandai-baca) tuntas di Fase 3
+- [x] 2. Build/test — `php -l` lolos + runtime E2E (buat/edit/hapus admin, guard self-delete int-cast, guard superadmin terakhir, anti-escalation, pengaturan simpan → DB berubah, non-superadmin 302)
+- [x] 3. Review loop tertutup — reviewer APPROVE (4a: 1 iterasi + 1 fix guard; 4b: 1 iterasi + 1 fix return type)
+- [x] 4. Tidak menggantung — temuan eskalasi/last-superadmin/return-type tertutup; saran audit-log dicatat sebagai enhancement
+- [x] 5. Secret aman — password bcrypt cost 12, tak pernah tampil di view
+- [x] 6. Push terverifikasi — `9723fa6` (4a), `804d0f8` (4b) — author Martinus Lukas
 
 ## Fase 5 — Uji lokal (php -S + smoke test + keamanan)
 - [ ] 1. File nyata
