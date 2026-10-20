@@ -15,6 +15,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <link rel="icon" type="image/png" href="<?= base_url('images/logo-kemenag-transparent.png') ?>">
+
     <link rel="stylesheet" href="<?= base_url('css/app.css') ?>">
 </head>
 <body class="bg-ground text-ink antialiased min-h-screen flex flex-col">
@@ -28,9 +30,6 @@
                     alt="Logo Kementerian Agama"
                     class="h-16 w-auto md:h-20 object-contain mb-4"
                 >
-                <p class="text-xs font-sans font-semibold uppercase tracking-[0.2em] text-accent-300 mb-2">
-                    <?= esc('Buku Tamu') ?>
-                </p>
                 <h1 class="text-3xl md:text-4xl font-serif text-brand-700 leading-tight">
                     <?= esc('SANTRI') ?>
                 </h1>
@@ -51,7 +50,8 @@
     <footer class="bg-surface border-t border-border mt-auto">
         <div class="container-readable py-6">
             <p class="text-center text-sm text-ink-muted">
-                &copy; <?= date('Y') ?> <?= esc($pengaturan['nama_instansi_ptsp'] ?? 'Kanwil Kemenag Kaltara') ?>. Sistem Buku Tamu Digital PTSP.
+                Tim Humas dan Komunikasi Publik<br>
+                &mdash; Kanwil Kementerian Agama Provinsi Kalimantan Utara &mdash;
             </p>
         </div>
     </footer>

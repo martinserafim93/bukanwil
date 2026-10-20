@@ -29,6 +29,8 @@ function isActive(string $path): string
 
     <?= $this->renderSection('styles') ?>
 
+    <link rel="icon" type="image/png" href="<?= base_url('images/logo-kemenag-transparent.png') ?>">
+
     <link rel="stylesheet" href="<?= base_url('css/app.css') ?>">
 </head>
 <body class="bg-ground text-ink antialiased min-h-screen flex">

@@ -57,7 +57,7 @@ class Tamu extends BaseController
             'no_hp'           => 'required|regex_match[/^(0|62|\+62)[0-9]{8,13}$/]',
             'keperluan'       => 'required',
             'foto'            => [
-                'rules' => 'permit_empty|max_size[foto,2048]|mime_in[foto,image/jpeg,image/png,image/webp]|ext_in[foto,jpg,jpeg,png,webp]',
+                'rules' => 'permit_empty|max_size[foto,1024]|mime_in[foto,image/jpeg,image/png,image/webp]|ext_in[foto,jpg,jpeg,png,webp]',
             ],
         ];
 

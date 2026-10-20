@@ -97,7 +97,8 @@ $this->section('content');
                 <div>
                     <label for="foto" class="form-label">Foto Kunjungan</label>
                     <input type="file" id="foto" name="foto" accept="image/jpeg,image/png,image/webp" class="form-field file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100">
-                    <p class="form-hint">Maks 2 MB JPG/PNG/WebP (opsional)</p>
+                    <p class="form-hint">Maks 10 MB, otomatis dikompres di bawah 1 MB (JPG/PNG/WebP, opsional)</p>
+                    <p id="foto-error" class="text-sm text-danger mt-1 hidden"></p>
                 </div>
             </div>
 

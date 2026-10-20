@@ -55,12 +55,12 @@ Poin: (1) File nyata · (2) Build/test lolos · (3) Review loop tertutup · (4) 
 - [x] 6. Push terverifikasi — `90abfca` (Martinus Lukas)
 
 ## Fase 6 — Paket & deploy FTP (InfinityFree)
-- [ ] 1. File nyata
-- [ ] 2. Build/test
-- [ ] 3. Review loop tertutup
-- [ ] 4. Tidak menggantung
-- [ ] 5. Secret aman
-- [ ] 6. Push terverifikasi
+- [x] 1. File nyata — 3.217 file ter-upload ke `santri.is-best.net/htdocs/` (docroot subdomain; verifikasi koneksi baru)
+- [x] 2. Build/test — live: form buku tamu + login admin render 200, DB terbaca (tabel `pengaturan`)
+- [x] 3. Review loop tertutup — bug config produksi (`$proxyIPs` format CI4 4.7) ditemukan+fiksasi sampai app jalan
+- [x] 4. Tidak menggantung — upload tuntas, tak ada proses background tersisa
+- [x] 5. Secret aman — kredensial DB produksi hanya di staging deploy, BUKAN di repo git (repo pakai localhost)
+- [x] 6. Push terverifikasi — kode Fase 0–5 sudah di remote; deploy add bukan commit baru (config produksi tak di-commit)
 
 ## Fase 7 — Dokumentasi & serah terima
 - [ ] 1. File nyata
