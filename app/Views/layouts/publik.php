@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= esc($this->renderSection('title')) ?? 'Form Buku Tamu' ?> — SANTRI</title>
+    <title><?= esc($this->renderSection('title')) ?? 'Form Buku Tamu' ?> — <?= esc($pengaturan['judul_aplikasi'] ?? 'SANTRI') ?></title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,7 +31,7 @@
                     class="h-16 w-auto md:h-20 object-contain mb-4"
                 >
                 <h1 class="text-3xl md:text-4xl font-serif text-brand-700 leading-tight">
-                    <?= esc('SANTRI') ?>
+                    <?= esc($pengaturan['judul_aplikasi'] ?? 'SANTRI') ?>
                 </h1>
                 <p class="text-base md:text-lg italic text-ink-muted mt-1">
                     <?= esc('Sistem Aplikasi Notifikasi dan Tamu Religius Integritas') ?>

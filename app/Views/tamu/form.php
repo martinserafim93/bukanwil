@@ -15,7 +15,7 @@ $this->section('content');
             <h2 class="text-xl md:text-2xl font-bold text-brand-700 mb-2 font-serif">
                 Formulir Kunjungan
             </h2>
-            <p class="text-ink-muted">Silakan isi data kunjungan Anda dengan lengkap.</p>
+            <p class="text-ink-muted"><?= esc((string)($pengaturan['teks_header'] ?? '')) ?></p>
         </div>
 
         <?php if (! empty($errors) && is_array($errors)): ?>
