@@ -23,18 +23,6 @@ Kelola Admin
     </a>
 </div>
 
-<?php if (session('sukses')): ?>
-    <div class="bg-success-bg border border-success text-success px-4 py-3 rounded mb-6" role="alert">
-        <?= esc((string) session('sukses')) ?>
-    </div>
-<?php endif; ?>
-
-<?php if (session('error')): ?>
-    <div class="bg-danger-bg border border-danger text-danger px-4 py-3 rounded mb-6" role="alert">
-        <?= esc((string) session('error')) ?>
-    </div>
-<?php endif; ?>
-
 <div class="bg-surface border border-border overflow-x-auto">
     <table class="w-full text-left text-sm">
         <thead class="bg-surface-raised border-b border-border">

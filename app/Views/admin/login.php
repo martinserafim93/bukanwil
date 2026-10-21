@@ -17,12 +17,6 @@ $this->section('content');
             <p class="text-sm text-ink-muted">Masukkan akun untuk mengelola data tamu.</p>
         </div>
 
-        <?php if (session('error')): ?>
-            <div class="mb-6 rounded-md bg-danger-bg border border-danger p-4 text-sm text-danger">
-                <?= esc(session('error')) ?>
-            </div>
-        <?php endif; ?>
-
         <form action="<?= site_url('admin/login') ?>" method="post" class="space-y-6">
             <?= csrf_field() ?>
 

@@ -36,8 +36,13 @@ class AdminUser extends BaseController
     /**
      * Display the admin user list.
      */
-    public function index(): string
+    public function index(): string|ResponseInterface
     {
+        $redirect = $this->requireSuperadmin();
+        if ($redirect !== null) {
+            return $redirect;
+        }
+
         $adminModel = new AdminModel();
         $admins     = $adminModel->orderBy('id', 'ASC')->findAll();
         $jumlahSuperadmin = $this->countSuperadmin();
@@ -53,8 +58,13 @@ class AdminUser extends BaseController
     /**
      * Show the create form.
      */
-    public function buat(): string
+    public function buat(): string|ResponseInterface
     {
+        $redirect = $this->requireSuperadmin();
+        if ($redirect !== null) {
+            return $redirect;
+        }
+
         return view('admin/admin-user/form', [
             'pengaturan' => $this->pengaturan,
             'unreadCount' => $this->unreadCount,
@@ -69,6 +79,11 @@ class AdminUser extends BaseController
      */
     public function simpan(): ResponseInterface
     {
+        $redirect = $this->requireSuperadmin();
+        if ($redirect !== null) {
+            return $redirect;
+        }
+
         $role = (string) $this->request->getPost('role');
 
         // Escalation guard: non-superadmin cannot create superadmin accounts.
@@ -106,8 +121,13 @@ class AdminUser extends BaseController
     /**
      * Show the edit form for the given admin.
      */
-    public function edit(int $id): string
+    public function edit(int $id): string|ResponseInterface
     {
+        $redirect = $this->requireSuperadmin();
+        if ($redirect !== null) {
+            return $redirect;
+        }
+
         $admin = (new AdminModel())->find($id);
 
         if ($admin === null) {
@@ -128,6 +148,11 @@ class AdminUser extends BaseController
      */
     public function update(int $id): ResponseInterface
     {
+        $redirect = $this->requireSuperadmin();
+        if ($redirect !== null) {
+            return $redirect;
+        }
+
         $adminModel = new AdminModel();
         $admin      = $adminModel->find($id);
 

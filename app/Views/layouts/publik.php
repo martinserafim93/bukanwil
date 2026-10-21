@@ -18,6 +18,7 @@
     <link rel="icon" type="image/png" href="<?= base_url('images/logo-kemenag-transparent.png') ?>">
 
     <link rel="stylesheet" href="<?= base_url('css/app.css') ?>">
+    <script src="<?= base_url('js/toast.js') ?>" defer></script>
 </head>
 <body class="bg-ground text-ink antialiased min-h-screen flex flex-col">
 
@@ -55,6 +56,18 @@
             </p>
         </div>
     </footer>
+
+    <script>
+        // Auto-trigger toast dari flash session
+        document.addEventListener('DOMContentLoaded', function () {
+            <?php if (session('sukses')): ?>
+                toastShow('success', 'Berhasil', <?= json_encode(session('sukses')) ?>);
+            <?php endif; ?>
+            <?php if (session('error')): ?>
+                toastShow('error', 'Terjadi Kesalahan', <?= json_encode(session('error')) ?>);
+            <?php endif; ?>
+        });
+    </script>
 
     <?= $this->renderSection('scripts') ?>
 </body>

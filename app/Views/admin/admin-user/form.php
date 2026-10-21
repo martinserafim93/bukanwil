@@ -19,12 +19,6 @@ $this->extend('layouts/admin');
 
 <?php $this->section('content'); ?>
 
-<?php if (session('error')): ?>
-    <div class="bg-danger-bg border border-danger text-danger px-4 py-3 rounded mb-6" role="alert">
-        <?= esc((string) session('error')) ?>
-    </div>
-<?php endif; ?>
-
 <div class="bg-surface border border-border p-6 max-w-2xl">
     <h1 class="text-xl font-bold mb-6"><?= esc($judul) ?></h1>
 

@@ -32,6 +32,7 @@ function isActive(string $path): string
     <link rel="icon" type="image/png" href="<?= base_url('images/logo-kemenag-transparent.png') ?>">
 
     <link rel="stylesheet" href="<?= base_url('css/app.css') ?>">
+    <script src="<?= base_url('js/toast.js') ?>" defer></script>
 </head>
 <body class="bg-ground text-ink antialiased min-h-screen flex">
 
@@ -61,16 +62,18 @@ function isActive(string $path): string
             <a href="<?= site_url('admin/tamu') ?>" class="flex items-center gap-3 px-4 py-3 text-sm font-medium <?= isActive('admin/tamu') ?>">
                 <span>Daftar Tamu</span>
             </a>
+            <?php if (session('role') === 'superadmin'): ?>
             <a href="<?= site_url('admin/admin-user') ?>" class="flex items-center gap-3 px-4 py-3 text-sm font-medium <?= isActive('admin/admin-user') ?>">
                 <span>Kelola Admin</span>
             </a>
             <a href="<?= site_url('admin/pengaturan') ?>" class="flex items-center gap-3 px-4 py-3 text-sm font-medium <?= isActive('admin/pengaturan') ?>">
                 <span>Pengaturan</span>
             </a>
+            <?php endif; ?>
         </nav>
 
         <div class="p-4 border-t border-border">
-            <a href="<?= site_url('admin/logout') ?>" class="block w-full text-center px-4 py-2 text-sm font-medium text-danger hover:bg-danger-bg rounded-full transition-colors">
+            <a href="<?= site_url('admin/logout') ?>" onclick="return confirm('Apakah Anda yakin ingin logout?');" class="block w-full text-center px-4 py-2 text-sm font-medium text-danger hover:bg-danger-bg rounded-full transition-colors">
                 Logout
             </a>
         </div>
@@ -103,6 +106,18 @@ function isActive(string $path): string
             <?= $this->renderSection('content') ?>
         </main>
     </div>
+
+    <script>
+        // Auto-trigger toast dari flash session
+        document.addEventListener('DOMContentLoaded', function () {
+            <?php if (session('sukses')): ?>
+                toastShow('success', 'Berhasil', <?= json_encode(session('sukses')) ?>);
+            <?php endif; ?>
+            <?php if (session('error')): ?>
+                toastShow('error', 'Terjadi Kesalahan', <?= json_encode(session('error')) ?>);
+            <?php endif; ?>
+        });
+    </script>
 
     <?= $this->renderSection('scripts') ?>
 </body>
