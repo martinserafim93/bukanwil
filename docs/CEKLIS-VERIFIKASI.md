@@ -77,3 +77,11 @@ Poin: (1) File nyata · (2) Build/test lolos · (3) Review loop tertutup · (4) 
 - [x] 4. Tidak menggantung — tidak ada proses tersisa; skrip sementara terhapus
 - [x] 5. Secret aman — kredensial DB produksi hanya di Database.php server (tidak di repo); file sementara ber-kredensial dihapus
 - [x] 6. Push terverifikasi — n/a (deploy FTP; kode sudah di remote `martinserafim93/bukanwil`)
+
+## Fase 9 — Toast notification + pembeda hak akses role
+- [x] 1. File nyata — `public/js/toast.js` (BARU, 97 baris, zero-dep) + kelas toast di `themes/app.css` → `public/css/app.css` (rebuild 26.756 B); integrasi di `layouts/publik.php` + `layouts/admin.php`; guard `requireSuperadmin()` di 7 method `AdminUser.php`; logout `Auth.php`; spec `docs/SPEC-TOAST-ROLE.md` (843 baris)
+- [x] 2. Build/test — `php -l` semua file lolos; `npm run build:css` hijau (268ms); kelas toast terverifikasi di CSS minified; JS ordering aman (`DOMContentLoaded`); bug logout flash terbukti empiris via PHP CLI (destroy vs remove) lalu diperbaiki
+- [x] 3. Review loop tertutup — arsitek → koding (backend) → frontend (toast+sidebar) → reviewer **APPROVE** (temuan: 1 kosmetik P2 return-type konfirmasi, tidak wajib sebelum push)
+- [x] 4. Tidak menggantung — bug return type `edit()` (TypeError) difix Lead; file sampah `tests/unit/LogoutFlashTest.php` dibersihkan; tak ada proses tersisa
+- [x] 5. Secret aman — scan `git diff` bersih (tak ada password/token/secret); author tanpa atribusi AI
+- [x] 6. Push terverifikasi — `7a3d80c` (Martinus Lukas) di `martinserafim93/bukanwil`
