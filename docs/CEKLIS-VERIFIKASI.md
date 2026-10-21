@@ -70,10 +70,10 @@ Poin: (1) File nyata · (2) Build/test lolos · (3) Review loop tertutup · (4) 
 - [x] 5. Secret aman — tidak ada secret di commit
 - [x] 6. Push terverifikasi — `6cd5b29` (Martinus Lukas); repo di-rename `martinserafim93/bukanwil`
 
-## Fase 8 — Deploy produksi BUKANWIL (subdomain + migrasi data)
-- [ ] 1. File nyata — subdomain `bukanwil.is-best.net` dibuat di panel InfinityFree (manual Martinus)
-- [ ] 2. Build/test — upload + smoke test live di subdomain baru
-- [ ] 3. Review loop tertutup
-- [ ] 4. Tidak menggantung
-- [ ] 5. Secret aman — kredensial DB produksi tak di-commit
-- [ ] 6. Push terverifikasi
+## Fase 8 — Deploy produksi BUKANWIL (subdomain + DB)
+- [x] 1. File nyata — 3.218 file ter-upload ke `bukanwil.is-great.org/htdocs` (ZIP + extract server-side; struktur app/public/vendor/writable benar)
+- [x] 2. Build/test — smoke test live via browser: form publik 200 + header BUKANWIL, login superadmin OK, dashboard render, pengaturan field deskripsi terbaca
+- [x] 3. Review loop tertutup — paket staging diverifikasi Lead (baseURL, DB, cookie secure); ZIP/extract.php terhapus setelah deploy
+- [x] 4. Tidak menggantung — tidak ada proses tersisa; skrip sementara terhapus
+- [x] 5. Secret aman — kredensial DB produksi hanya di Database.php server (tidak di repo); file sementara ber-kredensial dihapus
+- [x] 6. Push terverifikasi — n/a (deploy FTP; kode sudah di remote `martinserafim93/bukanwil`)
