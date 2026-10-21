@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin detail tamu — SANTRI
+ * Admin detail tamu — BUKANWIL
  *
  * @var array<string, mixed> $tamu
  */

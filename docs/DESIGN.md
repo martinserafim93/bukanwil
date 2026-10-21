@@ -1,12 +1,12 @@
-# SANTRI Design System
+# BUKANWIL Design System
 
-Dokumen ini merangkum arah desain, token, dan aturan visual yang digunakan pada Fase 1 pengembangan SANTRI.
+Dokumen ini merangkum arah desain, token, dan aturan visual yang digunakan pada Fase 1 pengembangan BUKANWIL.
 
 ---
 
 ## 1. Arah desain
 
-SANTRI adalah aplikasi internal sekaligus publik yang mewakili instansi pemerintah (Kementerian Agama). Oleh karena itu pendekatan visualnya:
+BUKANWIL adalah aplikasi internal sekaligus publik yang mewakili instansi pemerintah (Kementerian Agama). Oleh karena itu pendekatan visualnya:
 
 - **Tegas & bersih**: tampilan dipercaya, tidak norak, mudah diakses masyarakat umum.
 - **Institusional namun hangat**: brand Kemenag hijau + emas dipadukan dengan netral hangat supaya tidak terlalu kaku.
@@ -87,7 +87,7 @@ Diadaptasi dari skill `design-taste-frontend`, `minimalist-ui`, dan `high-end-vi
 
 ### Logo / identitas institusi
 
-- Logo/ikon "Km" pada layout publik dan admin bersifat dekoratif dan diberi `aria-hidden="true"`. Identitas institusi (publik: "Kementerian Agama RI / Kanwil Kemenag"; admin: "SANTRI / Admin Panel") dibacakan oleh screen reader melalui teks heading di sampingnya, sehingga tidak perlu `aria-label` pada lingkaran logo.
+- Logo/ikon "Km" pada layout publik dan admin bersifat dekoratif dan diberi `aria-hidden="true"`. Identitas institusi (publik: "Kementerian Agama RI / Kanwil Kemenag"; admin: "BUKANWIL / Admin Panel") dibacakan oleh screen reader melalui teks heading di sampingnya, sehingga tidak perlu `aria-label` pada lingkaran logo.
 
 ### Kontras warna utama
 
@@ -112,7 +112,7 @@ Diadaptasi dari skill `design-taste-frontend`, `minimalist-ui`, dan `high-end-vi
 ## 8. Build
 
 ```bash
-cd /opt/data/workspaces/santri && npm run build:css
+cd /opt/data/workspaces/bukanwil && npm run build:css
 ```
 
 Saat ini script build menggunakan binary `tailwindcss` langsung ( `./node_modules/.bin/tailwindcss ...`) karena `@tailwindcss/cli` tidak tereksekusi di environment ini. Perintah `npm run build:css` sudah disesuaikan.

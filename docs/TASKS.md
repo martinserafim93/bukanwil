@@ -1,5 +1,5 @@
 # TASKS.md — Dekomposisi Task untuk Agen Koding
-## Aplikasi SANTRI v1.0
+## Aplikasi BUKANWIL v1.0
 
 **Urutan eksekusi wajib diikuti** — setiap task bergantung pada task sebelumnya.
 Baca SPEC.md secara penuh sebelum memulai task apapun.
@@ -44,10 +44,10 @@ Tidak ada `.env` — semua config di `app/Config/*.php`.
 
 **Cara eksekusi:**
 ```bash
-mysql -u db_user -p santri_db < database/schema.sql
+mysql -u db_user -p bukanwil_db < database/schema.sql
 php -r "echo password_hash('Admin@2026', PASSWORD_BCRYPT, ['cost'=>12]);"
 # Salin hash, lalu:
-mysql -u db_user -p santri_db -e "UPDATE admin SET password='<hash>' WHERE username='superadmin';"
+mysql -u db_user -p bukanwil_db -e "UPDATE admin SET password='<hash>' WHERE username='superadmin';"
 ```
 
 **Kriteria selesai:**
@@ -800,3 +800,329 @@ $this->response->setHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
 - Semua item QA checklist di atas dicentang dan dilaporkan oleh agen koding.
 - Tidak ada PHP error/warning di log saat menjalankan semua flow utama.
 - Aplikasi bisa di-deploy ke InfinityFree (tanpa dotenv, tanpa Redis, tanpa CLI PHP production).
+
+---
+
+## Task-RENAME — Full Rebrand BUKANWIL (2026-10-21)
+
+**Tujuan:** Rename lengkap aplikasi BUKANWIL → BUKANWIL, ubah deskripsi dari hardcoded menjadi konfigurabel via menu Pengaturan.
+
+**Referensi:** Baca `docs/SPEC-RENAME-BUKANWIL.md` secara LENGKAP sebelum mulai — dokumen tersebut berisi pemetaan file-by-file yang presisi.
+
+**Urutan eksekusi wajib:**
+
+### RENAME-01 — BACKEND: Database Schema + Config (agen `koding`)
+
+**Estimasi:** 1 jam
+
+**File diubah:**
+
+1. **database/schema.sql**
+   - Baris 2: `-- BUKANWIL —` → `-- BUKANWIL —`
+   - Baris 3: `-- Buku Tamu Kanwil Kemenag Kaltara` → `-- Buku Tamu Kanwil Kemenag Kaltara`
+   - Baris 109: `('judul_aplikasi', 'BUKANWIL — Buku Tamu PTSP'),` → `('judul_aplikasi', 'BUKANWIL'),`
+   - **TAMBAH baris baru** setelah baris 109 (sebelum baris 110):
+     ```sql
+     ('deskripsi_aplikasi', 'Buku Tamu Kanwil Kemenag Kaltara'),
+     ```
+   - Hasil akhir seed (4 baris key-value, lihat SPEC-RENAME §2.1).
+
+2. **app/Config/Database.php**
+   - Baris 33: `'database' => 'bukanwil_db',` → `'database' => 'bukanwil_db',`
+
+3. **app/Config/Session.php**
+   - Baris 34: `public string $cookieName = 'bukanwil_session';` → `public string $cookieName = 'bukanwil_session';`
+
+4. **app/Controllers/Admin/Pengaturan.php**
+   - Method `simpan()`, array `$rules` (sekitar baris 49-53):
+     ```php
+     $rules = [
+         'judul_aplikasi'       => 'required|max_length[255]',
+         'deskripsi_aplikasi'   => 'required|max_length[255]',  // TAMBAH
+         'nama_instansi_ptsp'   => 'required|max_length[255]',
+         'teks_header'          => 'required',
+     ];
+     ```
+   - Array `$data` (sekitar baris 61-65):
+     ```php
+     $data = [
+         'judul_aplikasi'       => (string) $this->request->getPost('judul_aplikasi'),
+         'deskripsi_aplikasi'   => (string) $this->request->getPost('deskripsi_aplikasi'),  // TAMBAH
+         'nama_instansi_ptsp'   => (string) $this->request->getPost('nama_instansi_ptsp'),
+         'teks_header'          => (string) $this->request->getPost('teks_header'),
+     ];
+     ```
+
+5. **package.json**
+   - Baris 2: `"name": "bukanwil",` → `"name": "bukanwil",`
+   - Baris 4: `"description": "BUKANWIL — Buku Tamu Kanwil Kemenag Kaltara (CodeIgniter 4 + Tailwind CSS)",` → `"description": "BUKANWIL — Buku Tamu Kanwil Kemenag Kaltara (CodeIgniter 4 + Tailwind CSS)",`
+   - Baris 12: `"url": "git+https://github.com/martinserafim93/bukanwil.git"` → `"url": "git+https://github.com/martinserafim93/bukanwil.git"`
+
+6. **app/Controllers/Tamu.php**
+   - Baris 8: `* Public guestbook form controller — BUKANWIL` → `* Public guestbook form controller — BUKANWIL`
+
+**Kriteria selesai:**
+- `grep -r "bukanwil_db" app/ database/` hanya di 2 file yang sudah diganti.
+- `grep -r "bukanwil_session" app/` hanya di 1 file yang sudah diganti.
+- Seed `pengaturan` memiliki 4 baris (judul, deskripsi, nama_instansi, teks_header).
+- Controller Pengaturan memvalidasi dan menyimpan `deskripsi_aplikasi`.
+
+---
+
+### RENAME-02 — FRONTEND: Layout + Views (agen `frontend`)
+
+**Estimasi:** 2 jam
+
+**File diubah:**
+
+1. **app/Views/layouts/publik.php**
+   - Baris 3: `* Layout Publik — BUKANWIL` → `* Layout Publik — BUKANWIL`
+   - Baris 12: `— <?= esc($pengaturan['judul_aplikasi'] ?? 'BUKANWIL') ?>` → `— <?= esc($pengaturan['judul_aplikasi'] ?? 'BUKANWIL') ?>`
+   - Baris 34: `<?= esc($pengaturan['judul_aplikasi'] ?? 'BUKANWIL') ?>` → `<?= esc($pengaturan['judul_aplikasi'] ?? 'BUKANWIL') ?>`
+   - Baris 37: `<?= esc('Buku Tamu Kanwil Kemenag Kaltara') ?>` → `<?= esc($pengaturan['deskripsi_aplikasi'] ?? 'Buku Tamu Kanwil Kemenag Kaltara') ?>`  
+     (PERHATIAN: dari hardcoded string menjadi dinamis dari DB)
+
+2. **app/Views/layouts/admin.php**
+   - Baris 3: `* Layout Admin — BUKANWIL` → `* Layout Admin — BUKANWIL`
+   - Baris 24: `— <?= esc($pengaturan['judul_aplikasi'] ?? 'BUKANWIL') ?>` → `— <?= esc($pengaturan['judul_aplikasi'] ?? 'BUKANWIL') ?>`
+   - Baris 50: `<?= esc($pengaturan['judul_aplikasi'] ?? 'BUKANWIL') ?>` → `<?= esc($pengaturan['judul_aplikasi'] ?? 'BUKANWIL') ?>`
+
+3. **app/Views/tamu/form.php**
+   - Baris 3: `* Public guestbook form — BUKANWIL` → `* Public guestbook form — BUKANWIL`
+
+4. **app/Views/tamu/sukses.php**
+   - Baris 3: `* Public guestbook success page — BUKANWIL` → `* Public guestbook success page — BUKANWIL`
+
+5. **app/Views/admin/tamu/index.php**
+   - Baris 3: `* Admin guest list — BUKANWIL` → `* Admin guest list — BUKANWIL`
+
+6. **app/Views/admin/tamu/detail.php**
+   - Baris 3: `* Admin detail tamu — BUKANWIL` → `* Admin detail tamu — BUKANWIL`
+
+7. **app/Views/admin/pengaturan/index.php**
+   - Baris 3: `* Admin settings form — BUKANWIL` → `* Admin settings form — BUKANWIL`
+   - **TAMBAH field baru** setelah field `judul_aplikasi` (setelah `</div>` baris 45, sebelum `<div>` baris 47):
+     ```php
+             <div>
+                 <label for="deskripsi_aplikasi" class="form-label"><?= esc('Deskripsi Aplikasi') ?></label>
+                 <input type="text" id="deskripsi_aplikasi" name="deskripsi_aplikasi" value="<?= esc((string) old('deskripsi_aplikasi', $pengaturan['deskripsi_aplikasi'] ?? '')) ?>" class="form-field" required>
+                 <?php if (session('errors.deskripsi_aplikasi')): ?>
+                     <p class="text-danger text-sm mt-1"><?= esc((string) session('errors.deskripsi_aplikasi')) ?></p>
+                 <?php endif; ?>
+                 <p class="text-xs text-ink-muted mt-1">Deskripsi singkat yang tampil di bawah judul pada halaman publik.</p>
+             </div>
+     ```
+
+8. **app/Views/admin/login.php**
+   - Baris 3: `* Standalone admin login page — BUKANWIL` → `* Standalone admin login page — BUKANWIL`
+
+9. **app/Views/admin/admin-user/index.php**
+   - Baris 3: `* Admin user list — BUKANWIL` → `* Admin user list — BUKANWIL`
+
+10. **app/Views/admin/admin-user/form.php**
+    - Baris 3: `* Admin user form — BUKANWIL` → `* Admin user form — BUKANWIL`
+
+11. **app/Views/admin/admin-user/hapus.php**
+    - Baris 3: `* Delete admin confirmation — BUKANWIL` → `* Delete admin confirmation — BUKANWIL`
+
+12. **themes/app.css**
+    - Baris 4: `   BUKANWIL Design System — Tailwind CSS v4 (CSS-first)` → `   BUKANWIL Design System — Tailwind CSS v4 (CSS-first)`
+
+**Kriteria selesai:**
+- `grep -ri "— BUKANWIL" app/Views/` tidak mengembalikan hasil.
+- `grep -ri "BUKANWIL" themes/` tidak mengembalikan hasil.
+- Form Pengaturan memiliki field `Deskripsi Aplikasi` setelah field `Judul Aplikasi`.
+- Layout publik menggunakan `$pengaturan['deskripsi_aplikasi']` (dinamis) bukan string hardcoded.
+
+---
+
+### RENAME-03 — DOKUMENTASI: docs/ dan blueprint/ (agen `koding`)
+
+**Estimasi:** 1 jam
+
+**File diubah:**
+
+1. **docs/PRD.md**
+   - Baris 1: `# PRD — BUKANWIL` → `# PRD — BUKANWIL`
+   - Baris 2: `## Buku Tamu Kanwil Kemenag Kaltara` → `## Buku Tamu Kanwil Kemenag Kaltara`
+   - Baris 15: `BUKANWIL hadir sebagai pengganti Google Form…` → `BUKANWIL hadir sebagai pengganti Google Form…`
+
+2. **docs/SPEC.md**
+   - Baris 1: `# SPEC.md — Spesifikasi Teknis BUKANWIL` → `# SPEC.md — Spesifikasi Teknis BUKANWIL`
+   - Baris 2: `## Buku Tamu Kanwil Kemenag Kaltara` → `## Buku Tamu Kanwil Kemenag Kaltara`
+   - Baris 42 (dalam contoh config): `'database' => 'bukanwil_db',` → `'database' => 'bukanwil_db',`
+
+3. **docs/DECISIONS.md**
+   - Baris 1: `# Keputusan Lead — BUKANWIL` → `# Keputusan Lead — BUKANWIL`
+
+4. **docs/DESIGN.md**
+   - Baris 1: `# BUKANWIL Design System` → `# BUKANWIL Design System`
+   - Baris 3: `…pengembangan BUKANWIL.` → `…pengembangan BUKANWIL.`
+   - Baris 9: `BUKANWIL adalah aplikasi internal…` → `BUKANWIL adalah aplikasi internal…`
+   - Baris 90: `…(publik: "Kementerian Agama RI / Kanwil Kemenag"; admin: "BUKANWIL / Admin Panel")…` → `…(admin: "BUKANWIL / Admin Panel")…`
+
+5. **docs/CEKLIS-VERIFIKASI.md**
+   - Baris 1: `# Ceklis Verifikasi per Fase — BUKANWIL` → `# Ceklis Verifikasi per Fase — BUKANWIL`
+
+6. **blueprint/project-plan.md**
+   - Baris 1: `# Project Plan — BUKANWIL v1.0` → `# Project Plan — BUKANWIL v1.0`
+   - Baris 3: `**Buku Tamu Kanwil Kemenag Kaltara**` → `**Buku Tamu Kanwil Kemenag Kaltara**`
+   - Baris 17: `BUKANWIL menggantikan Google Form…` → `BUKANWIL menggantikan Google Form…`
+
+7. **blueprint/build-plan.md**
+   - Baris 1: `# Build Plan — BUKANWIL v1.0` → `# Build Plan — BUKANWIL v1.0`
+
+8. **blueprint/context/project-overview.md**
+   - Baris 1: `# Project Overview — BUKANWIL` → `# Project Overview — BUKANWIL`
+   - Baris 3: `**Buku Tamu Kanwil Kemenag Kaltara**` → `**Buku Tamu Kanwil Kemenag Kaltara**`
+   - Baris 17: `BUKANWIL hadir sebagai solusi pengganti…` → `BUKANWIL hadir sebagai solusi pengganti…`
+
+9. **docs/preview.html**
+   - Baris 6: `<title>Form Buku Tamu — BUKANWIL</title>` → `<title>Form Buku Tamu — BUKANWIL</title>`
+
+**Kriteria selesai:**
+- `grep -ri "BUKANWIL" docs/ blueprint/` tidak mengembalikan hasil (kecuali file `SPEC-RENAME-BUKANWIL.md` yang sengaja berisi dokumentasi proses rename).
+- `grep -ri "Religius" docs/ blueprint/` tidak mengembalikan hasil.
+- Semua dokumen konsisten dengan nama baru.
+
+---
+
+### RENAME-04 — VERIFIKASI + BUILD (agen `koding` atau `frontend`)
+
+**Estimasi:** 0.5 jam
+
+**Checklist:**
+
+1. **Grep final (pastikan tidak ada sisa string lama):**
+   ```bash
+   cd /opt/data/workspaces/bukanwil
+   grep -ri "BUKANWIL" app/ public/ database/ docs/ blueprint/ themes/ package.json --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=.claude
+   grep -ri "bukanwil_session" app/
+   grep -ri "bukanwil_db" app/ database/
+   grep -ri "Religius" app/ public/ database/ docs/ blueprint/
+   ```
+   **Target:** Semua perintah di atas tidak mengembalikan hasil (atau hanya mengembalikan file `docs/SPEC-RENAME-BUKANWIL.md` dan AGENTS.md/CLAUDE.md yang memang dokumentasi proses).
+
+2. **Build CSS:**
+   ```bash
+   npm run build:css
+   ```
+   **Target:** Selesai tanpa error, file `public/css/app.css` ter-generate.
+
+3. **Smoke test lokal (bila DB lokal sudah ada):**
+   - Buat database `bukanwil_db`, import `database/schema.sql`.
+   - Update `app/Config/Database.php` lokal: `'database' => 'bukanwil_db'`.
+   - Akses halaman publik: verifikasi judul `BUKANWIL` dan deskripsi `Buku Tamu Kanwil Kemenag Kaltara` tampil.
+   - Login admin (username: `superadmin`, password: `Admin@2026`).
+   - Buka menu Pengaturan: verifikasi field `Deskripsi Aplikasi` ada dan terisi default `Buku Tamu Kanwil Kemenag Kaltara`.
+   - Ubah deskripsi menjadi string lain (misal: `Buku Tamu Kanwil Test`), simpan, reload halaman publik: verifikasi deskripsi berubah.
+   - Cek cookie session via DevTools → Application → Cookies: nama cookie `bukanwil_session`.
+
+4. **Commit lokal (JANGAN push — tunggu Lead review):**
+   ```bash
+   git add -A
+   git commit -m "feat: Full rebrand BUKANWIL → BUKANWIL + deskripsi konfigurabel"
+   ```
+
+**Kriteria selesai:**
+- Semua checklist di atas terpenuhi.
+- Tidak ada error build.
+- Halaman publik dan admin menampilkan branding baru.
+- Deskripsi aplikasi konfigurabel via menu Pengaturan.
+
+---
+
+### RENAME-05 — OPS: Deployment Produksi (LEAD — TIDAK DIKERJAKAN AGEN)
+
+**Estimasi:** 2 jam (Lead)
+
+**Langkah:**
+
+1. **Rename repo GitHub:**
+   ```bash
+   gh repo rename bukanwil --repo martinserafim93/bukanwil
+   ```
+   - URL lama redirect otomatis.
+   - Update remote lokal: `git remote set-url origin https://github.com/martinserafim93/bukanwil.git`
+
+2. **Buat subdomain baru `bukanwil.is-best.net`:**
+   - Login panel InfinityFree.
+   - Buat subdomain, arahkan root ke folder `htdocs/` (atau folder baru).
+   - Upload repo dari GitHub atau sync lokal.
+
+3. **Update config produksi:**
+   - `app/Config/App.php`: `public string $baseURL = 'https://bukanwil.is-best.net/';`
+   - `app/Config/Database.php`: hostname, username, password, database produksi (misal `epiz_xxxxx_bukanwil`).
+
+4. **Migrasi database:**
+   - Dump tabel `tamu` dari `bukanwil_db` lama:
+     ```bash
+     mysqldump -u user -p bukanwil_db tamu > tamu_backup.sql
+     ```
+   - Buat database baru `bukanwil_db` (atau `epiz_xxxxx_bukanwil`).
+   - Import skema baru:
+     ```bash
+     mysql -u user -p bukanwil_db < database/schema.sql
+     ```
+   - Import data tamu lama:
+     ```bash
+     mysql -u user -p bukanwil_db < tamu_backup.sql
+     ```
+   - Verifikasi:
+     ```sql
+     SELECT COUNT(*) FROM bukanwil_db.tamu;
+     SELECT * FROM bukanwil_db.pengaturan;
+     ```
+   - Update seed `pengaturan` bila perlu:
+     ```sql
+     UPDATE pengaturan SET value = 'BUKANWIL' WHERE `key` = 'judul_aplikasi';
+     INSERT INTO pengaturan (`key`, `value`) VALUES ('deskripsi_aplikasi', 'Buku Tamu Kanwil Kemenag Kaltara')
+     ON DUPLICATE KEY UPDATE value = VALUES(value);
+     ```
+
+5. **Instruksi admin:**
+   - Admin logout dari `bukanwil.is-best.net`.
+   - Login ulang di `bukanwil.is-best.net` (cookie session berbeda, domain berbeda).
+
+**Kriteria selesai:**
+- Subdomain baru online, halaman publik dan admin berfungsi.
+- Data tamu lama berhasil dimigrasikan tanpa kehilangan.
+- Notifikasi badge tamu baru berfungsi.
+- Admin bisa login dan mengubah deskripsi aplikasi via menu Pengaturan.
+
+---
+
+### RENAME-06 — DOKUMENTASI AKHIR: Catat Perubahan (agen `koding`)
+
+**Estimasi:** 0.25 jam
+
+**Tujuan:** Catat hasil rename di dokumen `docs/DECISIONS.md` atau buat changelog.
+
+**File diubah:**
+
+1. **docs/DECISIONS.md**
+   - Tambah bagian baru di akhir:
+     ```markdown
+     ## 2026-10-21 — Rebrand BUKANWIL → BUKANWIL
+
+     **Keputusan:**
+     - Nama aplikasi diubah dari BUKANWIL (Buku Tamu Kanwil Kemenag Kaltara) menjadi BUKANWIL (Buku Tamu Kanwil Kemenag Kaltara).
+     - Deskripsi aplikasi (kepanjangan) yang sebelumnya hardcoded di `app/Views/layouts/publik.php` kini menjadi konfigurabel via menu Pengaturan (superadmin), disimpan di tabel `pengaturan` key `deskripsi_aplikasi`.
+     - Database lokal: `bukanwil_db` → `bukanwil_db`.
+     - Cookie session: `bukanwil_session` → `bukanwil_session`.
+     - Repo GitHub: `martinserafim93/bukanwil` → `martinserafim93/bukanwil`.
+     - Domain produksi: `bukanwil.is-best.net` → `bukanwil.is-best.net`.
+
+     **Referensi:**
+     - Spesifikasi lengkap: `docs/SPEC-RENAME-BUKANWIL.md`.
+     - Task rename: `docs/TASKS.md` → Task-RENAME.
+
+     **Estimasi total:** 6.1 jam (BACKEND 1 jam + FRONTEND 2 jam + DOC 1 jam + OPS 2 jam + VERIFIKASI 0.5 jam).
+     ```
+
+**Kriteria selesai:**
+- Dokumen `DECISIONS.md` mencatat perubahan ini dengan timestamp dan referensi.
+
+---
+
+## END OF TASK-RENAME

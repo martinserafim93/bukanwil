@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin user list — SANTRI
+ * Admin user list — BUKANWIL
  *
  * @var array<int, array<string, mixed>> $admins
  * @var int $jumlahSuperadmin

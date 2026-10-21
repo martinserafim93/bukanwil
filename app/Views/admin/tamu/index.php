@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin guest list — SANTRI
+ * Admin guest list — BUKANWIL
  *
  * @var array<int, array<string, mixed>> $tamu
  * @var \CodeIgniter\Pager\Pager         $pager

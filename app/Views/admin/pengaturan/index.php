@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin settings form — SANTRI
+ * Admin settings form — BUKANWIL
  *
  * @var array<string, string> $pengaturan
  * @var int $unreadCount
@@ -42,6 +42,15 @@ $this->extend('layouts/admin');
             <?php if (session('errors.judul_aplikasi')): ?>
                 <p class="text-danger text-sm mt-1"><?= esc((string) session('errors.judul_aplikasi')) ?></p>
             <?php endif; ?>
+        </div>
+
+        <div>
+            <label for="deskripsi_aplikasi" class="form-label"><?= esc('Deskripsi Aplikasi') ?></label>
+            <input type="text" id="deskripsi_aplikasi" name="deskripsi_aplikasi" value="<?= esc((string) old('deskripsi_aplikasi', $pengaturan['deskripsi_aplikasi'] ?? '')) ?>" class="form-field" required>
+            <?php if (session('errors.deskripsi_aplikasi')): ?>
+                <p class="text-danger text-sm mt-1"><?= esc((string) session('errors.deskripsi_aplikasi')) ?></p>
+            <?php endif; ?>
+            <p class="text-xs text-ink-muted mt-1">Deskripsi singkat yang tampil di bawah judul pada halaman publik.</p>
         </div>
 
         <div>

@@ -1,4 +1,4 @@
-# Keputusan Lead — SANTRI
+# Keputusan Lead — BUKANWIL
 
 Jawaban atas "PERTANYAAN UNTUK LEAD" dari agen `arsitek` (docs/SPEC.md §9 dan blueprint/context/project-overview.md §Open Questions). Berlaku untuk seluruh fase pembangunan.
 

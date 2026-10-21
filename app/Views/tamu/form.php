@@ -1,6 +1,6 @@
 <?php
 /**
- * Public guestbook form — SANTRI
+ * Public guestbook form — BUKANWIL
  */
 $this->extend('layouts/publik');
 $this->section('title');

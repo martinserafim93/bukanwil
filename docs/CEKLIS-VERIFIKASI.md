@@ -1,4 +1,4 @@
-# Ceklis Verifikasi per Fase — SANTRI
+# Ceklis Verifikasi per Fase — BUKANWIL
 
 Ledger verifikasi Lead sebelum menyatakan fase selesai & push. Enam poin WAJIB (lihat "Aturan Kerja Lead" di AGENTS.md). Tiap fase dicentang bila semua poinnya hijau.
 
@@ -55,7 +55,7 @@ Poin: (1) File nyata · (2) Build/test lolos · (3) Review loop tertutup · (4) 
 - [x] 6. Push terverifikasi — `90abfca` (Martinus Lukas)
 
 ## Fase 6 — Paket & deploy FTP (InfinityFree)
-- [x] 1. File nyata — 3.217 file ter-upload ke `santri.is-best.net/htdocs/` (docroot subdomain; verifikasi koneksi baru)
+- [x] 1. File nyata — 3.217 file ter-upload ke `bukanwil.is-best.net/htdocs/` (docroot subdomain; verifikasi koneksi baru)
 - [x] 2. Build/test — live: form buku tamu + login admin render 200, DB terbaca (tabel `pengaturan`)
 - [x] 3. Review loop tertutup — bug config produksi (`$proxyIPs` format CI4 4.7) ditemukan+fiksasi sampai app jalan
 - [x] 4. Tidak menggantung — upload tuntas, tak ada proses background tersisa

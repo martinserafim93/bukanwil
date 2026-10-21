@@ -1,6 +1,6 @@
 <?php
 /**
- * Layout Admin — SANTRI
+ * Layout Admin — BUKANWIL
  * Sidebar + topbar + area konten.
  */
 
@@ -21,7 +21,7 @@ function isActive(string $path): string
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $this->renderSection('title', true) ?> — <?= esc($pengaturan['judul_aplikasi'] ?? 'SANTRI') ?></title>
+    <title><?= $this->renderSection('title', true) ?> — <?= esc($pengaturan['judul_aplikasi'] ?? 'BUKANWIL') ?></title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,7 +47,7 @@ function isActive(string $path): string
                 >
                 <div>
                     <p class="text-sm font-bold leading-tight text-brand-700">
-                        <?= esc($pengaturan['judul_aplikasi'] ?? 'SANTRI') ?>
+                        <?= esc($pengaturan['judul_aplikasi'] ?? 'BUKANWIL') ?>
                     </p>
                     <p class="text-xs text-ink-muted">Admin Panel</p>
                 </div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Public guestbook success page — SANTRI
+ * Public guestbook success page — BUKANWIL
  */
 $this->extend('layouts/publik');
 $this->section('title'); echo 'Terima Kasih'; $this->endSection();

@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\TamuModel;
 
 /**
- * Public guestbook form controller — SANTRI
+ * Public guestbook form controller — BUKANWIL
  */
 class Tamu extends BaseController
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Standalone admin login page — SANTRI
+ * Standalone admin login page — BUKANWIL
  * Extends the public layout (no admin sidebar).
  */
 $this->extend('layouts/publik');

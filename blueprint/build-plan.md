@@ -1,4 +1,4 @@
-# Build Plan — SANTRI v1.0
+# Build Plan — BUKANWIL v1.0
 
 **Rencana Build Teknis per Fitur/Task**
 
@@ -17,8 +17,8 @@ Dependensi: tidak ada (task pertama)
 
 File yang dibuat / diubah:
 - app/Config/App.php — baseURL, indexPage='', appTimezone='Asia/Makassar', charset, defaultLocale='id', CSRFProtection=true, CSRFTokenName, CSRFCookieName, CSRFExpire=7200, CSRFRegenerate=true, CI_ENVIRONMENT='production'
-- app/Config/Database.php — hostname, username, password, database='santri_db', DBDriver='MySQLi', DBDebug=false, charset='utf8mb4', DBCollat='utf8mb4_unicode_ci'
-- app/Config/Session.php — driver FileHandler, cookieName='santri_session', expiration=7200, savePath=WRITEPATH.'session', regenerateDestroy=true
+- app/Config/Database.php — hostname, username, password, database='bukanwil_db', DBDriver='MySQLi', DBDebug=false, charset='utf8mb4', DBCollat='utf8mb4_unicode_ci'
+- app/Config/Session.php — driver FileHandler, cookieName='bukanwil_session', expiration=7200, savePath=WRITEPATH.'session', regenerateDestroy=true
 - app/Config/Cookie.php — httponly=true, samesite='Lax', secure=true (sesuaikan bila tidak HTTPS)
 - app/Config/Encryption.php — key dari hasil 'php spark key:generate --show'
 - public/.htaccess — rewrite semua request ke index.php (CI4 default)
@@ -43,7 +43,7 @@ File yang dibuat / diubah:
 - Tidak ada file baru di repo — hanya operasi database
 
 Langkah eksekusi:
-1. mysql -u db_user -p santri_db < database/schema.sql
+1. mysql -u db_user -p bukanwil_db < database/schema.sql
 2. php -r "echo password_hash('Admin@2026', PASSWORD_BCRYPT, ['cost'=>12]);"
 3. UPDATE admin SET password='<hash>' WHERE username='superadmin'
 

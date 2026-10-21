@@ -1,7 +1,7 @@
 {
-  "name": "santri",
+  "name": "bukanwil",
   "version": "1.0.0",
-  "description": "SANTRI — Sistem Aplikasi Notifikasi dan Tamu Religius Integritas (CodeIgniter 4 + Tailwind CSS)",
+  "description": "BUKANWIL — Buku Tamu Kanwil Kemenag Kaltara (CodeIgniter 4 + Tailwind CSS)",
   "private": true,
   "scripts": {
     "build:css": "tailwindcss -i themes/app.css -o public/css/app.css --minify",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/martinserafim93/santri.git"
+    "url": "git+https://github.com/martinserafim93/bukanwil.git"
   },
   "author": "Martinus Lukas",
   "license": "MIT",

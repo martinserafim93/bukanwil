@@ -1,6 +1,6 @@
 -- ==========================================================
--- SANTRI — Skema Database MySQL 8.0 / MariaDB
--- Sistem Aplikasi Notifikasi dan Tamu Religius Integritas
+-- BUKANWIL — Skema Database MySQL 8.0 / MariaDB
+-- Buku Tamu Kanwil Kemenag Kaltara
 -- Kanwil Kemenag Kaltara
 -- Versi: 1.0.0 | 2026-10-18
 -- ==========================================================
@@ -106,9 +106,10 @@ CREATE TABLE IF NOT EXISTS `pengaturan` (
 
 -- Seed pengaturan default
 INSERT INTO `pengaturan` (`key`, `value`) VALUES
-    ('judul_aplikasi',    'SANTRI — Buku Tamu PTSP'),
-    ('nama_instansi_ptsp','Kantor Wilayah Kementerian Agama Provinsi Kalimantan Utara'),
-    ('teks_header',       'Selamat datang. Silakan isi buku tamu sebelum melanjutkan pelayanan.')
+    ('judul_aplikasi',      'BUKANWIL'),
+    ('deskripsi_aplikasi',  'Buku Tamu Kanwil Kemenag Kaltara'),
+    ('nama_instansi_ptsp',  'Kantor Wilayah Kementerian Agama Provinsi Kalimantan Utara'),
+    ('teks_header',         'Selamat datang. Silakan isi buku tamu sebelum melanjutkan pelayanan.')
 ON DUPLICATE KEY UPDATE `value` = VALUES(`value`);
 
 -- Seed akun superadmin awal

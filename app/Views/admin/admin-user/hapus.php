@@ -1,6 +1,6 @@
 <?php
 /**
- * Delete admin confirmation — SANTRI
+ * Delete admin confirmation — BUKANWIL
  *
  * @var array<string, mixed> $admin
  */

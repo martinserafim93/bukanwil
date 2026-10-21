@@ -1,6 +1,6 @@
-# Project Plan — SANTRI v1.0
+# Project Plan — BUKANWIL v1.0
 
-**Sistem Aplikasi Notifikasi dan Tamu Religius Integritas**
+**Buku Tamu Kanwil Kemenag Kaltara**
 PTSP Kanwil Kemenag Kalimantan Utara
 
 Sumber kebenaran: `docs/PRD.md`, `docs/SPEC.md`, `docs/TASKS.md`, `database/schema.sql`.
@@ -14,7 +14,7 @@ PTSP Kanwil Kemenag Kaltara menggunakan Google Form sebagai buku tamu digital.
 Masalah utama: data di platform pihak ketiga, tidak ada CMS terpusat, tidak ada notifikasi in-app,
 tampilan tidak mencerminkan identitas instansi.
 
-SANTRI menggantikan Google Form dengan aplikasi self-hosted: form publik + CMS admin,
+BUKANWIL menggantikan Google Form dengan aplikasi self-hosted: form publik + CMS admin,
 di-deploy ke InfinityFree free tier (PHP + MySQL, tanpa dotenv, tanpa Redis).
 
 ---
@@ -77,7 +77,7 @@ JS:        JavaScript native
 Peta:      Leaflet + OpenStreetMap (CDN)
 Chart:     Chart.js 4.4.x (CDN, versi di-pin)
 Hosting:   InfinityFree free tier (tidak ada dotenv, tidak ada Redis, tidak ada Node.js di server)
-Repo:      https://github.com/martinserafim93/santri
+Repo:      https://github.com/martinserafim93/bukanwil
 
 Constraint kritis:
 - TANPA .env — semua config di app/Config/*.php

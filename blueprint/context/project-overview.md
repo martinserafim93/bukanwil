@@ -1,6 +1,6 @@
-# Project Overview — SANTRI
+# Project Overview — BUKANWIL
 
-**Sistem Aplikasi Notifikasi dan Tamu Religius Integritas**  
+**Buku Tamu Kanwil Kemenag Kaltara**  
 Buku Tamu Digital + CMS Admin untuk PTSP Kanwil Kemenag Kalimantan Utara
 
 ---
@@ -14,7 +14,7 @@ PTSP (Pelayanan Terpadu Satu Pintu) Kanwil Kemenag Kaltara saat ini menggunakan 
 - **Tidak ada notifikasi in-app** — operator tidak tahu kapan ada tamu baru tanpa membuka spreadsheet.
 - **Tampilan generik** — tidak mencerminkan identitas instansi Kemenag.
 
-SANTRI hadir sebagai solusi pengganti: aplikasi buku tamu self-hosted yang tetap ringan, mudah di-deploy ke hosting shared (InfinityFree free tier), dan tidak bergantung pada layanan eksternal untuk fungsi inti.
+BUKANWIL hadir sebagai solusi pengganti: aplikasi buku tamu self-hosted yang tetap ringan, mudah di-deploy ke hosting shared (InfinityFree free tier), dan tidak bergantung pada layanan eksternal untuk fungsi inti.
 
 ---
 
@@ -149,7 +149,7 @@ Dicatat di SPEC.md §9 — belum ada jawaban final:
 ## Deployment Notes
 
 - **Hosting:** InfinityFree free tier (PHP + MySQL + .htaccess).
-- **Repo:** https://github.com/martinserafim93/santri (sudah terbootstrap).
+- **Repo:** https://github.com/martinserafim93/bukanwil (sudah terbootstrap).
 - **Build command (lokal/dev):** `npx @tailwindcss/cli -i public/assets/css/app.css -o public/assets/css/app.compiled.css --minify`
 - **Deploy:** Commit file `app.compiled.css` yang sudah ter-build, upload seluruh repo ke `htdocs/` InfinityFree (atau subdirektori), arahkan domain ke folder `public/`.
 - **Database setup:** Import `database/schema.sql`, generate hash password superadmin via `php -r "echo password_hash('Admin@2026', PASSWORD_BCRYPT, ['cost'=>12]);"`, UPDATE tabel admin.

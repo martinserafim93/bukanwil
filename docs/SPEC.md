@@ -1,5 +1,5 @@
-# SPEC.md — Spesifikasi Teknis SANTRI
-## Sistem Aplikasi Notifikasi dan Tamu Religius Integritas
+# SPEC.md — Spesifikasi Teknis BUKANWIL
+## Buku Tamu Kanwil Kemenag Kaltara
 
 **Versi:** 1.0.0
 **Tanggal:** 2026-10-18
@@ -39,7 +39,7 @@ public array $default = [
     'hostname'     => 'localhost',
     'username'     => 'db_user',      // ganti
     'password'     => 'db_password',  // ganti
-    'database'     => 'santri_db',    // ganti
+    'database'     => 'bukanwil_db',    // ganti
     'DBDriver'     => 'MySQLi',
     'DBPrefix'     => '',
     'pConnect'     => false,
@@ -59,7 +59,7 @@ public array $default = [
 
 ```php
 public string $driver            = 'CodeIgniter\Session\Handlers\FileHandler';
-public string $cookieName        = 'santri_session';
+public string $cookieName        = 'bukanwil_session';
 public int    $expiration        = 7200;       // 2 jam
 public string $savePath          = WRITEPATH . 'session';
 public bool   $matchIP           = false;
@@ -157,7 +157,7 @@ Key seed: judul_aplikasi, nama_instansi_ptsp, teks_header
 ## 3. Struktur Direktori MVC
 
 ```
-santri/
+bukanwil/
 ├── app/
 │   ├── Config/
 │   │   ├── App.php

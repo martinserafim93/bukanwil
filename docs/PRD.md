@@ -1,5 +1,5 @@
-# PRD — SANTRI
-## Sistem Aplikasi Notifikasi dan Tamu Religius Integritas
+# PRD — BUKANWIL
+## Buku Tamu Kanwil Kemenag Kaltara
 
 **Versi:** 1.0.0
 **Tanggal:** 2026-10-18
@@ -12,7 +12,7 @@
 
 PTSP (Pelayanan Terpadu Satu Pintu) Kanwil Kemenag Kaltara saat ini menggunakan Google Form sebagai buku tamu digital. Pendekatan ini memiliki keterbatasan: data tersimpan di platform pihak ketiga, tidak ada CMS terpusat, tidak ada notifikasi in-app, dan tampilan tidak mencerminkan identitas instansi.
 
-SANTRI hadir sebagai pengganti Google Form sekaligus CMS internal — tetap ringan, mudah di-deploy ke hosting shared (InfinityFree), dan tidak bergantung pada layanan eksternal untuk fungsi inti.
+BUKANWIL hadir sebagai pengganti Google Form sekaligus CMS internal — tetap ringan, mudah di-deploy ke hosting shared (InfinityFree), dan tidak bergantung pada layanan eksternal untuk fungsi inti.
 
 ---
 

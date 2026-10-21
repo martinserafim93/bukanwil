@@ -48,6 +48,7 @@ class Pengaturan extends BaseController
 
         $rules = [
             'judul_aplikasi'     => 'required|max_length[255]',
+            'deskripsi_aplikasi' => 'required|max_length[255]',
             'nama_instansi_ptsp' => 'required|max_length[255]',
             'teks_header'        => 'required',
         ];
@@ -60,6 +61,7 @@ class Pengaturan extends BaseController
 
         $data = [
             'judul_aplikasi'     => (string) $this->request->getPost('judul_aplikasi'),
+            'deskripsi_aplikasi' => (string) $this->request->getPost('deskripsi_aplikasi'),
             'nama_instansi_ptsp' => (string) $this->request->getPost('nama_instansi_ptsp'),
             'teks_header'        => (string) $this->request->getPost('teks_header'),
         ];
