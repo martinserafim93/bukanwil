@@ -55,17 +55,25 @@ Poin: (1) File nyata · (2) Build/test lolos · (3) Review loop tertutup · (4) 
 - [x] 6. Push terverifikasi — `90abfca` (Martinus Lukas)
 
 ## Fase 6 — Paket & deploy FTP (InfinityFree)
-- [x] 1. File nyata — 3.217 file ter-upload ke `bukanwil.is-best.net/htdocs/` (docroot subdomain; verifikasi koneksi baru)
+- [x] 1. File nyata — 3.217 file ter-upload ke `santri.is-best.net/htdocs/` (subdomain LAMA, sebelum rename; verifikasi koneksi baru)
 - [x] 2. Build/test — live: form buku tamu + login admin render 200, DB terbaca (tabel `pengaturan`)
 - [x] 3. Review loop tertutup — bug config produksi (`$proxyIPs` format CI4 4.7) ditemukan+fiksasi sampai app jalan
 - [x] 4. Tidak menggantung — upload tuntas, tak ada proses background tersisa
 - [x] 5. Secret aman — kredensial DB produksi hanya di staging deploy, BUKAN di repo git (repo pakai localhost)
 - [x] 6. Push terverifikasi — kode Fase 0–5 sudah di remote; deploy add bukan commit baru (config produksi tak di-commit)
 
-## Fase 7 — Dokumentasi & serah terima
-- [ ] 1. File nyata
-- [ ] 2. Build/test
+## Fase 7 — Rename SANTRI → BUKANWIL
+- [x] 1. File nyata — 32 file ter-rename (views/layouts, config, controller, schema.sql, package.json+lock, docs/blueprint) + spec `SPEC-RENAME-BUKANWIL.md`
+- [x] 2. Build/test — `php -l` semua file lolos; `npm run build:css` OK; grep sisa `santri`/`Religius` kosong di app/database/public/themes
+- [x] 3. Review loop tertutup — reviewer APPROVE (temuan: TIDAK ADA P0/P1/P2)
+- [x] 4. Tidak menggantung — tidak ada proses tersisa; OPS lanjutan dialihkan ke Fase 8
+- [x] 5. Secret aman — tidak ada secret di commit
+- [x] 6. Push terverifikasi — `6cd5b29` (Martinus Lukas); repo di-rename `martinserafim93/bukanwil`
+
+## Fase 8 — Deploy produksi BUKANWIL (subdomain + migrasi data)
+- [ ] 1. File nyata — subdomain `bukanwil.is-best.net` dibuat di panel InfinityFree (manual Martinus)
+- [ ] 2. Build/test — upload + smoke test live di subdomain baru
 - [ ] 3. Review loop tertutup
 - [ ] 4. Tidak menggantung
-- [ ] 5. Secret aman
+- [ ] 5. Secret aman — kredensial DB produksi tak di-commit
 - [ ] 6. Push terverifikasi
