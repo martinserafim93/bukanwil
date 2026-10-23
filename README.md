@@ -1,69 +1,121 @@
-# CodeIgniter 4 Application Starter
+# BUKANWIL
 
-## What is CodeIgniter?
+Buku tamu digital dan CMS admin untuk PTSP Kantor Wilayah Kementerian Agama Provinsi Kalimantan Utara.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+Situs: https://bukanwil.is-great.org
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## Apa itu BUKANWIL
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+BUKANWIL (Buku Tamu Kanwil Kemenag Kaltara) menggantikan Google Form yang sebelumnya dipakai untuk mencatat pengunjung PTSP. Aplikasi ini punya dua antarmuka. Form publik yang bisa diisi siapa saja tanpa akun, dan panel admin tempat petugas membaca, menyaring, serta mengekspor data tamu.
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+## Fitur utama
 
-## Installation & updates
+### Form buku tamu (publik)
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+- Isian nama, jenis kelamin, asal (perorangan, instansi, lembaga), instansi, alamat, nomor HP, dan keperluan.
+- Foto bersifat opsional.
+- Tidak butuh akun atau login.
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+### Panel admin
 
-## Setup
+- Login petugas dengan dua role: superadmin dan admin.
+- Dashboard statistik: total tamu, tamu hari ini, tamu belum dibaca, rekap per jenis kelamin dan per asal, lima keperluan teratas, dan grafik tren 7 hari (Chart.js).
+- Daftar tamu dengan pagination, pencarian (nama, nomor HP, instansi), filter (tanggal, jenis kelamin, asal, keperluan), dan pengurutan.
+- Halaman detail tamu.
+- Export CSV dengan BOM UTF-8, langsung terbaca benar di Excel.
+- Notifikasi in-app berupa badge untuk tamu baru yang belum dibaca.
+- Pengelolaan akun admin dan pengaturan aplikasi.
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+### Keamanan
 
-## Important Change with index.php
+- Proteksi CSRF (mode cookie di `app/Config/Security.php`).
+- Honeypot dan rate limit form: 3 pengiriman per 10 menit.
+- Rate limit login: 5 kali gagal per 15 menit.
+- Validasi upload: MIME dicek dengan finfo (jpeg, png, webp), ekstensi whitelist, nama file diganti acak, ukuran maksimal 1 MB.
+- Query memakai CI4 Query Builder (prepared statements).
+- Password disimpan dengan bcrypt cost 12.
+- Session hardening.
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+## Tech stack
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+- CodeIgniter 4.7.5 dengan PHP 8.3
+- MySQL 8.0
+- Tailwind CSS v4, hasil build di `public/css/app.css` dan ikut di-commit
+- JavaScript native
+- Chart.js, versi di-pin dan dimuat lewat CDN
+- Composer dan npm
 
-**Please** read the user guide for a better explanation of how CI4 works!
+## Prasyarat
 
-## Repository Management
+- PHP 8.2 atau lebih baru dengan ekstensi intl, mbstring, mysqli, fileinfo, dan json
+- MySQL 8.0
+- Composer
+- Node.js dan npm, hanya bila ingin membangun ulang CSS
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+## Instalasi dan run lokal
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+1. Clone repo dan pasang dependensi.
 
-## Server Requirements
+```bash
+git clone https://github.com/martinserafim93/bukanwil.git
+cd bukanwil
+composer install
+```
 
-PHP version 8.2 or higher is required, with the following extensions installed:
+2. Buat database lalu impor skema. Nama database bebas, contoh di bawah memakai `bukanwil`.
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+```bash
+mysql -u root -p -e "CREATE DATABASE bukanwil CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+mysql -u root -p bukanwil < database/schema.sql
+```
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
+Skema menyertakan akun superadmin awal. Segera ganti password lewat menu Kelola Admin setelah login pertama.
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+3. Sesuaikan konfigurasi. Proyek ini tidak memakai file `.env`, semua nilai ditulis langsung di berkas config.
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+- `app/Config/Database.php`: hostname, username, password, dan nama database.
+- `app/Config/App.php`: baseURL, misalnya `http://localhost:8080/`.
+
+4. Jalankan server pengembangan.
+
+```bash
+php spark serve
+```
+
+Buka http://localhost:8080 di browser.
+
+Environment bawaan adalah `production`. Untuk mode development, set variabel environment saat menjalankan server:
+
+```bash
+CI_ENVIRONMENT=development php spark serve
+```
+
+Bila ingin mengubah tampilan, bangun ulang CSS Tailwind lalu commit hasilnya:
+
+```bash
+npm run build:css
+```
+
+## Deploy
+
+Aplikasi berjalan di InfinityFree (free tier) pada https://bukanwil.is-great.org. Batasan hosting ini membentuk beberapa keputusan desain: tanpa dotenv, Redis, dan queue, seluruh konfigurasi ada di `app/Config/*.php`.
+
+Langkah umum:
+
+1. Jalankan `composer install` di lokal agar folder `vendor/` tersedia.
+2. Ubah baseURL di `app/Config/App.php` ke domain produksi, dan isi kredensial database hosting di `app/Config/Database.php`.
+3. Impor `database/schema.sql` ke MySQL hosting lewat phpMyAdmin.
+4. Unggah seluruh proyek lewat FTP, atau unggah satu file ZIP lalu ekstrak di server.
+5. Arahkan domain ke folder `public/` lewat `.htaccess`. Entry point aplikasi adalah `public/index.php`.
+
+Jangan sampai file `.env` atau kredensial produksi masuk ke repo.
+
+## Struktur direktori
+
+```text
+app/               kode MVC CodeIgniter 4 (controller, model, view)
+app/Config/        konfigurasi (App.php, Database.php, Security.php, dst.)
+public/            entry point (index.php), aset, dan CSS hasil build
+database/schema.sql  skema MySQL
+writable/          log dan cache
+```

@@ -9,6 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BUKANWIL adalah buku tamu digital PTSP Kanwil Kemenag Provinsi Kalimantan Utara. Pengunjung mengisi data kunjungan secara daring tanpa akun, dan petugas mengelolanya lewat dashboard admin.">
     <title><?= esc($this->renderSection('title')) ?? 'Form Buku Tamu' ?> — <?= esc($pengaturan['judul_aplikasi'] ?? 'BUKANWIL') ?></title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
