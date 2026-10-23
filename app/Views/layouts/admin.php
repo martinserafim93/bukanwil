@@ -33,6 +33,7 @@ function isActive(string $path): string
 
     <link rel="stylesheet" href="<?= base_url('css/app.css') ?>">
     <script src="<?= base_url('js/toast.js') ?>" defer></script>
+    <script src="<?= base_url('js/dialog.js') ?>" defer></script>
 </head>
 <body class="bg-ground text-ink antialiased min-h-screen flex">
 
@@ -73,7 +74,7 @@ function isActive(string $path): string
         </nav>
 
         <div class="p-4 border-t border-border">
-            <a href="<?= site_url('admin/logout') ?>" onclick="return confirm('Apakah Anda yakin ingin logout?');" class="block w-full text-center px-4 py-2 text-sm font-medium text-danger hover:bg-danger-bg rounded-full transition-colors">
+            <a href="<?= site_url('admin/logout') ?>" id="admin-logout-btn" class="block w-full text-center px-4 py-2 text-sm font-medium text-danger hover:bg-danger-bg rounded-full transition-colors">
                 Logout
             </a>
         </div>
@@ -108,7 +109,7 @@ function isActive(string $path): string
     </div>
 
     <script>
-        // Auto-trigger toast dari flash session
+        // Auto-trigger toast dari flash session & wiring modal dialog
         document.addEventListener('DOMContentLoaded', function () {
             <?php if (session('sukses')): ?>
                 toastShow('success', 'Berhasil', <?= json_encode(session('sukses')) ?>);
@@ -116,6 +117,28 @@ function isActive(string $path): string
             <?php if (session('error')): ?>
                 toastShow('error', 'Terjadi Kesalahan', <?= json_encode(session('error')) ?>);
             <?php endif; ?>
+
+            var logoutBtn = document.getElementById('admin-logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var logoutUrl = this.getAttribute('href');
+                    if (typeof confirmDialog === 'function') {
+                        confirmDialog({
+                            title: 'Konfirmasi Logout',
+                            message: 'Apakah Anda yakin ingin keluar dari panel admin?',
+                            confirmText: 'Logout',
+                            cancelText: 'Batal',
+                            danger: true,
+                            onConfirm: function () {
+                                window.location.href = logoutUrl;
+                            }
+                        });
+                    } else {
+                        window.location.href = logoutUrl;
+                    }
+                });
+            }
         });
     </script>
 
