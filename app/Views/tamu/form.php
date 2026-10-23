@@ -112,5 +112,5 @@ $this->section('content');
 <?php $this->endSection(); ?>
 
 <?php $this->section('scripts'); ?>
-<script src="<?= base_url('js/form-publik.js') ?>"></script>
+<script src="<?= base_url('js/form-publik.js') ?>?v=<?= filemtime(FCPATH . 'js/form-publik.js') ?>"></script>
 <?php $this->endSection(); ?>

@@ -31,9 +31,9 @@ function isActive(string $path): string
 
     <link rel="icon" type="image/png" href="<?= base_url('images/logo-kemenag-transparent.png') ?>">
 
-    <link rel="stylesheet" href="<?= base_url('css/app.css') ?>">
-    <script src="<?= base_url('js/toast.js') ?>" defer></script>
-    <script src="<?= base_url('js/dialog.js') ?>" defer></script>
+    <link rel="stylesheet" href="<?= base_url('css/app.css') ?>?v=<?= filemtime(FCPATH . 'css/app.css') ?>">
+    <script src="<?= base_url('js/toast.js') ?>?v=<?= filemtime(FCPATH . 'js/toast.js') ?>" defer></script>
+    <script src="<?= base_url('js/dialog.js') ?>?v=<?= filemtime(FCPATH . 'js/dialog.js') ?>" defer></script>
 </head>
 <body class="bg-ground text-ink antialiased min-h-screen flex">
 
