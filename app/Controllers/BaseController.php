@@ -44,6 +44,10 @@ abstract class BaseController extends Controller
         // Load helpers before parent init so they are available in parent.
         parent::initController($request, $response, $logger);
 
+        // Force MySQL session to WITA (UTC+8) so CURRENT_TIMESTAMP and CURDATE
+        // use the application's timezone regardless of server configuration.
+        \Config\Database::connect()->query("SET time_zone = '+08:00'");
+
         $pengaturanModel = new PengaturanModel();
         $this->pengaturan = $pengaturanModel->getAll();
 

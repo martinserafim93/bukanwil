@@ -111,6 +111,9 @@ class TamuAdmin extends BaseController
 
         $tamuModel->tandaiBaca($id);
 
+        // Reflect the just-updated read status before rendering the view.
+        $tamu['is_read'] = 1;
+
         return view('admin/tamu/detail', [
             'pengaturan'  => $this->pengaturan,
             'unreadCount' => $this->unreadCount,

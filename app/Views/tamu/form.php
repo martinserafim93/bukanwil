@@ -18,11 +18,12 @@ $this->section('content');
             <p class="text-ink-muted"><?= esc((string)($pengaturan['teks_header'] ?? '')) ?></p>
         </div>
 
-        <?php if (! empty($errors) && is_array($errors)): ?>
+        <?php $errs = session('errors'); ?>
+        <?php if (! empty($errs) && is_array($errs)): ?>
             <div class="mb-6 p-4 bg-danger-bg border border-danger text-danger text-sm" role="alert" aria-live="assertive">
                 <p class="font-semibold mb-1">Mohon periksa kembali isian Anda:</p>
                 <ul class="list-disc list-inside space-y-1">
-                    <?php foreach ($errors as $field => $message): ?>
+                    <?php foreach ($errs as $field => $message): ?>
                         <li><?= esc(is_array($message) ? implode(' ', $message) : $message) ?></li>
                     <?php endforeach; ?>
                 </ul>
@@ -81,22 +82,22 @@ $this->section('content');
 
                 <div>
                     <label for="alamat" class="form-label">Alamat</label>
-                    <textarea id="alamat" name="alamat" rows="3" class="form-field" placeholder="Alamat lengkap" required><?= esc(old('alamat')) ?></textarea>
+                    <textarea id="alamat" name="alamat" rows="3" class="form-field <?= session('errors.alamat') ? 'form-field-error' : '' ?>" placeholder="Alamat lengkap" required><?= esc(old('alamat')) ?></textarea>
                 </div>
 
                 <div>
                     <label for="no_hp" class="form-label">No. HP / WhatsApp</label>
-                    <input type="tel" id="no_hp" name="no_hp" value="<?= esc(old('no_hp')) ?>" class="form-field" placeholder="08xxxxxxxxxx" autocomplete="tel" required>
+                    <input type="tel" id="no_hp" name="no_hp" value="<?= esc(old('no_hp')) ?>" class="form-field <?= session('errors.no_hp') ? 'form-field-error' : '' ?>" placeholder="08xxxxxxxxxx" autocomplete="tel" required>
                 </div>
 
                 <div>
                     <label for="keperluan" class="form-label">Keperluan</label>
-                    <textarea id="keperluan" name="keperluan" rows="3" class="form-field" placeholder="Tuliskan keperluan kunjungan" required><?= esc(old('keperluan')) ?></textarea>
+                    <textarea id="keperluan" name="keperluan" rows="3" class="form-field <?= session('errors.keperluan') ? 'form-field-error' : '' ?>" placeholder="Tuliskan keperluan kunjungan" required><?= esc(old('keperluan')) ?></textarea>
                 </div>
 
                 <div>
                     <label for="foto" class="form-label">Foto Kunjungan</label>
-                    <input type="file" id="foto" name="foto" accept="image/jpeg,image/png,image/webp" class="form-field file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100">
+                    <input type="file" id="foto" name="foto" accept="image/jpeg,image/png,image/webp" class="form-field <?= session('errors.foto') ? 'form-field-error' : '' ?> file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100">
                     <p class="form-hint">Maks 10 MB, otomatis dikompres di bawah 1 MB (JPG/PNG/WebP, opsional)</p>
                     <p id="foto-error" class="text-sm text-danger mt-1 hidden"></p>
                 </div>

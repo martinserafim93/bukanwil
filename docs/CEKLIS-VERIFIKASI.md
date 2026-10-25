@@ -85,3 +85,11 @@ Poin: (1) File nyata · (2) Build/test lolos · (3) Review loop tertutup · (4) 
 - [x] 4. Tidak menggantung — bug return type `edit()` (TypeError) difix Lead; file sampah `tests/unit/LogoutFlashTest.php` dibersihkan; tak ada proses tersisa
 - [x] 5. Secret aman — scan `git diff` bersih (tak ada password/token/secret); author tanpa atribusi AI
 - [x] 6. Push terverifikasi — `7a3d80c` (Martinus Lukas) di `martinserafim93/bukanwil`
+
+## Fase 10 — Perbaikan bug produksi (timezone + validasi + detail status + CSRF)
+- [x] 1. File nyata — `BaseController.php` (SET time_zone WITA per request), `tamu/form.php` (baca error dari session flashdata), `Admin/TamuAdmin.php` (patch is_read setelah tandaiBaca), `Language/id/Validation.php` (terjemah Indonesia), `Config/Filters.php` (aktifkan filter csrf)
+- [x] 2. Build/test — `php -l` lolos; runtime E2E lokal: created_at tersimpan WITA benar, error box validasi muncul, detail status "Dibaca" langsung, CSRF POST-tanpa-token 403 + POST-bertoken 303
+- [x] 3. Review loop tertutup — reviewer APPROVE 4 perubahan (timezone/form/detail/bahasa) + reviewer APPROVE perbaikan CSRF (P0 pre-existing)
+- [x] 4. Tidak menggantung — data `pengaturan` produksi dikoreksi via UI admin; pembersihan data tamu uji QA menyusul setelah deploy
+- [x] 5. Secret aman — scan `git diff` bersih (tidak ada password/token/secret); author tanpa atribusi AI
+- [ ] 6. Push terverifikasi — menunggu commit+push
