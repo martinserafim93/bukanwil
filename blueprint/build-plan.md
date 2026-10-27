@@ -26,3 +26,5 @@ Do not renumber completed features; their archived specs refer to those IDs.
 ## Upcoming roadmap
 
 - [ ] 10. **Penyempurnaan & Pemeliharaan Berkala** - Optimasi performa kueri data tamu, pemantauan log aplikasi, serta penyesuaian kebutuhan operasional PTSP Kanwil Kemenag Kaltara.
+- [x] 11. **Redesign UI/UX Halaman Publik, Sukses, dan Login Admin dengan Tasteskill v2 (Fase 1)** - Perbaikan token Tailwind CSS v4 (`brand`, `brand-gold`, `.btn-danger`, `.choice-card`), komposisi editorial 2 kolom pada halaman buku tamu publik dengan jam WITA real-time dan kartu pilihan ramah sentuh, kartu bukti kunjungan pada halaman sukses, serta layout mandiri untuk login admin.
+- [ ] 12. **Redesign UI/UX Shell dan Halaman Kerja Panel Admin dengan Tasteskill v2 (Fase 2)** - Penerapan kaidah App Screens Tasteskill v2 pada sidebar/shell admin (navigasi mobile, logo transparan, badge antrean tamu belum dibaca), penyegaran hierarki KPI dan grafik dashboard, toolbar filter ringkas dan pagination Tailwind pada daftar tamu, serta penyeragaman halaman detail, CRUD admin, dan pengaturan.

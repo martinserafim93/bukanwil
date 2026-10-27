@@ -1,24 +1,37 @@
 <?php
 /**
- * Public guestbook success page — BUKANWIL
+ * Public guestbook success page - BUKANWIL
  */
 $this->extend('layouts/publik');
-$this->section('title'); echo 'Terima Kasih'; $this->endSection();
+$this->section('title');
+echo 'Terima Kasih';
+$this->endSection();
 $this->section('content');
 ?>
 
-<section class="container-readable">
-    <div class="card-surface p-8 md:p-12 text-center">
-        <div class="mb-6 flex justify-center">
-            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-success-bg text-success" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-            </div>
+<section class="max-w-2xl mx-auto">
+    <div class="brand-stripe" aria-hidden="true"></div>
+    <div class="card-surface p-8 sm:p-12">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <span class="inline-flex items-center gap-2 px-3 py-1 bg-success-bg text-success text-xs font-semibold">
+                Kunjungan Tercatat
+            </span>
+            <span class="text-xs text-ink-muted tabular-nums">
+                <?= esc(date('d/m/Y H:i')) ?> WITA
+            </span>
         </div>
-        <h2 class="text-2xl md:text-3xl font-bold text-ink mb-3 font-serif">Terima kasih, data kunjungan Anda telah tercatat.</h2>
-        <p class="text-ink-muted mb-8">Silakan isi form baru untuk tamu berikutnya.</p>
-        <a href="<?= site_url('/') ?>" class="btn-primary inline-block">Isi Form Lagi</a>
+
+        <h1 class="text-2xl sm:text-3xl font-bold text-ink font-serif mt-2 mb-3">
+            Kunjungan Berhasil Dicatat
+        </h1>
+
+        <p class="text-base text-ink-muted leading-relaxed mb-8">
+            Terima kasih, data kehadiran Anda telah masuk ke dalam sistem Pelayanan Terpadu Satu Pintu (PTSP). Silakan menuju meja petugas pelayanan atau isi formulir baru untuk pengunjung berikutnya.
+        </p>
+
+        <div class="flex flex-wrap items-center gap-4">
+            <a href="<?= site_url('/') ?>" class="btn-primary">Isi Form Lagi</a>
+        </div>
     </div>
 </section>
 

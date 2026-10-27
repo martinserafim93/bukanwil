@@ -44,9 +44,9 @@ Layanan publik internal instansi pemerintah non-komersial (didukung DIPA Kanwil 
 
 ## 7. UI/UX - How should this look and feel?
 
-- **Palet Warna & Identitas**: Memakai nuansa warna hijau resmi Kementerian Agama (`#006B2E`), dipadukan dengan aksen modern Tailwind CSS v4.
-- **Tampilan Publik**: Bersih, elegan, bebas gangguan, dan responsif ramah layar gawai (smartphone/tablet) yang nyaman digunakan pengunjung di meja resepsionis PTSP.
-- **Tampilan Panel Admin**: Layout modern berbasis sidebar, kartu statistik informatif, tabel data yang padat (*dense* dan rapi), modal dialog konfirmasi kustom yang menggantikan `confirm()` bawaan browser, serta indikator status dan notifikasi toast in-app.
+- **Palet Warna & Identitas**: Memakai nuansa warna hijau resmi Kementerian Agama (`#006B2E`) dan aksen emas (`#E5A400`), dipadukan dengan sistem desain flat Tailwind CSS v4 dan kaidah Tasteskill v2 (`brand`, `brand-gold`, tombol pil, serta permukaan siku bebas gradasi).
+- **Tampilan Publik & Login Admin**: Komposisi editorial 2 kolom pada layar lebar (panel identitas instansi Kemenag Kaltara dengan logo transparan dan jam layanan WITA real-time di sisi kiri, serta lembar kerja formulir buku tamu dengan kartu pilihan ramah sentuh dan dropzone unggah foto di sisi kanan), halaman sukses berbentuk kartu bukti pencatatan kunjungan PTSP, serta halaman login petugas yang fokus dan terpisah dari banner buku tamu publik.
+- **Tampilan Panel Admin**: Mengadopsi kaidah App Screens Tasteskill v2 berbasis sidebar responsif (drawer mobile, logo transparan, indikator menu aktif, dan badge jumlah antrean belum dibaca pada menu Daftar Tamu), kartu KPI bertipografi tabular tegas tanpa label huruf kapital renggang, toolbar pencarian/filter ringkas agar tabel tampil di layar pertama (*above the fold*), pagination ber-style Tailwind, modal dialog konfirmasi kustom, serta notifikasi toast in-app.
 
 ## 8. Deployment - Where and how will this ship?
 

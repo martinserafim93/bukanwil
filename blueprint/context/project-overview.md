@@ -1,6 +1,6 @@
 # BUKANWIL - Project Overview
 
-<!-- blueprint:source-hash 03cc794b683ef663a8831b4eb43e3ec9004f7a4601fa4dd9f311037f1faede3b -->
+<!-- blueprint:source-hash e41bb89cc2c0ebc4872985a07c9eeb232905efd16b7b3e423f3474c864966523 -->
 
 > Buku tamu digital dan panel administrasi Pelayanan Terpadu Satu Pintu (PTSP) Kantor Wilayah Kementerian Agama Provinsi Kalimantan Utara.
 
@@ -32,6 +32,8 @@ Pencatatan buku tamu konvensional (buku manual kertas atau Google Form generik) 
 8. **Pengerasan Keamanan & Kompatibilitas Produksi** - Mitigasi cache browser, validasi ketat, dan kompatibilitas PHP 8.2+/8.3 di lingkungan server Linux.
 9. **Manajemen Arsip dan Pembersihan Data Tamu** - Pengelolaan siklus hidup tamu (soft delete/tong sampah, pemulihan, hapus permanen, dan arsip riwayat tahunan).
 10. **Penyempurnaan & Pemeliharaan Berkala** - Optimasi performa kueri data tamu, pemantauan log aplikasi, serta penyesuaian kebutuhan operasional PTSP Kanwil Kemenag Kaltara.
+11. **Redesign UI/UX Halaman Publik, Sukses, dan Login Admin dengan Tasteskill v2 (Fase 1)** - Perbaikan token Tailwind CSS v4 (`brand`, `brand-gold`, `.btn-danger`, `.choice-card`), komposisi editorial 2 kolom pada halaman buku tamu publik dengan jam WITA real-time dan kartu pilihan ramah sentuh, kartu bukti kunjungan pada halaman sukses, serta layout mandiri untuk login admin.
+12. **Redesign UI/UX Shell dan Halaman Kerja Panel Admin dengan Tasteskill v2 (Fase 2)** - Penerapan kaidah App Screens Tasteskill v2 pada sidebar/shell admin (navigasi mobile, logo transparan, badge antrean tamu belum dibaca), penyegaran hierarki KPI dan grafik dashboard, toolbar filter ringkas dan pagination Tailwind pada daftar tamu, serta penyeragaman halaman detail, CRUD admin, dan pengaturan.
 
 ## Data model
 
@@ -88,15 +90,15 @@ Tidak berlaku (Non-komersial). Aplikasi layanan publik pemerintahan Kanwil Kemen
 
 ## UI/UX
 
-Identitas visual mengusung warna hijau resmi Kementerian Agama (`#006B2E`) dengan tata letak modern dan ramah layar sentuh (mobile/tablet).
+Identitas visual mengusung warna hijau resmi Kementerian Agama (`#006B2E`) dan aksen emas (`#E5A400`) dengan sistem desain flat Tailwind CSS v4 serta kaidah Tasteskill v2 (permukaan bertingkat bebas gradasi, tombol pil, komposisi editorial 2 kolom pada layar lebar dengan penunjuk waktu WITA real-time, kartu pilihan ramah sentuh, halaman login admin mandiri, serta panel admin berbasis kaidah App Screens).
 
-- `/` - Formulir publik buku tamu mandiri
+- `/` - Formulir publik buku tamu mandiri (komposisi editorial 2 kolom: panel identitas PTSP & waktu WITA di kiri, lembar formulir interaktif di kanan)
 - `/tamu/submit` - Endpoint POST penerimaan tamu (CSRF, honeypot, rate limiting)
-- `/tamu/sukses` - Halaman ucapan terima kasih dan konfirmasi pengisian berhasil
-- `/admin/login` - Antarmuka login petugas admin
+- `/tamu/sukses` - Halaman konfirmasi berbentuk kartu bukti pencatatan kunjungan PTSP
+- `/admin/login` - Antarmuka login petugas admin mandiri (split/focused panel terpisah dari banner buku tamu publik)
 - `/admin/logout` - Endpoint logout dengan modal konfirmasi dialog kustom
-- `/admin` - Dashboard statistik, kartu KPI, dan grafik tren kunjungan
-- `/admin/tamu` - Antarmuka manajemen tamu dengan bilah tab (Aktif, Arsip, Tong Sampah), pencarian, filter, pagination, dan status baca
+- `/admin` - Dashboard statistik dengan KPI bertipografi tabular tegas, grafik tren kunjungan, serta bar proporsional keperluan dan asal pengunjung
+- `/admin/tamu` - Antarmuka manajemen tamu dengan bilah tab (Aktif, Arsip, Tong Sampah), toolbar pencarian/filter ringkas (*above the fold*), pagination ber-style Tailwind, dan status baca
 - `/admin/tamu/(:num)` - Halaman rincian riwayat lengkap kunjungan tamu beserta penampil foto
 - `/admin/tamu/export` - Endpoint unduhan berkas CSV ber-BOM UTF-8
 - `/admin/admin-user` - Halaman manajemen akun petugas admin (CRUD khusus Superadmin)

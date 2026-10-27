@@ -1,5 +1,5 @@
 /**
- * Public form behaviours — conditional fields + foto compression.
+ * Public form behaviours - conditional fields + foto compression.
  * IIFE, zero dependencies.
  */
 (function () {
@@ -161,8 +161,22 @@
         var input = $('#foto');
         var submitButton = form ? form.querySelector('button[type="submit"]') : null;
         var isCompressing = false;
+        var filenameEl = $('#foto-filename');
 
         if (! form || ! input) return;
+
+        input.addEventListener('change', function () {
+            hideFotoError();
+            var f = input.files && input.files[0];
+            if (f && filenameEl) {
+                var sizeMb = (f.size / (1024 * 1024)).toFixed(2);
+                filenameEl.textContent = 'Berkas dipilih: ' + f.name + ' (' + sizeMb + ' MB)';
+                filenameEl.classList.remove('hidden');
+            } else if (filenameEl) {
+                filenameEl.textContent = '';
+                filenameEl.classList.add('hidden');
+            }
+        });
 
         form.addEventListener('submit', function (e) {
             hideFotoError();

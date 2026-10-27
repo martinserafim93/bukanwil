@@ -1,7 +1,7 @@
 <?php
 /**
- * Layout Publik — BUKANWIL
- * Header minimalis + area konten + footer sederhana.
+ * Layout Publik - BUKANWIL
+ * Header minimalis + area konten + footer responsif.
  */
 ?>
 <!DOCTYPE html>
@@ -10,7 +10,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="BUKANWIL adalah buku tamu digital PTSP Kanwil Kemenag Provinsi Kalimantan Utara. Pengunjung mengisi data kunjungan secara daring tanpa akun, dan petugas mengelolanya lewat dashboard admin.">
-    <title><?= esc($this->renderSection('title')) ?? 'Form Buku Tamu' ?> — <?= esc($pengaturan['judul_aplikasi'] ?? 'BUKANWIL') ?></title>
+    <title><?= esc($this->renderSection('title')) ?: 'Form Buku Tamu' ?> - <?= esc($pengaturan['judul_aplikasi'] ?? 'BUKANWIL') ?></title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,38 +23,47 @@
 </head>
 <body class="bg-ground text-ink antialiased min-h-screen flex flex-col">
 
-    <header class="bg-surface border-b border-border">
-        <div class="brand-stripe" aria-hidden="true"></div>
-        <div class="container-readable py-8 md:py-10">
-            <div class="flex flex-col items-center text-center">
+    <div class="brand-stripe" aria-hidden="true"></div>
+
+    <header class="bg-ground-warm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap items-center justify-between gap-4">
+            <a href="<?= site_url('/') ?>" class="inline-flex items-center gap-3 text-ink hover:opacity-90">
                 <img
-                    src="<?= base_url('images/logo-kemenag.jpg') ?>"
+                    src="<?= base_url('images/logo-kemenag-transparent.png') ?>"
                     alt="Logo Kementerian Agama"
-                    class="h-16 w-auto md:h-20 object-contain mb-4"
+                    class="h-10 w-10 object-contain"
                 >
-                <h1 class="text-3xl md:text-4xl font-serif text-brand-700 leading-tight">
-                    <?= esc($pengaturan['judul_aplikasi'] ?? 'BUKANWIL') ?>
-                </h1>
-                <p class="text-base md:text-lg italic text-ink-muted mt-1">
-                    <?= esc($pengaturan['deskripsi_aplikasi'] ?? 'Buku Tamu Kanwil Kemenag Kaltara') ?>
-                </p>
-                <p class="text-sm md:text-base font-semibold text-ink mt-1">
-                    <?= esc($pengaturan['nama_instansi_ptsp'] ?? 'Kantor Wilayah Kementerian Agama Provinsi Kalimantan Utara') ?>
-                </p>
+                <div>
+                    <span class="block text-sm font-bold text-brand-700 leading-tight">
+                        <?= esc($pengaturan['judul_aplikasi'] ?? 'BUKANWIL') ?>
+                    </span>
+                    <span class="block text-xs text-ink-muted">
+                        <?= esc($pengaturan['nama_instansi_ptsp'] ?? 'Kantor Wilayah Kementerian Agama Provinsi Kalimantan Utara') ?>
+                    </span>
+                </div>
+            </a>
+
+            <div class="inline-flex items-center gap-2 bg-surface px-3.5 py-1.5 text-xs font-medium text-ink-muted" data-ui>
+                <span class="inline-block h-2 w-2 rounded-full bg-brand-500" aria-hidden="true"></span>
+                <span id="live-wita-clock" class="tabular-nums text-ink font-semibold">Zona Waktu: WITA (UTC+8)</span>
             </div>
         </div>
     </header>
 
     <main class="flex-1 py-8 md:py-12">
-        <?= $this->renderSection('content') ?>
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <?= $this->renderSection('content') ?>
+        </div>
     </main>
 
-    <footer class="bg-surface border-t border-border mt-auto">
-        <div class="container-readable py-6">
-            <p class="text-center text-sm text-ink-muted">
-                Tim Humas dan Komunikasi Publik<br>
-                &mdash; Kanwil Kementerian Agama Provinsi Kalimantan Utara &mdash;
+    <footer class="bg-ground-warm mt-auto">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-ink-muted">
+            <p>
+                Tim Humas dan Komunikasi Publik - Kanwil Kementerian Agama Provinsi Kalimantan Utara
             </p>
+            <a href="<?= site_url('admin/login') ?>" class="text-xs font-semibold text-brand-700 hover:underline">
+                Portal Petugas PTSP
+            </a>
         </div>
     </footer>
 
@@ -67,6 +76,26 @@
             <?php if (session('error')): ?>
                 toastShow('error', 'Terjadi Kesalahan', <?= json_encode(session('error')) ?>);
             <?php endif; ?>
+
+            var clockEl = document.getElementById('live-wita-clock');
+            if (clockEl && typeof Intl !== 'undefined' && Intl.DateTimeFormat) {
+                var fmt = new Intl.DateTimeFormat('id-ID', {
+                    timeZone: 'Asia/Makassar',
+                    weekday: 'short',
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                });
+                var updateClock = function () {
+                    clockEl.textContent = fmt.format(new Date()) + ' WITA';
+                };
+                updateClock();
+                setInterval(updateClock, 1000);
+            }
         });
     </script>
 

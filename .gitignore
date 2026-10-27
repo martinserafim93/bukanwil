@@ -132,3 +132,4 @@ _modules/*
 # Node / Tailwind
 #-------------------------
 node_modules/
+.taste-skill/

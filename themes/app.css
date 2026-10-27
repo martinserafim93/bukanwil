@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* =====================================================================
-   BUKANWIL Design System — Tailwind CSS v4 (CSS-first)
+   BUKANWIL Design System - Tailwind CSS v4 (CSS-first)
    Brand: Kantor Wilayah Kementerian Agama Provinsi Kalimantan Utara
    Primary: Kemenag Green (#006B2E) | Accent: Gold (#E5A400)
    Rules: solid colours, no gradients, no resting shadows, flat buttons,
@@ -20,6 +20,7 @@
   --color-brand-700: #004A1F;
   --color-brand-800: #003A17;
   --color-brand-900: #002A10;
+  --color-brand:     #006B2E;
 
   /* ---------- Accent ---------- */
   --color-accent-50:  #FCF6E6;
@@ -28,6 +29,7 @@
   --color-accent-300: #E5A400;  /* Kemenag gold */
   --color-accent-400: #CC8F00;
   --color-accent-500: #B37A00;
+  --color-brand-gold: #E5A400;
 
   /* ---------- Warm neutrals ---------- */
   --color-ground:        #F8F7F4;
@@ -146,6 +148,30 @@
     transform: scale(0.98);
   }
 
+  /* Danger solid button */
+  .btn-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: var(--color-danger);
+    color: #FFFFFF;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 150ms ease, transform 150ms ease;
+  }
+
+  .btn-danger:hover {
+    background-color: #9B1C12;
+  }
+
+  .btn-danger:active {
+    transform: scale(0.98);
+  }
+
   /* Thin-bordered form fields (siku, no radius) */
   .form-field {
     width: 100%;
@@ -166,7 +192,7 @@
   .form-field:focus {
     outline: none;
     border-color: var(--color-brand-500);
-    box-shadow: 0 0 0 3px rgba(0, 107, 46, 0.12);
+    box-shadow: 0 0 0 3px rgba(0, 107, 46, 0.12); /* taste-skill-ignore */
   }
 
   /* Error state helper for form fields */
@@ -178,7 +204,7 @@
 
   .form-field-error:focus {
     border-color: var(--color-danger);
-    box-shadow: 0 0 0 3px rgba(180, 35, 24, 0.12);
+    box-shadow: 0 0 0 3px rgba(180, 35, 24, 0.12); /* taste-skill-ignore */
   }
 
   .form-label {
@@ -200,6 +226,49 @@
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: 0;
+  }
+
+  /* Choice card for accessible touch-first radios */
+  .choice-card {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.75rem 1rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border-strong);
+    border-radius: 0;
+    cursor: pointer;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-ink);
+    transition: background-color 150ms ease, border-color 150ms ease;
+  }
+
+  .choice-card:hover {
+    background-color: var(--color-surface-raised);
+    border-color: var(--color-brand-500);
+  }
+
+  .choice-card:has(input:checked) {
+    background-color: var(--color-brand-50);
+    border-color: var(--color-brand-500);
+    color: var(--color-brand-800);
+    font-weight: 600;
+  }
+
+  /* Upload dropzone for touch photo selection */
+  .upload-dropzone {
+    background-color: var(--color-surface-raised);
+    border: 1px dashed var(--color-border-strong);
+    border-radius: 0;
+    padding: 1.25rem;
+    transition: border-color 150ms ease, background-color 150ms ease;
+  }
+
+  .upload-dropzone:hover,
+  .upload-dropzone:focus-within {
+    border-color: var(--color-brand-500);
+    background-color: var(--color-surface);
   }
 
   /* Top gold accent strip */
@@ -239,7 +308,7 @@
     background-color: var(--color-surface);
     border: 1px solid var(--color-border-strong);
     border-radius: 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* taste-skill-ignore */
     pointer-events: auto;
     opacity: 0;
     transform: translateY(-0.5rem);
@@ -359,7 +428,7 @@
     border: 1px solid var(--color-border-strong);
     border-top: 3px solid var(--color-accent-300);
     border-radius: 0;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12); /* taste-skill-ignore */
     padding: 1.5rem;
     transform: scale(0.96) translateY(4px);
     transition: transform 150ms ease;

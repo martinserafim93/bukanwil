@@ -1,6 +1,6 @@
 <?php
 /**
- * Public guestbook form — BUKANWIL
+ * Public guestbook form - BUKANWIL
  */
 $this->extend('layouts/publik');
 $this->section('title');
@@ -9,13 +9,51 @@ $this->endSection();
 $this->section('content');
 ?>
 
-<section class="container-readable">
-    <div class="card-surface p-6 md:p-8">
-        <div class="mb-8 text-center">
-            <h2 class="text-xl md:text-2xl font-bold text-brand-700 mb-2 font-serif">
-                Formulir Kunjungan
-            </h2>
-            <p class="text-ink-muted"><?= esc((string)($pengaturan['teks_header'] ?? '')) ?></p>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
+
+    <!-- Kolom Kiri: Panel Identitas Editorial -->
+    <aside class="lg:col-span-5 bg-brand-700 text-white p-6 sm:p-8 lg:p-10 flex flex-col justify-between">
+        <div>
+            <div class="text-center mb-8">
+                <img
+                    src="<?= base_url('images/logo-kemenag-transparent.png') ?>"
+                    alt="Logo Kementerian Agama"
+                    class="h-16 w-16 object-contain mx-auto mb-5"
+                >
+
+                <h1 class="text-2xl sm:text-3xl font-serif font-bold text-white leading-tight mb-2">
+                    <?= esc($pengaturan['judul_aplikasi'] ?? 'BUKANWIL') ?>
+                </h1>
+
+                <p class="text-lg text-brand-100 font-medium mb-3">
+                    <?= esc($pengaturan['deskripsi_aplikasi'] ?? 'Buku Tamu Kanwil Kemenag Kaltara') ?>
+                </p>
+
+                <p class="text-base text-brand-50 leading-relaxed">
+                    <?= esc((string) ($pengaturan['teks_header'] ?? 'Selamat datang di Pelayanan Terpadu Satu Pintu (PTSP). Silakan lengkapi data kunjungan Anda.')) ?>
+                </p>
+            </div>
+
+            <div class="bg-brand-800 p-5 mb-8 text-left">
+                <h2 class="text-base font-bold text-accent-200 mb-3">Panduan Pengisian Mandiri</h2>
+                <ul class="space-y-2 text-base text-brand-50">
+                    <li>Isi identitas diri dan pilih kategori asal pengunjung sesuai kedatangan Anda.</li>
+                    <li>Tuliskan nomor WhatsApp aktif serta maksud keperluan layanan secara jelas.</li>
+                    <li>Lampirkan foto kunjungan bila diperlukan (otomatis dikompres oleh sistem).</li>
+                </ul>
+            </div>
+        </div>
+
+        <p class="text-sm text-brand-200 pt-6 text-center">
+            <?= esc($pengaturan['nama_instansi_ptsp'] ?? 'Kantor Wilayah Kementerian Agama Provinsi Kalimantan Utara') ?>
+        </p>
+    </aside>
+
+    <!-- Kolom Kanan: Lembar Kerja Formulir -->
+    <section class="lg:col-span-7 card-surface p-6 sm:p-8 lg:p-10" aria-labelledby="form-heading">
+        <div class="mb-6">
+            <h2 id="form-heading" class="text-2xl font-serif font-bold text-ink mb-1">Formulir Kunjungan</h2>
+            <p class="text-sm text-ink-muted">Seluruh kolom bertanda bintang (*) wajib diisi sebelum mengirim data.</p>
         </div>
 
         <?php $errs = session('errors'); ?>
@@ -35,80 +73,163 @@ $this->section('content');
 
             <input type="text" name="_hp" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
 
-            <div class="space-y-4">
-
+            <div class="space-y-5">
                 <div>
-                    <label for="nama" class="form-label">Nama Lengkap</label>
-                    <input type="text" id="nama" name="nama" value="<?= esc(old('nama')) ?>" class="form-field <?= session('errors.nama') ? 'form-field-error' : '' ?>" placeholder="Masukkan nama lengkap" autocomplete="name" required>
+                    <label for="nama" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
+                    <input
+                        type="text"
+                        id="nama"
+                        name="nama"
+                        value="<?= esc(old('nama')) ?>"
+                        class="form-field <?= session('errors.nama') ? 'form-field-error' : '' ?>"
+                        placeholder="Masukkan nama lengkap sesuai identitas"
+                        autocomplete="name"
+                        required
+                    >
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <span class="form-label block">Jenis Kelamin</span>
-                        <div class="mt-2 flex flex-col gap-2">
-                            <label class="inline-flex items-center gap-2">
-                                <input type="radio" name="jenis_kelamin" value="Laki-laki" <?= old('jenis_kelamin') === 'Laki-laki' ? 'checked' : '' ?> class="h-4 w-4 text-brand-500 border-border-strong" required>
-                                <span class="text-sm text-ink">Laki-laki</span>
-                            </label>
-                            <label class="inline-flex items-center gap-2">
-                                <input type="radio" name="jenis_kelamin" value="Perempuan" <?= old('jenis_kelamin') === 'Perempuan' ? 'checked' : '' ?> class="h-4 w-4 text-brand-500 border-border-strong" required>
-                                <span class="text-sm text-ink">Perempuan</span>
-                            </label>
-                        </div>
+                <fieldset>
+                    <legend class="form-label">Jenis Kelamin <span class="text-danger">*</span></legend>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1">
+                        <label class="choice-card">
+                            <input
+                                type="radio"
+                                name="jenis_kelamin"
+                                value="Laki-laki"
+                                <?= old('jenis_kelamin') === 'Laki-laki' ? 'checked' : '' ?>
+                                class="h-4 w-4 accent-brand-500"
+                                required
+                            >
+                            <span>Laki-laki</span>
+                        </label>
+                        <label class="choice-card">
+                            <input
+                                type="radio"
+                                name="jenis_kelamin"
+                                value="Perempuan"
+                                <?= old('jenis_kelamin') === 'Perempuan' ? 'checked' : '' ?>
+                                class="h-4 w-4 accent-brand-500"
+                                required
+                            >
+                            <span>Perempuan</span>
+                        </label>
                     </div>
-                    <div>
-                        <span class="form-label block">Asal Pengunjung</span>
-                        <div class="mt-2 flex flex-col gap-2">
-                            <label class="inline-flex items-center gap-2">
-                                <input type="radio" name="asal_pengunjung" value="perorangan" <?= old('asal_pengunjung') === 'perorangan' ? 'checked' : '' ?> class="h-4 w-4 text-brand-500 border-border-strong" required>
-                                <span class="text-sm text-ink">Perorangan</span>
-                            </label>
-                            <label class="inline-flex items-center gap-2">
-                                <input type="radio" name="asal_pengunjung" value="instansi" <?= old('asal_pengunjung') === 'instansi' ? 'checked' : '' ?> class="h-4 w-4 text-brand-500 border-border-strong" required>
-                                <span class="text-sm text-ink">Instansi</span>
-                            </label>
-                            <label class="inline-flex items-center gap-2">
-                                <input type="radio" name="asal_pengunjung" value="lembaga" <?= old('asal_pengunjung') === 'lembaga' ? 'checked' : '' ?> class="h-4 w-4 text-brand-500 border-border-strong" required>
-                                <span class="text-sm text-ink">Lembaga</span>
-                            </label>
-                        </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend class="form-label">Asal Pengunjung <span class="text-danger">*</span></legend>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-1">
+                        <label class="choice-card">
+                            <input
+                                type="radio"
+                                name="asal_pengunjung"
+                                value="perorangan"
+                                <?= old('asal_pengunjung') === 'perorangan' ? 'checked' : '' ?>
+                                class="h-4 w-4 accent-brand-500"
+                                required
+                            >
+                            <span>Perorangan</span>
+                        </label>
+                        <label class="choice-card">
+                            <input
+                                type="radio"
+                                name="asal_pengunjung"
+                                value="instansi"
+                                <?= old('asal_pengunjung') === 'instansi' ? 'checked' : '' ?>
+                                class="h-4 w-4 accent-brand-500"
+                                required
+                            >
+                            <span>Instansi</span>
+                        </label>
+                        <label class="choice-card">
+                            <input
+                                type="radio"
+                                name="asal_pengunjung"
+                                value="lembaga"
+                                <?= old('asal_pengunjung') === 'lembaga' ? 'checked' : '' ?>
+                                class="h-4 w-4 accent-brand-500"
+                                required
+                            >
+                            <span>Lembaga</span>
+                        </label>
                     </div>
-                </div>
+                </fieldset>
 
                 <div id="wrap-nama-instansi" style="display: none;">
-                    <label for="nama_instansi" class="form-label">Nama Instansi</label>
-                    <input type="text" id="nama_instansi" name="nama_instansi" value="<?= esc(old('nama_instansi')) ?>" class="form-field <?= session('errors.nama_instansi') ? 'form-field-error' : '' ?>" placeholder="Diisi jika asal instansi/lembaga">
+                    <label for="nama_instansi" class="form-label">Nama Instansi / Lembaga <span class="text-danger">*</span></label>
+                    <input
+                        type="text"
+                        id="nama_instansi"
+                        name="nama_instansi"
+                        value="<?= esc(old('nama_instansi')) ?>"
+                        class="form-field <?= session('errors.nama_instansi') ? 'form-field-error' : '' ?>"
+                        placeholder="Masukkan nama instansi atau lembaga asal"
+                    >
                 </div>
 
                 <div>
-                    <label for="alamat" class="form-label">Alamat</label>
-                    <textarea id="alamat" name="alamat" rows="3" class="form-field <?= session('errors.alamat') ? 'form-field-error' : '' ?>" placeholder="Alamat lengkap" required><?= esc(old('alamat')) ?></textarea>
+                    <label for="no_hp" class="form-label">No. HP / WhatsApp <span class="text-danger">*</span></label>
+                    <input
+                        type="tel"
+                        id="no_hp"
+                        name="no_hp"
+                        value="<?= esc(old('no_hp')) ?>"
+                        class="form-field <?= session('errors.no_hp') ? 'form-field-error' : '' ?>"
+                        placeholder="08xxxxxxxxxx"
+                        autocomplete="tel"
+                        required
+                    >
                 </div>
 
                 <div>
-                    <label for="no_hp" class="form-label">No. HP / WhatsApp</label>
-                    <input type="tel" id="no_hp" name="no_hp" value="<?= esc(old('no_hp')) ?>" class="form-field <?= session('errors.no_hp') ? 'form-field-error' : '' ?>" placeholder="08xxxxxxxxxx" autocomplete="tel" required>
+                    <label for="alamat" class="form-label">Alamat Lengkap <span class="text-danger">*</span></label>
+                    <textarea
+                        id="alamat"
+                        name="alamat"
+                        rows="3"
+                        class="form-field <?= session('errors.alamat') ? 'form-field-error' : '' ?>"
+                        placeholder="Alamat tempat tinggal atau instansi"
+                        required
+                    ><?= esc(old('alamat')) ?></textarea>
                 </div>
 
                 <div>
-                    <label for="keperluan" class="form-label">Keperluan</label>
-                    <textarea id="keperluan" name="keperluan" rows="3" class="form-field <?= session('errors.keperluan') ? 'form-field-error' : '' ?>" placeholder="Tuliskan keperluan kunjungan" required><?= esc(old('keperluan')) ?></textarea>
+                    <label for="keperluan" class="form-label">Keperluan Kunjungan <span class="text-danger">*</span></label>
+                    <textarea
+                        id="keperluan"
+                        name="keperluan"
+                        rows="3"
+                        class="form-field <?= session('errors.keperluan') ? 'form-field-error' : '' ?>"
+                        placeholder="Tuliskan maksud atau keperluan kedatangan Anda"
+                        required
+                    ><?= esc(old('keperluan')) ?></textarea>
                 </div>
 
                 <div>
-                    <label for="foto" class="form-label">Foto Kunjungan</label>
-                    <input type="file" id="foto" name="foto" accept="image/jpeg,image/png,image/webp" class="form-field <?= session('errors.foto') ? 'form-field-error' : '' ?> file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100">
-                    <p class="form-hint">Maks 10 MB, otomatis dikompres di bawah 1 MB (JPG/PNG/WebP, opsional)</p>
-                    <p id="foto-error" class="text-sm text-danger mt-1 hidden"></p>
+                    <label for="foto" class="form-label">Foto Kunjungan <span class="text-ink-muted font-normal">(Opsional)</span></label>
+                    <div class="upload-dropzone">
+                        <input
+                            type="file"
+                            id="foto"
+                            name="foto"
+                            accept="image/jpeg,image/png,image/webp"
+                            aria-describedby="foto-hint foto-error"
+                            class="block w-full text-sm text-ink file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer"
+                        >
+                        <p id="foto-hint" class="form-hint mt-2">Format JPG, PNG, atau WebP. Maksimal 10 MB (otomatis dikompres di bawah 1 MB saat dikirim).</p>
+                        <p id="foto-filename" class="text-sm font-semibold text-brand-700 mt-2 hidden"></p>
+                        <p id="foto-error" class="text-sm text-danger mt-1 hidden" role="alert"></p>
+                    </div>
                 </div>
             </div>
 
             <div class="pt-2">
-                <button type="submit" class="btn-primary w-full md:w-auto">Kirim Data</button>
+                <button type="submit" class="btn-primary w-full sm:w-auto min-w-52">Kirim Data Kunjungan</button>
             </div>
         </form>
-    </div>
-</section>
+    </section>
+
+</div>
 
 <?php $this->endSection(); ?>
 
