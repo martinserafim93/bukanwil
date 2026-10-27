@@ -12,15 +12,7 @@ signatures. Preserve genuine human attribution. See
 for optional tool settings.
 
 ## What this is
-
-A description of your project and the problem it solves.
-
-This project is built with the **AI Blueprint**, a workflow layer, not an
-app skeleton. To start a new project, scaffold the app first in an empty folder
-(create-next-app, Vite, etc.), then overlay these files on top. Never run a
-framework scaffolder inside a directory that already holds the blueprint files
-(`AGENTS.md`, `CLAUDE.md`, `.agents/`, `.claude/`, `blueprint/`); it fails
-because the directory isn't empty.
+BUKANWIL (Buku Tamu Kanwil Kemenag Kaltara) is a digital guestbook and administration panel for the Pelayanan Terpadu Satu Pintu (PTSP) at Kantor Wilayah Kementerian Agama Provinsi Kalimantan Utara. Built with CodeIgniter 4, Tailwind CSS v4, and MySQL 8.0.
 
 The workflow is defined by the local skills and context files below.
 
@@ -318,19 +310,15 @@ checks do not make the Blueprint unusable.
 
 ## Commands
 
-<!-- blueprint:onboarding-required -->
-CodeIgniter 4 + PHP 8.3 + Tailwind CSS v4 stack.
-
 - Dev server: `php spark serve` (http://localhost:8080)
-- Build CSS: `npm run build:css`
+- Build CSS: `npm run build:css` (minified `public/css/app.css`)
 - Watch CSS: `npm run watch:css`
-- PHP lint: `php -l app/Controllers/<file>.php`
+- CLI tool: `php spark`
+- Test: `composer test` (runs PHPUnit)
 
-Testing is opt-in. If this project does not already have a unit test runner, run
-`/tests` or `$tests` to add one and update this section with the real test
-commands.
+Testing is configured with PHPUnit in `composer.json` (`composer test`).
 
-Browser testing is also opt-in. Run `/tests browser` or `$tests browser` to add
+Browser testing is opt-in. Run `/tests browser` or `$tests browser` to add
 or normalize a browser harness and document its exact command as `Browser
 tests`. Check and Continuous Mode can then reuse it without installing tooling
 mid-feature.

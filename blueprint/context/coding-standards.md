@@ -1,86 +1,48 @@
 # Coding Standards
 
-> Your conventions. Edit these once to match your stack. The defaults below
-> assume Next.js + TypeScript + Tailwind + Prisma; change or trim anything that
-> doesn't fit your project.
->
-> Run `/onboard` after installing the Blueprint. It tunes this file to the real
-> project stack, along with `AGENTS.md`, `CLAUDE.md` when present,
-> `ai-interaction.md`, `.gitignore`, and README placement. Review the result
-> before `/overview`.
+> Coding conventions for BUKANWIL (CodeIgniter 4 + Tailwind CSS v4 + MySQL).
+> Adopted from the actual codebase.
 
-## TypeScript
+## PHP & CodeIgniter 4
 
-- Strict mode enabled
-- No `any` types - use proper typing or `unknown`
-- Define interfaces for all props, API responses, and data models
-- Use type inference where obvious, explicit types where helpful
+- PHP 8.2+ compatibility (tested on PHP 8.3).
+- Follow PSR-12 coding style and PSR-4 autoloading standards.
+- Controllers live in `app/Controllers/`, extending `App\Controllers\BaseController`. Group related actions (e.g., `App\Controllers\Admin\`).
+- Models live in `app/Models/`, extending `CodeIgniter\Model`. Explicitly define `$table`, `$primaryKey`, and `$allowedFields`.
+- Views live in `app/Views/` organized by context (`tamu/`, `admin/`, `layouts/`). Use template inheritance (`$this->extend(...)` and `$this->section(...)`).
+- Routes are explicitly defined in `app/Config/Routes.php`. Group administrative routes under the `/admin` prefix.
 
-## React
+## Styling & Frontend
 
-- Functional components only (no class components)
-- Use hooks for state and side effects
-- Keep components focused - one job per component
-- Extract reusable logic into custom hooks
+- Tailwind CSS v4 for all styling.
+- Source CSS is maintained in `themes/app.css` and compiled via `@tailwindcss/cli` to `public/css/app.css`.
+- Use npm scripts for asset builds: `npm run build:css` (production) and `npm run watch:css` (development).
+- Use semantic HTML5 markup.
+- For interactive elements, use custom modals and toast notifications rather than native browser `confirm()` or `alert()`.
+- Keep JavaScript focused and lightweight; use Chart.js for dashboard charts and vanilla JavaScript for DOM interactions.
 
-## Next.js
+## Database & Data Access
 
-- Server components by default
-- Only use `'use client'` when needed (interactivity, hooks, browser APIs)
-- Use Server Actions for form submissions and simple mutations
-- Use API routes when you need:
-  - Webhooks (Clerk, GitHub, etc.)
-  - File uploads with progress tracking
-  - Long-running operations
-  - Specific HTTP status codes or headers
-  - Endpoints for future mobile/CLI clients
-  - Third-party integrations
-- Otherwise, fetch data directly in server components
-- Dynamic routes for item/collection pages
+- MySQL 8.0 / MariaDB with `utf8mb4_unicode_ci` charset.
+- Authoritative database schema and seed data are maintained in `database/schema.sql`.
+- Timestamps and calculations must strictly adhere to the WITA (UTC+8) timezone (`SET time_zone = '+08:00'`).
+- Always use CodeIgniter Query Builder or Model methods for parameterized database queries to prevent SQL injection.
+- Ensure all queries filtering or ordering by dates use proper database indexes (e.g., `idx_tamu_created_at`).
 
-## File Organization
+## Security & Validation
 
-- Components: `src/components/[feature]/ComponentName.tsx`
-- Pages: `src/app/[route]/page.tsx`
-- Server Actions: `src/actions/[feature].ts`
-- Types: `src/types/[feature].ts`
-- Lib/Utils: `src/lib/[utility].ts`
+- **CSRF Protection**: CSRF is active across all POST requests. Every HTML form must include `<?= csrf_field() ?>`.
+- **Output Escaping**: Always wrap user-supplied output in views with `esc()` to prevent Cross-Site Scripting (XSS).
+- **Form Validation**: Validate all inputs using CodeIgniter's validation rules before processing or storing data.
+- **Honeypot & Rate Limiting**: Maintain honeypot fields on public submission forms and enforce rate limiting (e.g., public submissions and login attempts).
+- **Authentication & Passwords**: Passwords must always be hashed with `password_hash($password, PASSWORD_BCRYPT, ['cost' => 12])` and verified with `password_verify()`.
+- **File Upload Security**: Validate uploaded photos using finfo MIME checking (JPEG, PNG, WebP only), enforce maximum file size (1 MB), and generate random stored filenames (`getRandomName()`).
 
-## Naming
+## Error Handling & Notifications
 
-- Components: PascalCase (`ItemCard.tsx`)
-- Files: Match component name or kebab-case
-- Functions: camelCase
-- Constants: SCREAMING_SNAKE_CASE
-- Types/Interfaces: PascalCase (no prefix)
-
-## Styling
-
-- Tailwind CSS for all styling
-- Tailwind v4: CSS-first config (`@theme` in `globals.css`), no `tailwind.config.js`
-- Use shadcn/ui components where applicable
-- No inline styles
-- Dark mode first, light mode as option
-
-## Database
-
-- Use Prisma ORM for all database operations
-- Always use `prisma migrate dev` for schema changes (not `db push`)
-- Run `prisma migrate status` before committing to verify migrations are in sync
-- Production deployments must run `prisma migrate deploy` before the app starts
-
-## Data Fetching
-
-- Server components fetch directly with Prisma
-- Client components use Server Actions
-- Validate all inputs with Zod
-- Scope every user-owned query by the authenticated Clerk user id (`clerkUserId`); never trust a client-supplied user id
-
-## Error Handling
-
-- Use try/catch in Server Actions
-- Return `{ success, data, error }` pattern from actions
-- Display user-friendly error messages via toast
+- Validate input early and redirect back with input and errors (`return redirect()->back()->withInput()->with('errors', $this->validator->getErrors())`).
+- Use session flashdata (`session()->setFlashdata('sukses', ...)` / `session()->setFlashdata('error', ...)`) for user feedback messages across redirects.
+- Provide clear, user-friendly error messages in Indonesian.
 
 ## Testing
 
@@ -107,27 +69,17 @@ deliberate step, never a silent mid-step install. This is the single definition
 of the switch; the skills and `ai-interaction.md` only point back here.
 
 - **What to test (the scope rule):** pure logic where a wrong answer is possible -
-  parsers, formatters, validators, id/slug builders, server actions. These have
-  assertable inputs and outputs and real edge cases (empty, missing, malformed).
-- **What not to test:** UI components and integration-level surfaces (render or
-  export routes, anything driving a real browser or external service). Verify those
-  with a screenshot and the build, not brittle unit tests.
+  parsers, formatters, validators, helper functions, and data transformations. These
+  have assertable inputs and outputs and real edge cases (empty, missing, malformed).
+- **What not to test:** UI layouts, rendering views, or integration-level surfaces
+  requiring a real browser or external service. Verify those with manual checks or
+  browser evidence, not brittle unit tests.
 - **The gate (when a runner is configured):** a build step that adds in-scope logic
   must ship a passing test in the same reviewable diff. The project's test command
   must be green before the step is approved, before any checkpoint commit, and
-  before `/complete` merges. UI and integration-only steps are exempt and ride on
-  screenshot plus build evidence.
-- **When it's named:** the `/feature` spec's Testing section predicts the coverage,
-  `/implement` writes the test with the step, and if a step surfaces logic the spec
-  didn't foresee, add a focused test then.
-- An empty suite should fail, not pass, so "no tests ran" never looks like "passed".
-- Test files live next to source files (for example `feature.test.ts`).
-- Run them via the project's test command (see Commands in `AGENTS.md`), not a
-  hardcoded tool name.
-
-Stack binding (swap for yours): a TypeScript app uses Vitest, `vi.mock()` for
-external dependencies (Prisma, Clerk, etc.), and `vi.useFakeTimers()` for
-time-dependent logic; a Python app would use pytest; a Go app `go test`.
+  before `/complete` merges. UI and integration-only steps are exempt.
+- Run tests via the project's test command (see Commands in `AGENTS.md`), such as
+  `composer test`.
 
 ## Browser Verification
 
@@ -143,7 +95,7 @@ code and assuming it works.
   behavior, browser chrome, or another claim the test does not observe.
 - If no Browser tests command is declared, do not add a runner silently in the
   middle of an unrelated feature. Use the available dev server, browser
-  screenshots, build output, API output, or manual evidence instead.
+  screenshots, build output, or manual evidence instead.
 - Browser tests are not part of the default Verify command or CI unless the user
   separately chooses that slower gate.
 - Browser evidence is especially important for flows that click, type, submit,
@@ -152,9 +104,9 @@ code and assuming it works.
 
 ## Code Quality
 
-- No commented-out code unless specified
-- No unused imports or variables
-- Keep functions under 50 lines when possible
+- No commented-out dead code.
+- No unused variables or unused imports.
+- Keep controller and model methods focused and readable.
 
 ## Comments
 
@@ -168,8 +120,8 @@ Over-commenting is a common AI tell, so resist it.
   non-obvious decision, a gotcha or workaround, why a value is what it is, or a
   link to a spec or issue.
 - Prefer self-documenting names and small functions over explanatory comments.
-- Keep doc comments minimal: a one-line purpose on an exported type or function is
-  plenty; don't write JSDoc that just repeats the signature.
+- Keep doc comments minimal: a one-line purpose on an exported class or method is
+  plenty; don't write PHPDoc that just repeats the signature.
 - When in doubt, leave the comment out.
 
 ## Writing

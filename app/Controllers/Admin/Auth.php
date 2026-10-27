@@ -94,6 +94,10 @@ class Auth extends BaseController
      */
     public function logout()
     {
+        if (strtoupper($this->request->getMethod()) !== 'POST') {
+            return redirect()->to('/admin');
+        }
+
         $session = session();
         $session->remove([
             'logged_in',

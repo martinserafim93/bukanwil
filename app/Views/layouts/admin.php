@@ -74,9 +74,12 @@ function isActive(string $path): string
         </nav>
 
         <div class="p-4 border-t border-border">
-            <a href="<?= site_url('admin/logout') ?>" id="admin-logout-btn" class="block w-full text-center px-4 py-2 text-sm font-medium text-danger hover:bg-danger-bg rounded-full transition-colors">
-                Logout
-            </a>
+            <form id="admin-logout-form" action="<?= site_url('admin/logout') ?>" method="post">
+                <?= csrf_field() ?>
+                <button type="submit" id="admin-logout-btn" class="block w-full text-center px-4 py-2 text-sm font-medium text-danger hover:bg-danger-bg rounded-full transition-colors cursor-pointer">
+                    Logout
+                </button>
+            </form>
         </div>
     </aside>
 
@@ -119,10 +122,10 @@ function isActive(string $path): string
             <?php endif; ?>
 
             var logoutBtn = document.getElementById('admin-logout-btn');
-            if (logoutBtn) {
+            var logoutForm = document.getElementById('admin-logout-form');
+            if (logoutBtn && logoutForm) {
                 logoutBtn.addEventListener('click', function (e) {
                     e.preventDefault();
-                    var logoutUrl = this.getAttribute('href');
                     if (typeof confirmDialog === 'function') {
                         confirmDialog({
                             title: 'Konfirmasi Logout',
@@ -131,11 +134,11 @@ function isActive(string $path): string
                             cancelText: 'Batal',
                             danger: true,
                             onConfirm: function () {
-                                window.location.href = logoutUrl;
+                                logoutForm.submit();
                             }
                         });
                     } else {
-                        window.location.href = logoutUrl;
+                        logoutForm.submit();
                     }
                 });
             }

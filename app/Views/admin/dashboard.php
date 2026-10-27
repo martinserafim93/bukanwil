@@ -51,6 +51,27 @@ foreach ($perJenis as $item) {
 
 ?>
 
+<?php if (! empty($defaultPasswordWarning)): ?>
+    <div class="mb-6 p-4 bg-warning-bg border border-warning/30 flex items-start gap-3" role="alert">
+        <svg class="w-5 h-5 mt-0.5 shrink-0 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+        <div class="flex-1 text-sm text-ink">
+            <strong class="font-bold text-warning block mb-1">Peringatan Keamanan: Kata Sandi Bawaan Masih Digunakan!</strong>
+            <p class="text-ink-muted mb-2">
+                Akun Super Administrator masih menggunakan kata sandi awal (<code>Admin@2026</code>). Segera ubah kata sandi akun untuk mencegah akses yang tidak sah.
+            </p>
+            <?php if (session('role') === 'superadmin'): ?>
+                <a href="<?= site_url('admin/admin-user/' . ((int) ($superadminId ?? session('admin_id'))) . '/edit') ?>" class="inline-flex items-center gap-1 font-semibold text-warning hover:underline">
+                    Ganti Kata Sandi Sekarang &rarr;
+                </a>
+            <?php else: ?>
+                <span class="text-xs text-ink-subtle italic">Silakan hubungi Super Administrator untuk memperbarui kata sandi utama sistem.</span>
+            <?php endif; ?>
+        </div>
+    </div>
+<?php endif; ?>
+
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
     <!-- Total Tamu -->
     <div class="bg-surface-raised border border-border p-5">

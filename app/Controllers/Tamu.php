@@ -121,7 +121,7 @@ class Tamu extends BaseController
     {
         $file = $this->request->getFile('foto');
 
-        if (! $file || ! $file->isValid() || ! $file->isUploaded()) {
+        if (! $file || ! $file->isValid() || $file->hasMoved()) {
             return null;
         }
 

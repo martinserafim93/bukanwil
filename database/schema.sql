@@ -26,11 +26,17 @@ CREATE TABLE IF NOT EXISTS `tamu` (
     `foto`             VARCHAR(500)        NULL     DEFAULT NULL,
     -- 0 = belum dibaca admin; 1 = sudah dibaca
     `is_read`          TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
+    -- 0 = aktif di meja kerja; 1 = diarsipkan (riwayat lampau)
+    `is_archived`      TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
     `created_at`       DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    -- NULL = data sah; NOT NULL = dihapus ke tong sampah (soft delete)
+    `deleted_at`       DATETIME            NULL     DEFAULT NULL,
 
     PRIMARY KEY (`id`),
     INDEX `idx_tamu_created_at`    (`created_at`),
     INDEX `idx_tamu_is_read`       (`is_read`),
+    INDEX `idx_tamu_is_archived`   (`is_archived`),
+    INDEX `idx_tamu_deleted_at`    (`deleted_at`),
     INDEX `idx_tamu_jenis_kelamin` (`jenis_kelamin`),
     INDEX `idx_tamu_asal`          (`asal_pengunjung`)
 ) ENGINE=InnoDB

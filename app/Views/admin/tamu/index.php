@@ -1,11 +1,15 @@
 <?php
 /**
- * Admin guest list — BUKANWIL
+ * Admin guest list with lifecycle management (Aktif, Arsip, Tong Sampah) — BUKANWIL
  *
  * @var array<int, array<string, mixed>> $tamu
  * @var \CodeIgniter\Pager\Pager         $pager
  * @var int                             $total
  * @var array<string, mixed>            $filter_aktif
+ * @var string                          $tab_aktif
+ * @var int                             $count_aktif
+ * @var int                             $count_arsip
+ * @var int                             $count_sampah
  */
 
 $this->extend('layouts/admin');
@@ -20,6 +24,7 @@ Daftar Tamu
 
 $this->section('content');
 
+$isSuperadmin = session('role') === 'superadmin';
 $opsiJenisKelamin = ['Laki-laki', 'Perempuan'];
 $opsiAsal         = ['perorangan', 'instansi', 'lembaga'];
 
@@ -30,32 +35,93 @@ $exportUrl = site_url('admin/tamu/export') . ($filterQueryString ? '?' . $filter
 
 ?>
 
+<!-- Tab Navigation Bar -->
+<div class="border-b border-border mb-6 flex flex-wrap gap-2 text-sm font-medium">
+    <a href="<?= site_url('admin/tamu?tab=aktif') ?>"
+       class="inline-flex items-center gap-2 px-4 py-3 border-b-2 transition-colors <?= $tab_aktif === 'aktif' ? 'border-brand text-brand font-semibold' : 'border-transparent text-ink-muted hover:text-ink hover:border-border' ?>">
+        <span>Tamu Aktif</span>
+        <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full <?= $tab_aktif === 'aktif' ? 'bg-brand/10 text-brand' : 'bg-surface-raised border border-border text-ink-muted' ?>">
+            <?= esc((string) $count_aktif) ?>
+        </span>
+    </a>
+
+    <a href="<?= site_url('admin/tamu?tab=arsip') ?>"
+       class="inline-flex items-center gap-2 px-4 py-3 border-b-2 transition-colors <?= $tab_aktif === 'arsip' ? 'border-brand text-brand font-semibold' : 'border-transparent text-ink-muted hover:text-ink hover:border-border' ?>">
+        <span>Arsip Riwayat</span>
+        <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full <?= $tab_aktif === 'arsip' ? 'bg-brand/10 text-brand' : 'bg-surface-raised border border-border text-ink-muted' ?>">
+            <?= esc((string) $count_arsip) ?>
+        </span>
+    </a>
+
+    <?php if ($isSuperadmin): ?>
+        <a href="<?= site_url('admin/tamu?tab=sampah') ?>"
+           class="inline-flex items-center gap-2 px-4 py-3 border-b-2 transition-colors <?= $tab_aktif === 'sampah' ? 'border-danger text-danger font-semibold' : 'border-transparent text-ink-muted hover:text-danger hover:border-border' ?>">
+            <span>Tong Sampah</span>
+            <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full <?= $tab_aktif === 'sampah' ? 'bg-danger/10 text-danger' : 'bg-surface-raised border border-border text-ink-muted' ?>">
+                <?= esc((string) $count_sampah) ?>
+            </span>
+        </a>
+    <?php endif; ?>
+</div>
+
 <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
     <div>
         <p class="text-sm text-ink-muted">
-            Total hasil: <span class="font-semibold text-ink"><?= esc((string) $total) ?></span>
+            Total hasil pada tab ini: <span class="font-semibold text-ink"><?= esc((string) $total) ?></span>
         </p>
     </div>
     <div class="flex flex-wrap items-center gap-3">
         <a href="<?= $exportUrl ?>" class="btn-secondary text-sm">
             Export CSV
         </a>
-        <form action="<?= site_url('admin/tamu/baca-semua') ?>" method="post" class="inline">
-            <?= csrf_field() ?>
-            <button type="submit" class="btn-primary text-sm">
-                Tandai Semua Dibaca
-            </button>
-        </form>
+        <?php if ($tab_aktif === 'aktif'): ?>
+            <form action="<?= site_url('admin/tamu/baca-semua') ?>" method="post" class="inline">
+                <?= csrf_field() ?>
+                <button type="submit" class="btn-primary text-sm">
+                    Tandai Semua Dibaca
+                </button>
+            </form>
+        <?php endif; ?>
     </div>
 </div>
 
+<!-- Bulk Archive Panel (Superadmin only on Arsip tab) -->
+<?php if ($isSuperadmin && $tab_aktif === 'arsip'): ?>
+    <div class="bg-surface-raised border border-border p-4 mb-6">
+        <h4 class="text-xs font-semibold uppercase tracking-wide text-ink-muted mb-2">Alat Pengarsipan Massal (Tutup Buku)</h4>
+        <form action="<?= site_url('admin/tamu/arsipkan-massal') ?>" method="post" class="flex flex-wrap items-center gap-3">
+            <?= csrf_field() ?>
+            <label for="tahun_cutoff" class="text-sm text-ink">Arsipkan semua tamu aktif sebelum tahun:</label>
+            <input type="number" id="tahun_cutoff" name="tahun" min="2020" max="<?= esc(date('Y')) ?>" value="<?= esc(date('Y')) ?>" class="form-field w-28 text-center" required>
+            <button type="submit"
+                    class="btn-secondary text-sm action-confirm-btn"
+                    data-title="Konfirmasi Pengarsipan Massal"
+                    data-message="Seluruh data tamu aktif yang dibuat sebelum tahun tersebut akan dipindahkan ke Arsip. Lanjutkan?"
+                    data-confirm-text="Ya, Arsipkan Massal"
+                    data-danger="false">
+                Proses Arsipkan Massal
+            </button>
+        </form>
+    </div>
+<?php endif; ?>
+
+<!-- Filter Panel -->
 <div class="bg-surface border border-border p-5 mb-8">
-    <h3 class="text-sm font-semibold uppercase tracking-wide text-ink-muted mb-4">Filter Data</h3>
+    <h3 class="text-sm font-semibold uppercase tracking-wide text-ink-muted mb-4">Filter Data (<?= esc(ucfirst($tab_aktif)) ?>)</h3>
     <form action="<?= site_url('admin/tamu') ?>" method="get" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <input type="hidden" name="tab" value="<?= esc($tab_aktif) ?>">
+
         <div>
             <label for="q" class="form-label">Pencarian</label>
             <input type="text" id="q" name="q" value="<?= esc((string) ($filter_aktif['q'] ?? '')) ?>" class="form-field" placeholder="Nama / No. HP / Instansi">
         </div>
+
+        <?php if ($tab_aktif === 'arsip'): ?>
+            <div>
+                <label for="tahun" class="form-label">Tahun Kunjungan</label>
+                <input type="number" id="tahun" name="tahun" min="2020" max="<?= esc(date('Y')) ?>" value="<?= esc((string) ($filter_aktif['tahun'] ?? '')) ?>" class="form-field" placeholder="Semua Tahun">
+            </div>
+        <?php endif; ?>
 
         <div>
             <label for="tanggal_dari" class="form-label">Dari Tanggal</label>
@@ -98,14 +164,15 @@ $exportUrl = site_url('admin/tamu/export') . ($filterQueryString ? '?' . $filter
 
         <div class="md:col-span-2 lg:col-span-2 flex items-end gap-3">
             <button type="submit" class="btn-primary">Filter</button>
-            <a href="<?= site_url('admin/tamu') ?>" class="btn-secondary">Reset</a>
+            <a href="<?= site_url('admin/tamu?tab=' . esc($tab_aktif, 'url')) ?>" class="btn-secondary">Reset</a>
         </div>
     </form>
 </div>
 
+<!-- Guest Table -->
 <?php if (empty($tamu)): ?>
     <div class="bg-surface border border-border p-10 text-center">
-        <p class="text-ink-muted">Belum ada data tamu.</p>
+        <p class="text-ink-muted">Belum ada data tamu pada tab ini.</p>
     </div>
 <?php else: ?>
     <div class="overflow-x-auto bg-surface border border-border mb-6">
@@ -129,8 +196,14 @@ $exportUrl = site_url('admin/tamu/export') . ($filterQueryString ? '?' . $filter
                         <td class="px-4 py-3">
                             <div class="flex items-center gap-2">
                                 <span class="font-medium text-ink"><?= esc((string) $row['nama']) ?></span>
-                                <?php if (empty($row['is_read'])): ?>
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-brand-100 text-brand-700">Baru</span>
+                                <?php if ($tab_aktif === 'aktif' && empty($row['is_read'])): ?>
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-brand/10 text-brand">Baru</span>
+                                <?php endif; ?>
+                                <?php if (! empty($row['is_archived'])): ?>
+                                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-surface-raised border border-border text-ink-muted">Arsip</span>
+                                <?php endif; ?>
+                                <?php if (! empty($row['deleted_at'])): ?>
+                                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-danger/10 text-danger">Sampah</span>
                                 <?php endif; ?>
                             </div>
                         </td>
@@ -145,10 +218,94 @@ $exportUrl = site_url('admin/tamu/export') . ($filterQueryString ? '?' . $filter
                                 <?= esc(date('d/m/Y H:i', strtotime((string) $row['created_at']))) ?>
                             <?php endif; ?>
                         </td>
-                        <td class="px-4 py-3">
-                            <a href="<?= site_url('admin/tamu/' . ((int) $row['id'])) ?>" class="text-brand-600 hover:text-brand-700 font-medium">
-                                Detail
-                            </a>
+                        <td class="px-4 py-3 whitespace-nowrap">
+                            <div class="flex items-center gap-2">
+                                <a href="<?= site_url('admin/tamu/' . ((int) $row['id'])) ?>" class="text-brand hover:underline font-medium">
+                                    Detail
+                                </a>
+
+                                <?php if ($isSuperadmin): ?>
+                                    <?php if ($tab_aktif === 'aktif'): ?>
+                                        <!-- Tombol Arsip -->
+                                        <form action="<?= site_url('admin/tamu/' . ((int) $row['id']) . '/arsipkan') ?>" method="post" class="inline">
+                                            <?= csrf_field() ?>
+                                            <button type="submit"
+                                                    class="text-ink-muted hover:text-ink font-medium action-confirm-btn"
+                                                    data-title="Arsipkan Tamu"
+                                                    data-message="Pindahkan rekaman kunjungan <?= esc((string) $row['nama']) ?> ke tab Arsip Riwayat?"
+                                                    data-confirm-text="Ya, Arsipkan"
+                                                    data-danger="false">
+                                                Arsip
+                                            </button>
+                                        </form>
+
+                                        <!-- Tombol Buang ke Sampah (Soft Delete) -->
+                                        <form action="<?= site_url('admin/tamu/' . ((int) $row['id']) . '/hapus') ?>" method="post" class="inline">
+                                            <?= csrf_field() ?>
+                                            <button type="submit"
+                                                    class="text-danger hover:underline font-medium action-confirm-btn"
+                                                    data-title="Pindahkan ke Tong Sampah"
+                                                    data-message="Pindahkan data <?= esc((string) $row['nama']) ?> ke Tong Sampah? Data tidak akan dihitung pada statistik dashboard."
+                                                    data-confirm-text="Ya, Buang ke Sampah"
+                                                    data-danger="true">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    <?php elseif ($tab_aktif === 'arsip'): ?>
+                                        <!-- Tombol Batal Arsip -->
+                                        <form action="<?= site_url('admin/tamu/' . ((int) $row['id']) . '/batal-arsip') ?>" method="post" class="inline">
+                                            <?= csrf_field() ?>
+                                            <button type="submit"
+                                                    class="text-brand hover:underline font-medium action-confirm-btn"
+                                                    data-title="Kembalikan ke Aktif"
+                                                    data-message="Kembalikan rekaman kunjungan <?= esc((string) $row['nama']) ?> ke tab Tamu Aktif?"
+                                                    data-confirm-text="Ya, Kembalikan"
+                                                    data-danger="false">
+                                                Aktifkan
+                                            </button>
+                                        </form>
+
+                                        <!-- Tombol Buang ke Sampah dari Arsip -->
+                                        <form action="<?= site_url('admin/tamu/' . ((int) $row['id']) . '/hapus') ?>" method="post" class="inline">
+                                            <?= csrf_field() ?>
+                                            <button type="submit"
+                                                    class="text-danger hover:underline font-medium action-confirm-btn"
+                                                    data-title="Pindahkan ke Tong Sampah"
+                                                    data-message="Pindahkan data arsip <?= esc((string) $row['nama']) ?> ke Tong Sampah?"
+                                                    data-confirm-text="Ya, Buang ke Sampah"
+                                                    data-danger="true">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    <?php elseif ($tab_aktif === 'sampah'): ?>
+                                        <!-- Tombol Restore -->
+                                        <form action="<?= site_url('admin/tamu/' . ((int) $row['id']) . '/pulihkan') ?>" method="post" class="inline">
+                                            <?= csrf_field() ?>
+                                            <button type="submit"
+                                                    class="text-brand hover:underline font-medium action-confirm-btn"
+                                                    data-title="Pulihkan Data Tamu"
+                                                    data-message="Pulihkan data <?= esc((string) $row['nama']) ?> kembali ke daftar aktif?"
+                                                    data-confirm-text="Ya, Pulihkan"
+                                                    data-danger="false">
+                                                Pulihkan
+                                            </button>
+                                        </form>
+
+                                        <!-- Tombol Hapus Permanen -->
+                                        <form action="<?= site_url('admin/tamu/' . ((int) $row['id']) . '/hapus-permanen') ?>" method="post" class="inline">
+                                            <?= csrf_field() ?>
+                                            <button type="submit"
+                                                    class="text-danger hover:underline font-bold action-confirm-btn"
+                                                    data-title="HAPUS PERMANEN"
+                                                    data-message="PERINGATAN: Rekaman dan berkas foto fisik <?= esc((string) $row['nama']) ?> akan dihapus selamanya dari database dan server. Tindakan ini TIDAK BISA dibatalkan!"
+                                                    data-confirm-text="HAPUS SELAMANYA"
+                                                    data-danger="true">
+                                                Hapus Permanen
+                                            </button>
+                                        </form>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            </div>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -162,5 +319,36 @@ $exportUrl = site_url('admin/tamu/export') . ($filterQueryString ? '?' . $filter
         </div>
     <?php endif; ?>
 <?php endif; ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var confirmButtons = document.querySelectorAll('.action-confirm-btn');
+    confirmButtons.forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            var form = this.closest('form');
+            var title = this.getAttribute('data-title') || 'Konfirmasi';
+            var message = this.getAttribute('data-message') || 'Apakah Anda yakin ingin melanjutkan tindakan ini?';
+            var confirmText = this.getAttribute('data-confirm-text') || 'Ya, Lanjutkan';
+            var isDanger = this.getAttribute('data-danger') === 'true';
+
+            if (typeof confirmDialog === 'function') {
+                confirmDialog({
+                    title: title,
+                    message: message,
+                    confirmText: confirmText,
+                    cancelText: 'Batal',
+                    danger: isDanger,
+                    onConfirm: function () {
+                        form.submit();
+                    }
+                });
+            } else if (confirm(message)) {
+                form.submit();
+            }
+        });
+    });
+});
+</script>
 
 <?php $this->endSection(); ?>

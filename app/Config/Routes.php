@@ -10,6 +10,7 @@ $routes->get('/tamu/sukses', 'Tamu::sukses');
 // Admin auth routes (public access)
 $routes->get('/admin/login', 'Admin\\Auth::login');
 $routes->post('/admin/login', 'Admin\\Auth::doLogin');
+$routes->post('/admin/logout', 'Admin\\Auth::logout');
 $routes->get('/admin/logout', 'Admin\\Auth::logout');
 
 // Admin dashboard
@@ -21,6 +22,12 @@ $routes->get('admin/tamu/export', 'Admin\\TamuAdmin::exportCsv');
 $routes->get('admin/tamu/(:num)', 'Admin\\TamuAdmin::detail/$1');
 $routes->post('admin/tamu/(:num)/baca', 'Admin\\TamuAdmin::tandaiBaca/$1');
 $routes->post('admin/tamu/baca-semua', 'Admin\\TamuAdmin::bacaSemua');
+$routes->post('admin/tamu/(:num)/hapus', 'Admin\\TamuAdmin::hapus/$1');
+$routes->post('admin/tamu/(:num)/pulihkan', 'Admin\\TamuAdmin::pulihkan/$1');
+$routes->post('admin/tamu/(:num)/hapus-permanen', 'Admin\\TamuAdmin::hapusPermanen/$1');
+$routes->post('admin/tamu/(:num)/arsipkan', 'Admin\\TamuAdmin::arsipkan/$1');
+$routes->post('admin/tamu/(:num)/batal-arsip', 'Admin\\TamuAdmin::batalArsip/$1');
+$routes->post('admin/tamu/arsipkan-massal', 'Admin\\TamuAdmin::arsipkanMassal');
 
 // Admin user management routes (CRUD)
 $routes->get('admin/admin-user', 'Admin\\AdminUser::index');

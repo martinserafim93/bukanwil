@@ -1,172 +1,109 @@
-# Project Overview — BUKANWIL
+# BUKANWIL - Project Overview
 
-**Buku Tamu Kanwil Kemenag Kaltara**  
-Buku Tamu Digital + CMS Admin untuk PTSP Kanwil Kemenag Kalimantan Utara
+<!-- blueprint:source-hash 03cc794b683ef663a8831b4eb43e3ec9004f7a4601fa4dd9f311037f1faede3b -->
 
----
+> Buku tamu digital dan panel administrasi Pelayanan Terpadu Satu Pintu (PTSP) Kantor Wilayah Kementerian Agama Provinsi Kalimantan Utara.
 
-## Problem Statement
+## Problem
 
-PTSP (Pelayanan Terpadu Satu Pintu) Kanwil Kemenag Kaltara saat ini menggunakan Google Form sebagai buku tamu digital. Pendekatan ini memiliki keterbatasan kritis:
+Pencatatan buku tamu konvensional (buku manual kertas atau Google Form generik) pada PTSP Kanwil Kemenag Kaltara rentan terhadap ketidakteraturan data, kendala privasi antar-pengunjung, dan lambatnya pelaporan rekapitulasi. BUKANWIL menyediakan solusi digital terintegrasi yang memungkinkan tamu mengisi data secara mandiri dan cepat, sekaligus memberi petugas antarmuka analitik, pencarian, dan pelaporan yang terstruktur.
 
-- **Data tersimpan di platform pihak ketiga** — tidak ada kepemilikan penuh atas data sensitif pengunjung.
-- **Tidak ada CMS terpusat** — admin tidak dapat mengelola, mencari, atau mengekspor data secara fleksibel.
-- **Tidak ada notifikasi in-app** — operator tidak tahu kapan ada tamu baru tanpa membuka spreadsheet.
-- **Tampilan generik** — tidak mencerminkan identitas instansi Kemenag.
+## Users
 
-BUKANWIL hadir sebagai solusi pengganti: aplikasi buku tamu self-hosted yang tetap ringan, mudah di-deploy ke hosting shared (InfinityFree free tier), dan tidak bergantung pada layanan eksternal untuk fungsi inti.
+- **Pengunjung PTSP**: Tamu masyarakat umum (perorangan), perwakilan instansi pemerintah, dan pengurus lembaga keagamaan/swasta. Mengisi formulir kedatangan mandiri di meja pelayanan tanpa perlu akun login.
+- **Petugas PTSP (Admin)**: Front-office dan staf sekretariat penerima tamu yang memantau kehadiran, memeriksa keperluan, meninjau riwayat kunjungan, dan mengekspor rekap laporan.
+- **Super Administrator**: Administrator sistem dengan wewenang penuh mengelola akun petugas CMS, hak akses, dan pengaturan identitas instansi.
 
----
+## Usage model
 
-## Solution
+- **Skala & Beban**: Operasional kantor wilayah tingkat provinsi dengan volume puluhan hingga ratusan tamu per hari.
+- **Keamanan Batas Akses**: Formulir publik terbuka untuk umum dengan pengamanan honeypot anti-bot, rate limiting (3 submit / 10 menit), proteksi CSRF, dan validasi MIME berkas ketat. Area administrasi dibatasi autentikasi sesi dengan proteksi brute-force login.
+- **Kepatuhan Waktu**: Seluruh pencatatan riwayat dan laporan statistik terikat zona waktu WITA (UTC+8).
 
-Aplikasi web full-stack sederhana dengan dua interface:
+## Features
 
-1. **Form buku tamu publik** — pengunjung PTSP mengisi data (nama, jenis kelamin, asal, instansi, alamat, no HP, keperluan, foto) sekali per kunjungan, tanpa akun.
-2. **CMS admin** — operator/admin PTSP login, melihat dashboard statistik, menelusuri daftar tamu dengan filter/pencarian/pagination, membuka detail lengkap, dan mengekspor data ke CSV.
+1. **Formulir Tamu Publik Mandiri** - Pintu masuk utama bagi tamu untuk mencatat kehadiran lengkap dengan foto opsional.
+2. **Autentikasi & Sesi Petugas CMS** - Pengamanan akses panel admin berbasis role (`superadmin` dan `admin`) dengan pembatasan percobaan login.
+3. **Dashboard Statistik & Analitik Tren** - Halaman ringkasan metrik kehadiran harian, akumulasi total, dan grafik tren 7 hari (Chart.js).
+4. **Manajemen & Penelusuran Riwayat Tamu** - Tabel data kunjungan dengan pencarian multifield, filter tanggal/kategori, penomoran halaman, dan status baca.
+5. **Ekspor Laporan Tamu CSV** - Unduhan rekap data tamu dalam format CSV ber-BOM UTF-8 siap buka di Microsoft Excel.
+6. **Manajemen Akun Petugas Admin (CRUD)** - Antarmuka kelola pengguna petugas admin khusus Superadmin.
+7. **Konfigurasi Identitas Aplikasi & PTSP** - Panel konfigurasi dinamis nama instansi, judul aplikasi, dan teks sambutan.
+8. **Pengerasan Keamanan & Kompatibilitas Produksi** - Mitigasi cache browser, validasi ketat, dan kompatibilitas PHP 8.2+/8.3 di lingkungan server Linux.
+9. **Manajemen Arsip dan Pembersihan Data Tamu** - Pengelolaan siklus hidup tamu (soft delete/tong sampah, pemulihan, hapus permanen, dan arsip riwayat tahunan).
+10. **Penyempurnaan & Pemeliharaan Berkala** - Optimasi performa kueri data tamu, pemantauan log aplikasi, serta penyesuaian kebutuhan operasional PTSP Kanwil Kemenag Kaltara.
 
-Fitur keamanan built-in: anti-spam (honeypot + rate limit), CSRF protection, upload file validation, session hardening, prepared statements.
+## Data model
 
-Notifikasi in-app: badge jumlah tamu baru belum dibaca di topbar admin, otomatis berkurang saat admin membuka detail tamu.
+### `tamu`
 
----
+Menyimpan setiap entri kunjungan tamu dari formulir publik.
 
-## User Personas
+- `id` (BIGINT UNSIGNED, Primary Key, AUTO_INCREMENT) - Pengidentifikasi unik entri tamu
+- `nama` (VARCHAR(255), NOT NULL) - Nama lengkap pengunjung
+- `jenis_kelamin` (ENUM('Laki-laki', 'Perempuan'), NOT NULL) - Jenis kelamin
+- `asal_pengunjung` (ENUM('perorangan', 'instansi', 'lembaga'), NOT NULL) - Kategori asal
+- `nama_instansi` (VARCHAR(255), NULL) - Wajib diisi jika asal `instansi` atau `lembaga`
+- `alamat` (TEXT, NOT NULL) - Alamat tempat tinggal atau instansi tamu
+- `no_hp` (VARCHAR(20), NOT NULL) - Nomor kontak / WhatsApp
+- `keperluan` (TEXT, NOT NULL) - Maksud atau tujuan kedatangan
+- `foto` (VARCHAR(500), NULL) - Path berkas foto tersimpan (relatif terhadap `public/uploads/foto/`)
+- `is_read` (TINYINT(1) UNSIGNED, NOT NULL, DEFAULT 0) - Status review petugas (0 = belum dibaca, 1 = sudah dibaca)
+- `is_archived` (TINYINT(1) UNSIGNED, NOT NULL, DEFAULT 0) - Status arsip (0 = aktif, 1 = diarsipkan)
+- `created_at` (DATETIME, NOT NULL, DEFAULT CURRENT_TIMESTAMP) - Timestamp kunjungan dalam waktu WITA
+- `deleted_at` (DATETIME, NULL, DEFAULT NULL) - Timestamp soft delete ke Tong Sampah (NULL = aktif/arsip sah)
+- Indeks: `idx_tamu_created_at`, `idx_tamu_is_read`, `idx_tamu_jenis_kelamin`, `idx_tamu_asal`, `idx_tamu_archive`, `idx_tamu_deleted`
 
-### 1. Pengunjung PTSP (Tamu)
-- Masyarakat umum atau perwakilan instansi yang datang ke kantor PTSP.
-- Mengakses halaman publik via perangkat mobile/desktop.
-- **Tidak perlu akun**. Mengisi form satu kali per kunjungan.
-- Tingkat literasi digital bervariasi — form harus sesederhana mungkin, mobile-first.
+### `admin`
 
-### 2. Operator / Admin
-- Staff atau operator PTSP Kanwil Kemenag Kaltara.
-- Mengelola data tamu, melihat statistik, mengekspor laporan.
-- Mengakses CMS dari browser desktop/laptop di jaringan kantor.
+Menyimpan data kredensial dan hak akses petugas pengelola CMS.
 
-### 3. Superadmin
-- Pemegang akun admin dengan hak penuh: CRUD admin lain + ubah pengaturan aplikasi (judul, nama instansi, teks header).
-- Minimal 1 akun; strukturnya extensible untuk penambahan admin di kemudian hari.
+- `id` (INT UNSIGNED, Primary Key, AUTO_INCREMENT) - Pengidentifikasi unik admin
+- `nama` (VARCHAR(255), NOT NULL) - Nama lengkap petugas
+- `username` (VARCHAR(100), NOT NULL, UNIQUE) - Username unik untuk login
+- `password` (VARCHAR(255), NOT NULL) - Hash kata sandi menggunakan Bcrypt (cost 12)
+- `role` (ENUM('superadmin', 'admin'), NOT NULL, DEFAULT 'admin') - Tingkat hak akses
+- `created_at` (DATETIME, NOT NULL, DEFAULT CURRENT_TIMESTAMP)
+- `updated_at` (DATETIME, NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)
 
----
+### `pengaturan`
 
-## Tech Stack
+Penyimpanan key-value untuk konfigurasi teks dan identitas instansi.
 
-| Layer                | Teknologi                           | Alasan Pilihan                                      |
-|----------------------|-------------------------------------|-----------------------------------------------------|
-| **Backend**          | CodeIgniter 4.7.5 + PHP 8.3         | Framework MVC ringan, kompatibel hosting shared     |
-| **Database**         | MySQL 8.0                           | Standar InfinityFree                                |
-| **Frontend (CSS)**   | Tailwind CSS v4.3.3 (CSS-first `@theme`) | Design tokens eksplisit, anti-slop, mobile-first |
-| **Frontend (JS)**    | JavaScript native                   | No build step di production (Chart.js CDN)           |
-| **Chart**            | Chart.js 4.4.x (CDN)                | Dashboard statistik sederhana                       |
-| **Dependency Mgmt**  | Composer 2.x + npm                  | CI4 via Composer, Tailwind CLI via npm              |
+- `id` (INT UNSIGNED, Primary Key, AUTO_INCREMENT)
+- `key` (VARCHAR(100), NOT NULL, UNIQUE) - Kunci konfigurasi (`judul_aplikasi`, `deskripsi_aplikasi`, `nama_instansi_ptsp`, `teks_header`)
+- `value` (TEXT, NOT NULL) - Nilai teks konfigurasi
 
----
+## Tech stack
 
-## Hosting Constraints (InfinityFree Free Tier)
+- **CodeIgniter 4.7**: Framework MVC backend PHP (^8.2 / 8.3) untuk routing, controller, model query builder, dan session management.
+- **Tailwind CSS v4**: Utility-first CSS framework via `@tailwindcss/cli`, dipusatkan pada `themes/app.css` dan dikompilasi ke `public/css/app.css`.
+- **MySQL 8.0 / MariaDB**: Penyimpanan data relasional (`utf8mb4_unicode_ci`), skema autoritatif di `database/schema.sql`.
+- **Chart.js**: Visualisasi data grafik garis dan tren kunjungan mingguan pada dashboard admin.
+- **PHPUnit 10.5**: Pengujian unit dan integrasi berbasis `composer test` dan `phpunit.dist.xml`.
 
-Batasan yang harus diakomodasi:
+## Monetization
 
-1. **TANPA dotenv** — file `.env` tidak bisa dibaca karena keamanan IonCube. Semua konfigurasi (baseURL, database, CSRF, encryption key) ditulis langsung di `app/Config/*.php`.
-2. **Tidak ada Redis/Memcached** — rate limiting menggunakan session PHP (FileHandler).
-3. **Tidak ada queue/worker** — semua proses sinkron.
-4. **Upload file** disimpan di filesystem (`public/uploads/foto/`), bukan blob DB.
-5. **CDN eksternal** — Chart.js dimuat dari CDN (versi di-pin untuk stabilitas).
-6. **Entry point** `public/index.php` — domain diarahkan ke folder `public/` via `.htaccess`.
+Tidak berlaku (Non-komersial). Aplikasi layanan publik pemerintahan Kanwil Kementerian Agama Provinsi Kalimantan Utara.
 
----
+## UI/UX
 
-## Features (MVP / v1.0)
+Identitas visual mengusung warna hijau resmi Kementerian Agama (`#006B2E`) dengan tata letak modern dan ramah layar sentuh (mobile/tablet).
 
-### Must-Have (P1) — 11 Fitur Inti
+- `/` - Formulir publik buku tamu mandiri
+- `/tamu/submit` - Endpoint POST penerimaan tamu (CSRF, honeypot, rate limiting)
+- `/tamu/sukses` - Halaman ucapan terima kasih dan konfirmasi pengisian berhasil
+- `/admin/login` - Antarmuka login petugas admin
+- `/admin/logout` - Endpoint logout dengan modal konfirmasi dialog kustom
+- `/admin` - Dashboard statistik, kartu KPI, dan grafik tren kunjungan
+- `/admin/tamu` - Antarmuka manajemen tamu dengan bilah tab (Aktif, Arsip, Tong Sampah), pencarian, filter, pagination, dan status baca
+- `/admin/tamu/(:num)` - Halaman rincian riwayat lengkap kunjungan tamu beserta penampil foto
+- `/admin/tamu/export` - Endpoint unduhan berkas CSV ber-BOM UTF-8
+- `/admin/admin-user` - Halaman manajemen akun petugas admin (CRUD khusus Superadmin)
+- `/admin/pengaturan` - Halaman konfigurasi identitas instansi dan salam aplikasi
 
-| Kode  | Fitur                                                                                      |
-|-------|--------------------------------------------------------------------------------------------|
-| F-01  | Form buku tamu publik dengan 8 field (termasuk foto)               |
-| F-02  | Anti-spam: honeypot field + rate limit form publik (3 submit per 10 menit)               |
-| F-03  | Login/logout admin dengan proteksi CSRF, rate limit login (5 gagal per 15 menit), session hardening |
-| F-04  | Dashboard admin: statistik ringkas (total tamu, hari ini, belum dibaca, per jenis kelamin, per asal, top 5 keperluan) + grafik tren 7 hari (Chart.js) |
-| F-05  | Daftar tamu: pagination (20/halaman), pencarian (nama/no_hp/instansi), filter (tanggal range, jenis_kelamin, asal, keperluan), urutkan (created_at/nama asc/desc) |
-| F-06  | Detail tamu: semua field + foto           |
-| F-07  | Export daftar tamu ke CSV sesuai filter aktif (BOM UTF-8 untuk Excel)                    |
-| F-08  | Notifikasi in-app: badge tamu baru belum dibaca + tandai dibaca (otomatis saat buka detail) + tandai semua dibaca |
-| F-09  | Kelola admin: CRUD user admin, ubah password, role superadmin/admin (hapus hanya superadmin) |
-| F-10  | Pengaturan: judul aplikasi, nama instansi PTSP, teks header (tabel pengaturan key-value) |
-| F-11  | Checklist keamanan lengkap (lihat SPEC.md §7): prepared statements, bcrypt cost-12, CSRF, upload validation, XSS escaping, honeypot, rate limit, .htaccess hardening, mode produksi |
+## Deployment
 
-### Out of Scope (P2 — iterasi berikutnya)
-
-- Notifikasi email/Telegram saat ada tamu baru.
-- QR code untuk akses form publik.
-- Multi-bahasa (Indonesia/Inggris).
-- Fitur print kartu tamu.
-
----
-
-## Success Criteria (Definition of Done v1)
-
-Aplikasi dinyatakan selesai bila:
-
-1. ✅ Tamu dapat mengisi dan mengirim form dari perangkat mobile tanpa error.
-2. ✅ Admin dapat login, melihat dashboard, menelusuri dan mengekspor data tamu.
-3. ✅ Notifikasi badge tamu baru tampil dan bisa di-dismiss (berkurang saat buka detail).
-4. ✅ Semua 18 item checklist keamanan di SPEC.md §7 terpenuhi (diverifikasi oleh agen `koding`).
-5. ✅ Tidak ada query tanpa prepared statement — semua via CI4 Model QueryBuilder.
-6. ✅ Upload foto berjalan: validasi mime (`finfo_file`), ekstensi whitelist, ukuran max 2MB, rename acak, folder `.htaccess` terkunci (eksekusi PHP ditolak tapi foto tetap bisa disajikan).
-7. ✅ Mode produksi aktif: `CI_ENVIRONMENT = 'production'`, `DBDebug = false` di Database.php.
-8. ✅ Tidak ada file `.env` di root proyek (semua config di `app/Config/*.php`).
-9. ✅ Aplikasi bisa di-deploy ke InfinityFree tanpa modifikasi: commit file CSS yang sudah ter-build, tidak ada dependency pada Node.js atau Redis di server.
-
----
-
-## Design Principles (Anti-Slop)
-
-Skill `ui-design-standards` menjadi acuan:
-
-- **Warna solid flat** — tidak ada `bg-gradient-*` pada elemen diam.
-- **Border-radius konsisten** — pilih siku (0) atau pil (9999px), terapkan satu pilihan.
-- **Button primary** — `bg-brand-green text-white` tanpa gradient.
-- **Surface card** — `bg-surface-raised border border-border` bukan `shadow-lg rounded-lg`.
-- **Tidak ada eyebrow label, tiny-uppercase, atau deretan ikon-card identik**.
-
-Warna brand Kemenag:
-- Hijau primer: `#006B2E`
-- Emas aksen: `#E5A400`
-
----
-
-## Open Questions (PERTANYAAN UNTUK LEAD)
-
-Dicatat di SPEC.md §9 — belum ada jawaban final:
-
-1. **HTTPS di InfinityFree?** Bila domain sudah dikonfigurasi dengan SSL, set `$secure = true` di Cookie.php. Konfirmasi status HTTPS.
-2. **Foto wajib atau opsional?** Saat ini diperlakukan sebagai WAJIB di aturan validasi. Konfirmasi apakah foto boleh dilewati.
-3. **Rate limit berbasis session vs. IP?** Session PHP (tidak perlu Redis) — pengguna yang membersihkan cookie bisa melewatinya. Terima batasan ini?
-4. **Tandai dibaca: otomatis saat buka detail atau tombol manual?** Saat ini spec: otomatis set `is_read=1` saat admin membuka halaman detail. Alternatif: tombol eksplisit.
-
----
-
-## Deployment Notes
-
-- **Hosting:** InfinityFree free tier (PHP + MySQL + .htaccess).
-- **Repo:** https://github.com/martinserafim93/bukanwil (sudah terbootstrap).
-- **Build command (lokal/dev):** `npx @tailwindcss/cli -i public/assets/css/app.css -o public/assets/css/app.compiled.css --minify`
-- **Deploy:** Commit file `app.compiled.css` yang sudah ter-build, upload seluruh repo ke `htdocs/` InfinityFree (atau subdirektori), arahkan domain ke folder `public/`.
-- **Database setup:** Import `database/schema.sql`, generate hash password superadmin via `php -r "echo password_hash('Admin@2026', PASSWORD_BCRYPT, ['cost'=>12]);"`, UPDATE tabel admin.
-- **Encryption key:** Generate via `php spark key:generate --show`, paste ke `app/Config/Encryption.php`.
-- **Health check:** GET `/` (form publik), GET `/admin` (harus redirect ke `/admin/login` bila belum login).
-
----
-
-## Maintenance & Extensibility
-
-- **Logging:** CI4 log threshold 4 (warning ke atas), writable/logs/ — monitor error log setelah deploy.
-- **Backup:** Export MySQL via phpMyAdmin InfinityFree, backup folder `public/uploads/foto/` berkala.
-- **Skalabilitas:** Single-tenant, target 50–200 tamu per bulan (PTSP Kanwil), tidak ada rencana multi-tenant.
-- **Extensibility:** Tabel `pengaturan` key-value store — fitur baru bisa menambah key tanpa ALTER TABLE. Tabel `admin` sudah mendukung role superadmin/admin (siap untuk role tambahan di kemudian hari).
-
----
-
-**Versi:** 1.0.0  
-**Tanggal:** 2026-10-18  
-**Pemilik:** Kantor Wilayah Kementerian Agama Provinsi Kalimantan Utara
+- **Lingkungan Produksi**: Server web Linux Apache/Nginx (hosting cPanel / VPS) pada domain `https://bukanwil.is-great.org`.
+- **Konfigurasi Lingkungan**: Berkas `.env` dengan `CI_ENVIRONMENT = production`, konfigurasi database MySQL `database.default.*`, dan pengaturan zona waktu `+08:00` (WITA).
+- **Izin Direktori**: Direktori `public/uploads/foto/` dan `writable/` wajib dapat ditulis (*writeable*) oleh pengguna server web.

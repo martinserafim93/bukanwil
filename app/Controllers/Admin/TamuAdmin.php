@@ -18,6 +18,8 @@ class TamuAdmin extends BaseController
         $get = $this->request->getGet();
 
         return [
+            'tab'             => $get['tab'] ?? 'aktif',
+            'tahun'           => $get['tahun'] ?? '',
             'q'               => $get['q'] ?? '',
             'tanggal_dari'    => $get['tanggal_dari'] ?? '',
             'tanggal_sampai'  => $get['tanggal_sampai'] ?? '',
@@ -30,12 +32,31 @@ class TamuAdmin extends BaseController
     }
 
     /**
+     * Guard access to superadmin-only actions.
+     */
+    private function requireSuperadmin(): ?ResponseInterface
+    {
+        if (session('role') !== 'superadmin') {
+            return redirect()->to('/admin/tamu')->with('error', 'Akses ditolak: Hanya Super Administrator yang diizinkan melakukan tindakan ini.');
+        }
+
+        return null;
+    }
+
+    /**
      * Display the guest list with filtering and pagination.
      */
     public function index(): string
     {
         $filter = $this->buildFilter();
-        $result = (new TamuModel())->getPaginasi($filter, 20);
+        $model  = new TamuModel();
+
+        // Non-superadmin cannot view trash tab
+        if ($filter['tab'] === 'sampah' && session('role') !== 'superadmin') {
+            $filter['tab'] = 'aktif';
+        }
+
+        $result = $model->getPaginasi($filter, 20);
 
         return view('admin/tamu/index', [
             'pengaturan'   => $this->pengaturan,
@@ -44,6 +65,10 @@ class TamuAdmin extends BaseController
             'pager'        => $result['pager'],
             'total'        => $result['pager']->getTotal(),
             'filter_aktif' => $filter,
+            'tab_aktif'    => $filter['tab'],
+            'count_aktif'  => $model->countAktif(),
+            'count_arsip'  => $model->countArsip(),
+            'count_sampah' => $model->countSampah(),
         ]);
     }
 
@@ -73,7 +98,9 @@ class TamuAdmin extends BaseController
             'no_hp',
             'keperluan',
             'foto',
+            'is_archived',
             'created_at',
+            'deleted_at',
         ];
         fputcsv($handle, $headers);
 
@@ -89,7 +116,8 @@ class TamuAdmin extends BaseController
         $csv = stream_get_contents($handle);
         fclose($handle);
 
-        $filename = 'tamu_export_' . date('Ymd_His') . '.csv';
+        $tabSuffix = $filter['tab'] !== 'aktif' ? '_' . $filter['tab'] : '';
+        $filename  = 'tamu_export' . $tabSuffix . '_' . date('Ymd_His') . '.csv';
 
         return $this->response
             ->setHeader('Content-Type', 'text/csv; charset=UTF-8')
@@ -103,16 +131,17 @@ class TamuAdmin extends BaseController
     public function detail(int $id): string
     {
         $tamuModel = new TamuModel();
-        $tamu = $tamuModel->find($id);
+        // Allow loading detail even if soft-deleted (so Superadmin in trash can inspect)
+        $tamu = $tamuModel->withDeleted()->find($id);
 
         if ($tamu === null) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        $tamuModel->tandaiBaca($id);
-
-        // Reflect the just-updated read status before rendering the view.
-        $tamu['is_read'] = 1;
+        if (empty($tamu['deleted_at'])) {
+            $tamuModel->tandaiBaca($id);
+            $tamu['is_read'] = 1;
+        }
 
         return view('admin/tamu/detail', [
             'pengaturan'  => $this->pengaturan,
@@ -147,5 +176,109 @@ class TamuAdmin extends BaseController
         }
 
         return redirect()->to('/admin/tamu');
+    }
+
+    /**
+     * Soft delete a tamu record (move to trash). Superadmin only.
+     */
+    public function hapus(int $id): ResponseInterface
+    {
+        if ($redirect = $this->requireSuperadmin()) {
+            return $redirect;
+        }
+
+        $model = new TamuModel();
+        $tamu  = $model->find($id);
+        if ($tamu === null) {
+            return redirect()->to('/admin/tamu')->with('error', 'Data tamu tidak ditemukan.');
+        }
+
+        $model->delete($id);
+
+        return redirect()->back()->with('success', 'Data tamu berhasil dipindahkan ke Tong Sampah.');
+    }
+
+    /**
+     * Restore a soft-deleted tamu record back to active. Superadmin only.
+     */
+    public function pulihkan(int $id): ResponseInterface
+    {
+        if ($redirect = $this->requireSuperadmin()) {
+            return $redirect;
+        }
+
+        $model = new TamuModel();
+        $model->pulihkan($id);
+
+        return redirect()->back()->with('success', 'Data tamu berhasil dipulihkan ke daftar aktif.');
+    }
+
+    /**
+     * Permanently delete a tamu record and its physical photo. Superadmin only.
+     */
+    public function hapusPermanen(int $id): ResponseInterface
+    {
+        if ($redirect = $this->requireSuperadmin()) {
+            return $redirect;
+        }
+
+        $model   = new TamuModel();
+        $success = $model->hapusPermanen($id);
+
+        if ($success) {
+            return redirect()->back()->with('success', 'Data tamu dan berkas foto berhasil dihapus permanen.');
+        }
+
+        return redirect()->back()->with('error', 'Gagal menghapus data tamu.');
+    }
+
+    /**
+     * Move a tamu record to archive. Superadmin only.
+     */
+    public function arsipkan(int $id): ResponseInterface
+    {
+        if ($redirect = $this->requireSuperadmin()) {
+            return $redirect;
+        }
+
+        $model = new TamuModel();
+        $model->arsipkan($id);
+
+        return redirect()->back()->with('success', 'Data tamu berhasil diarsipkan.');
+    }
+
+    /**
+     * Restore an archived tamu record back to active. Superadmin only.
+     */
+    public function batalArsip(int $id): ResponseInterface
+    {
+        if ($redirect = $this->requireSuperadmin()) {
+            return $redirect;
+        }
+
+        $model = new TamuModel();
+        $model->batalArsip($id);
+
+        return redirect()->back()->with('success', 'Data tamu berhasil dikembalikan ke daftar aktif.');
+    }
+
+    /**
+     * Bulk archive tamu records created before specified year. Superadmin only.
+     */
+    public function arsipkanMassal(): ResponseInterface
+    {
+        if ($redirect = $this->requireSuperadmin()) {
+            return $redirect;
+        }
+
+        $tahun = (int) $this->request->getPost('tahun');
+        if ($tahun < 2000 || $tahun > (int) date('Y')) {
+            return redirect()->back()->with('error', 'Tahun cut-off tidak valid.');
+        }
+
+        $model = new TamuModel();
+        $total = $model->arsipkanSebelumTahun($tahun);
+
+        return redirect()->back()->with('success', "Sebanyak {$total} data tamu sebelum tahun {$tahun} berhasil diarsipkan.");
     }
 }
