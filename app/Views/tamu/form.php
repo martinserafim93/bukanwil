@@ -12,41 +12,36 @@ $this->section('content');
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
 
     <!-- Kolom Kiri: Panel Identitas Editorial -->
-    <aside class="lg:col-span-5 bg-brand-700 text-white p-6 sm:p-8 lg:p-10 flex flex-col justify-between">
-        <div>
-            <div class="text-center mb-8">
-                <img
-                    src="<?= base_url('images/logo-kemenag-transparent.png') ?>"
-                    alt="Logo Kementerian Agama"
-                    class="h-16 w-16 object-contain mx-auto mb-5"
-                >
+    <aside class="lg:col-span-5 bg-brand-700 text-white p-6 sm:p-8 lg:p-10 flex flex-col justify-between text-center">
+        <div class="my-auto py-4">
+            <img
+                src="<?= base_url('images/logo-kemenag-transparent.png') ?>"
+                alt="Logo Kementerian Agama"
+                class="h-20 w-20 object-contain mx-auto mb-6"
+            >
 
-                <h1 class="text-2xl sm:text-3xl font-serif font-bold text-white leading-tight mb-2">
-                    <?= esc($pengaturan['judul_aplikasi'] ?? 'BUKANWIL') ?>
-                </h1>
+            <h1 class="text-2xl sm:text-3xl font-serif font-bold text-white leading-tight mb-2">
+                <?= esc($pengaturan['judul_aplikasi'] ?? 'BUKANWIL') ?>
+            </h1>
 
-                <p class="text-lg text-brand-100 font-medium mb-3">
-                    <?= esc($pengaturan['deskripsi_aplikasi'] ?? 'Buku Tamu Kanwil Kemenag Kaltara') ?>
-                </p>
+            <p class="text-lg text-brand-100 font-medium mb-4">
+                <?= esc($pengaturan['deskripsi_aplikasi'] ?? 'Buku Tamu Kanwil Kemenag Kaltara') ?>
+            </p>
 
-                <p class="text-base text-brand-50 leading-relaxed">
-                    <?= esc((string) ($pengaturan['teks_header'] ?? 'Selamat datang di Pelayanan Terpadu Satu Pintu (PTSP). Silakan lengkapi data kunjungan Anda.')) ?>
-                </p>
-            </div>
-
-            <div class="bg-brand-800 p-5 mb-8 text-left">
-                <h2 class="text-base font-bold text-accent-200 mb-3">Panduan Pengisian Mandiri</h2>
-                <ul class="space-y-2 text-base text-brand-50">
-                    <li>Isi identitas diri dan pilih kategori asal pengunjung sesuai kedatangan Anda.</li>
-                    <li>Tuliskan nomor WhatsApp aktif serta maksud keperluan layanan secara jelas.</li>
-                    <li>Lampirkan foto kunjungan bila diperlukan (otomatis dikompres oleh sistem).</li>
-                </ul>
-            </div>
+            <p class="text-base text-brand-50 leading-relaxed max-w-md mx-auto">
+                <?= esc((string) ($pengaturan['teks_header'] ?? 'Selamat datang di Pelayanan Terpadu Satu Pintu (PTSP). Silakan lengkapi data kunjungan Anda.')) ?>
+            </p>
         </div>
 
-        <p class="text-sm text-brand-200 pt-6 text-center">
-            <?= esc($pengaturan['nama_instansi_ptsp'] ?? 'Kantor Wilayah Kementerian Agama Provinsi Kalimantan Utara') ?>
-        </p>
+        <div class="pt-6 border-t border-brand-600 space-y-3">
+            <div class="inline-flex items-center gap-2 bg-brand-800 px-3.5 py-1.5 text-xs font-medium text-brand-100" data-ui>
+                <span class="inline-block h-2 w-2 rounded-full bg-accent-500" aria-hidden="true"></span>
+                <span id="live-wita-clock" class="tabular-nums text-white font-semibold">Zona Waktu: WITA (UTC+8)</span>
+            </div>
+            <p class="text-sm text-brand-100">
+                <?= esc($pengaturan['nama_instansi_ptsp'] ?? 'Kantor Wilayah Kementerian Agama Provinsi Kalimantan Utara') ?>
+            </p>
+        </div>
     </aside>
 
     <!-- Kolom Kanan: Lembar Kerja Formulir -->

@@ -25,33 +25,8 @@
 
     <div class="brand-stripe" aria-hidden="true"></div>
 
-    <header class="bg-ground-warm">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap items-center justify-between gap-4">
-            <a href="<?= site_url('/') ?>" class="inline-flex items-center gap-3 text-ink hover:opacity-90">
-                <img
-                    src="<?= base_url('images/logo-kemenag-transparent.png') ?>"
-                    alt="Logo Kementerian Agama"
-                    class="h-10 w-10 object-contain"
-                >
-                <div>
-                    <span class="block text-sm font-bold text-brand-700 leading-tight">
-                        <?= esc($pengaturan['judul_aplikasi'] ?? 'BUKANWIL') ?>
-                    </span>
-                    <span class="block text-xs text-ink-muted">
-                        <?= esc($pengaturan['nama_instansi_ptsp'] ?? 'Kantor Wilayah Kementerian Agama Provinsi Kalimantan Utara') ?>
-                    </span>
-                </div>
-            </a>
-
-            <div class="inline-flex items-center gap-2 bg-surface px-3.5 py-1.5 text-xs font-medium text-ink-muted" data-ui>
-                <span class="inline-block h-2 w-2 rounded-full bg-brand-500" aria-hidden="true"></span>
-                <span id="live-wita-clock" class="tabular-nums text-ink font-semibold">Zona Waktu: WITA (UTC+8)</span>
-            </div>
-        </div>
-    </header>
-
-    <main class="flex-1 py-8 md:py-12">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main class="flex-1 py-8 md:py-12 flex flex-col justify-center">
+        <div class="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8">
             <?= $this->renderSection('content') ?>
         </div>
     </main>
