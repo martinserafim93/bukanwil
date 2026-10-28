@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin detail tamu — BUKANWIL
+ * Admin detail tamu - BUKANWIL
  *
  * @var array<string, mixed> $tamu
  */
@@ -18,29 +18,30 @@ Detail Tamu
 $this->section('content');
 
 $isSuperadmin = session('role') === 'superadmin';
-$id = (int) ($tamu['id'] ?? 0);
-$isDeleted = ! empty($tamu['deleted_at']);
-$isArchived = ! empty($tamu['is_archived']);
+$id           = (int) ($tamu['id'] ?? 0);
+$isDeleted    = ! empty($tamu['deleted_at']);
+$isArchived   = ! empty($tamu['is_archived']);
 
 ?>
 
 <div class="max-w-4xl mx-auto space-y-6">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-bold text-ink">
+            <h1 class="text-2xl sm:text-3xl font-serif font-bold text-ink">
                 <?= esc((string) ($tamu['nama'] ?? 'Detail Tamu')) ?>
             </h1>
-            <div class="flex items-center gap-2 mt-1">
+            <p class="text-base text-ink-muted mt-1">Rincian data pengunjung, identitas, keperluan, dan status peninjauan.</p>
+            <div class="flex items-center gap-2 mt-3">
                 <?php if ($isDeleted): ?>
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-danger/10 text-danger border border-danger/20">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-danger/10 text-danger border border-danger/20">
                         Tong Sampah (Soft Deleted)
                     </span>
                 <?php elseif ($isArchived): ?>
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-surface-raised border border-border text-ink-muted">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-surface-raised border border-border text-ink-muted">
                         Arsip Riwayat
                     </span>
                 <?php else: ?>
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-brand/10 text-brand">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand/10 text-brand">
                         Tamu Aktif
                     </span>
                 <?php endif; ?>
@@ -48,59 +49,68 @@ $isArchived = ! empty($tamu['is_archived']);
         </div>
         <div class="flex items-center gap-2">
             <a href="<?= site_url('admin/tamu' . ($isDeleted ? '?tab=sampah' : ($isArchived ? '?tab=arsip' : ''))) ?>" class="btn-secondary text-sm inline-flex items-center">
-                Kembali
+                &larr; Kembali ke Daftar Tamu
             </a>
         </div>
     </div>
 
     <!-- Alert status if in trash or archive -->
     <?php if ($isDeleted): ?>
-        <div class="p-4 bg-danger/10 border border-danger/20 text-danger text-sm rounded">
+        <div class="p-4 bg-danger/10 border border-danger/20 text-danger text-sm rounded-lg" role="alert">
             <strong>Pemberitahuan:</strong> Rekaman tamu ini telah dipindahkan ke Tong Sampah. Data ini tidak dihitung dalam statistik dashboard.
         </div>
     <?php elseif ($isArchived): ?>
-        <div class="p-4 bg-surface-raised border border-border text-ink-muted text-sm rounded">
+        <div class="p-4 bg-surface-raised border border-border text-ink-muted text-sm rounded-lg">
             <strong>Status Arsip:</strong> Rekaman ini tersimpan dalam arsip riwayat lampau.
         </div>
     <?php endif; ?>
 
-    <div class="bg-surface border border-border p-6">
+    <div class="bg-surface border border-border p-6 rounded-lg" data-ui>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
             <div>
-                <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted mb-1">Jenis Kelamin</p>
-                <p class="text-sm text-ink"><?= esc((string) ($tamu['jenis_kelamin'] ?? '-')) ?></p>
+                <p class="text-sm font-medium text-ink-muted mb-1">Jenis Kelamin</p>
+                <p class="text-base text-ink font-medium"><?= esc((string) ($tamu['jenis_kelamin'] ?? '-')) ?></p>
             </div>
 
             <div>
-                <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted mb-1">Asal Pengunjung</p>
-                <p class="text-sm text-ink capitalize"><?= esc((string) ($tamu['asal_pengunjung'] ?? '-')) ?></p>
+                <p class="text-sm font-medium text-ink-muted mb-1">Asal Pengunjung</p>
+                <p class="text-base text-ink font-medium capitalize"><?= esc((string) ($tamu['asal_pengunjung'] ?? '-')) ?></p>
             </div>
 
             <?php if (! empty($tamu['nama_instansi'])): ?>
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted mb-1">Nama Instansi</p>
-                    <p class="text-sm text-ink"><?= esc((string) $tamu['nama_instansi']) ?></p>
+                    <p class="text-sm font-medium text-ink-muted mb-1">Nama Instansi</p>
+                    <p class="text-base text-ink font-medium"><?= esc((string) $tamu['nama_instansi']) ?></p>
                 </div>
             <?php endif; ?>
 
             <div class="md:col-span-2">
-                <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted mb-1">Alamat</p>
-                <p class="text-sm text-ink whitespace-pre-wrap"><?= esc((string) ($tamu['alamat'] ?? '-')) ?></p>
+                <p class="text-sm font-medium text-ink-muted mb-1">Alamat</p>
+                <p class="text-sm text-ink whitespace-pre-wrap leading-relaxed"><?= esc((string) ($tamu['alamat'] ?? '-')) ?></p>
             </div>
 
             <div>
-                <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted mb-1">No. HP / WA</p>
-                <p class="text-sm text-ink"><?= esc((string) ($tamu['no_hp'] ?? '-')) ?></p>
+                <p class="text-sm font-medium text-ink-muted mb-1">Nomor Kontak / WhatsApp</p>
+                <p class="text-base text-ink font-medium tabular-nums"><?= esc((string) ($tamu['no_hp'] ?? '-')) ?></p>
+            </div>
+
+            <div>
+                <p class="text-sm font-medium text-ink-muted mb-1">Status Peninjauan</p>
+                <?php if (! empty($tamu['is_read'])): ?>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success/10 text-success">Sudah Ditinjau</span>
+                <?php else: ?>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand/10 text-brand">Belum Ditinjau</span>
+                <?php endif; ?>
             </div>
 
             <div class="md:col-span-2">
-                <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted mb-1">Keperluan</p>
-                <p class="text-sm text-ink whitespace-pre-wrap"><?= esc((string) ($tamu['keperluan'] ?? '-')) ?></p>
+                <p class="text-sm font-medium text-ink-muted mb-1">Keperluan Kunjungan</p>
+                <p class="text-sm text-ink whitespace-pre-wrap leading-relaxed"><?= esc((string) ($tamu['keperluan'] ?? '-')) ?></p>
             </div>
 
-            <div>
-                <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted mb-1">Tanggal Kunjungan</p>
-                <p class="text-sm text-ink">
+            <div class="md:col-span-2">
+                <p class="text-sm font-medium text-ink-muted mb-1">Waktu Kedatangan</p>
+                <p class="text-sm text-ink tabular-nums">
                     <?php if (! empty($tamu['created_at'])): ?>
                         <?= esc(date('d/m/Y H:i', strtotime((string) $tamu['created_at']))) ?> WITA
                     <?php else: ?>
@@ -108,21 +118,12 @@ $isArchived = ! empty($tamu['is_archived']);
                     <?php endif; ?>
                 </p>
             </div>
-
-            <div>
-                <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted mb-1">Status Peninjauan</p>
-                <?php if (! empty($tamu['is_read'])): ?>
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success/10 text-success">Sudah Ditinjau</span>
-                <?php else: ?>
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand/10 text-brand">Belum Ditinjau</span>
-                <?php endif; ?>
-            </div>
         </div>
     </div>
 
     <?php if (! empty($tamu['foto'])): ?>
-        <div class="bg-surface border border-border p-6">
-            <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted mb-4">Foto Pengunjung</p>
+        <div class="bg-surface border border-border p-6 rounded-lg" data-ui>
+            <h2 class="text-sm font-bold text-ink mb-3">Foto Pengunjung</h2>
             <?php
             $fotoPath = (string) $tamu['foto'];
             $src = str_starts_with($fotoPath, 'uploads/') ? $fotoPath : 'uploads/foto/' . $fotoPath;
@@ -130,16 +131,16 @@ $isArchived = ! empty($tamu['is_archived']);
             <img
                 src="<?= base_url(esc($src, 'url')) ?>"
                 alt="<?= esc((string) ($tamu['nama'] ?? 'Foto tamu')) ?>"
-                class="w-full max-w-md h-auto object-cover rounded border border-border"
+                class="w-full max-w-md h-auto object-cover rounded-lg border border-border"
             >
         </div>
     <?php endif; ?>
 
     <!-- Superadmin Lifecycle Action Bar -->
     <?php if ($isSuperadmin): ?>
-        <div class="bg-surface border border-border p-5 flex flex-wrap items-center justify-between gap-4">
+        <div class="bg-surface border border-border p-5 flex flex-wrap items-center justify-between gap-4 rounded-lg" data-ui>
             <div>
-                <h4 class="text-sm font-semibold text-ink">Tindakan Pengelolaan Data Tamu</h4>
+                <h2 class="text-sm font-bold text-ink">Tindakan Pengelolaan Data Tamu</h2>
                 <p class="text-xs text-ink-muted">Aksi khusus Super Administrator untuk pengarsipan dan pembersihan.</p>
             </div>
 
@@ -203,7 +204,7 @@ $isArchived = ! empty($tamu['is_archived']);
                         <button type="submit"
                                 class="btn-secondary text-sm action-confirm-btn"
                                 data-title="Arsipkan Tamu"
-                                data-message="Pindahkan rekaman <?= esc((string) $tamu['nama']) ?> ke Arsip Riwayat?"
+                                data-message="Pindahkan rekaman kunjungan <?= esc((string) $tamu['nama']) ?> ke tab Arsip Riwayat?"
                                 data-confirm-text="Ya, Arsipkan"
                                 data-danger="false">
                             Arsipkan
@@ -214,12 +215,12 @@ $isArchived = ! empty($tamu['is_archived']);
                     <form action="<?= site_url('admin/tamu/' . $id . '/hapus') ?>" method="post" class="inline">
                         <?= csrf_field() ?>
                         <button type="submit"
-                                class="btn-secondary text-danger text-sm action-confirm-btn"
+                                class="btn-danger text-sm action-confirm-btn"
                                 data-title="Pindahkan ke Tong Sampah"
-                                data-message="Pindahkan data <?= esc((string) $tamu['nama']) ?> ke Tong Sampah? Data tidak akan dihitung di statistik."
+                                data-message="Pindahkan data <?= esc((string) $tamu['nama']) ?> ke Tong Sampah? Data tidak akan dihitung pada statistik dashboard."
                                 data-confirm-text="Ya, Buang ke Sampah"
                                 data-danger="true">
-                            Pindahkan ke Tong Sampah
+                            Hapus ke Sampah
                         </button>
                     </form>
                 <?php endif; ?>
@@ -236,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             var form = this.closest('form');
             var title = this.getAttribute('data-title') || 'Konfirmasi';
-            var message = this.getAttribute('data-message') || 'Lanjutkan tindakan ini?';
+            var message = this.getAttribute('data-message') || 'Apakah Anda yakin ingin melanjutkan tindakan ini?';
             var confirmText = this.getAttribute('data-confirm-text') || 'Ya, Lanjutkan';
             var isDanger = this.getAttribute('data-danger') === 'true';
 

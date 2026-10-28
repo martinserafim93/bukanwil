@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin guest list with lifecycle management (Aktif, Arsip, Tong Sampah) — BUKANWIL
+ * Admin guest list with lifecycle management (Aktif, Arsip, Tong Sampah) - BUKANWIL
  *
  * @var array<int, array<string, mixed>> $tamu
  * @var \CodeIgniter\Pager\Pager         $pager
@@ -35,40 +35,11 @@ $exportUrl = site_url('admin/tamu/export') . ($filterQueryString ? '?' . $filter
 
 ?>
 
-<!-- Tab Navigation Bar -->
-<div class="border-b border-border mb-6 flex flex-wrap gap-2 text-sm font-medium">
-    <a href="<?= site_url('admin/tamu?tab=aktif') ?>"
-       class="inline-flex items-center gap-2 px-4 py-3 border-b-2 transition-colors <?= $tab_aktif === 'aktif' ? 'border-brand text-brand font-semibold' : 'border-transparent text-ink-muted hover:text-ink hover:border-border' ?>">
-        <span>Tamu Aktif</span>
-        <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full <?= $tab_aktif === 'aktif' ? 'bg-brand/10 text-brand' : 'bg-surface-raised border border-border text-ink-muted' ?>">
-            <?= esc((string) $count_aktif) ?>
-        </span>
-    </a>
-
-    <a href="<?= site_url('admin/tamu?tab=arsip') ?>"
-       class="inline-flex items-center gap-2 px-4 py-3 border-b-2 transition-colors <?= $tab_aktif === 'arsip' ? 'border-brand text-brand font-semibold' : 'border-transparent text-ink-muted hover:text-ink hover:border-border' ?>">
-        <span>Arsip Riwayat</span>
-        <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full <?= $tab_aktif === 'arsip' ? 'bg-brand/10 text-brand' : 'bg-surface-raised border border-border text-ink-muted' ?>">
-            <?= esc((string) $count_arsip) ?>
-        </span>
-    </a>
-
-    <?php if ($isSuperadmin): ?>
-        <a href="<?= site_url('admin/tamu?tab=sampah') ?>"
-           class="inline-flex items-center gap-2 px-4 py-3 border-b-2 transition-colors <?= $tab_aktif === 'sampah' ? 'border-danger text-danger font-semibold' : 'border-transparent text-ink-muted hover:text-danger hover:border-border' ?>">
-            <span>Tong Sampah</span>
-            <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full <?= $tab_aktif === 'sampah' ? 'bg-danger/10 text-danger' : 'bg-surface-raised border border-border text-ink-muted' ?>">
-                <?= esc((string) $count_sampah) ?>
-            </span>
-        </a>
-    <?php endif; ?>
-</div>
-
-<div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+<!-- Header Halaman Utama -->
+<div class="mb-6 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
     <div>
-        <p class="text-sm text-ink-muted">
-            Total hasil pada tab ini: <span class="font-semibold text-ink"><?= esc((string) $total) ?></span>
-        </p>
+        <h1 class="text-2xl sm:text-3xl font-serif font-bold text-ink">Daftar Kunjungan Tamu</h1>
+        <p class="text-base text-ink-muted mt-1">Kelola buku tamu aktif, arsip riwayat kunjungan, dan pembersihan data.</p>
     </div>
     <div class="flex flex-wrap items-center gap-3">
         <a href="<?= $exportUrl ?>" class="btn-secondary text-sm">
@@ -85,14 +56,43 @@ $exportUrl = site_url('admin/tamu/export') . ($filterQueryString ? '?' . $filter
     </div>
 </div>
 
+<!-- Tab Navigation Bar -->
+<div class="border-b border-border mb-6 flex flex-wrap gap-2 text-sm font-medium">
+    <a href="<?= site_url('admin/tamu?tab=aktif') ?>"
+       class="inline-flex items-center gap-2 px-4 py-3 border-b-2 transition-colors <?= $tab_aktif === 'aktif' ? 'border-brand text-brand font-semibold' : 'border-transparent text-ink-muted hover:text-ink hover:border-border' ?>">
+        <span>Tamu Aktif</span>
+        <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full tabular-nums <?= $tab_aktif === 'aktif' ? 'bg-brand/10 text-brand' : 'bg-surface-raised border border-border text-ink-muted' ?>">
+            <?= esc((string) $count_aktif) ?>
+        </span>
+    </a>
+
+    <a href="<?= site_url('admin/tamu?tab=arsip') ?>"
+       class="inline-flex items-center gap-2 px-4 py-3 border-b-2 transition-colors <?= $tab_aktif === 'arsip' ? 'border-brand text-brand font-semibold' : 'border-transparent text-ink-muted hover:text-ink hover:border-border' ?>">
+        <span>Arsip Riwayat</span>
+        <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full tabular-nums <?= $tab_aktif === 'arsip' ? 'bg-brand/10 text-brand' : 'bg-surface-raised border border-border text-ink-muted' ?>">
+            <?= esc((string) $count_arsip) ?>
+        </span>
+    </a>
+
+    <?php if ($isSuperadmin): ?>
+        <a href="<?= site_url('admin/tamu?tab=sampah') ?>"
+           class="inline-flex items-center gap-2 px-4 py-3 border-b-2 transition-colors <?= $tab_aktif === 'sampah' ? 'border-danger text-danger font-semibold' : 'border-transparent text-ink-muted hover:text-danger hover:border-border' ?>">
+            <span>Tong Sampah</span>
+            <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs rounded-full tabular-nums <?= $tab_aktif === 'sampah' ? 'bg-danger/10 text-danger' : 'bg-surface-raised border border-border text-ink-muted' ?>">
+                <?= esc((string) $count_sampah) ?>
+            </span>
+        </a>
+    <?php endif; ?>
+</div>
+
 <!-- Bulk Archive Panel (Superadmin only on Arsip tab) -->
 <?php if ($isSuperadmin && $tab_aktif === 'arsip'): ?>
-    <div class="bg-surface-raised border border-border p-4 mb-6">
-        <h4 class="text-xs font-semibold uppercase tracking-wide text-ink-muted mb-2">Alat Pengarsipan Massal (Tutup Buku)</h4>
+    <div class="bg-surface border border-border p-5 mb-6 rounded-lg" data-ui>
+        <h2 class="text-sm font-bold text-ink mb-2">Alat Pengarsipan Massal (Tutup Buku Tahunan)</h2>
         <form action="<?= site_url('admin/tamu/arsipkan-massal') ?>" method="post" class="flex flex-wrap items-center gap-3">
             <?= csrf_field() ?>
-            <label for="tahun_cutoff" class="text-sm text-ink">Arsipkan semua tamu aktif sebelum tahun:</label>
-            <input type="number" id="tahun_cutoff" name="tahun" min="2020" max="<?= esc(date('Y')) ?>" value="<?= esc(date('Y')) ?>" class="form-field w-28 text-center" required>
+            <label for="tahun_cutoff" class="text-sm text-ink-muted">Arsipkan semua tamu aktif sebelum tahun:</label>
+            <input type="number" id="tahun_cutoff" name="tahun" min="2020" max="<?= esc(date('Y')) ?>" value="<?= esc(date('Y')) ?>" class="form-field w-28 text-center tabular-nums" required>
             <button type="submit"
                     class="btn-secondary text-sm action-confirm-btn"
                     data-title="Konfirmasi Pengarsipan Massal"
@@ -106,8 +106,11 @@ $exportUrl = site_url('admin/tamu/export') . ($filterQueryString ? '?' . $filter
 <?php endif; ?>
 
 <!-- Filter Panel -->
-<div class="bg-surface border border-border p-5 mb-8">
-    <h3 class="text-sm font-semibold uppercase tracking-wide text-ink-muted mb-4">Filter Data (<?= esc(ucfirst($tab_aktif)) ?>)</h3>
+<div class="bg-surface border border-border p-5 mb-6 rounded-lg" data-ui>
+    <div class="flex items-center justify-between mb-4">
+        <h2 class="text-sm font-bold text-ink">Filter & Pencarian Data (<?= esc(ucfirst($tab_aktif)) ?>)</h2>
+        <span class="text-xs text-ink-muted tabular-nums">Total hasil: <strong class="text-ink"><?= esc((string) $total) ?></strong> data</span>
+    </div>
     <form action="<?= site_url('admin/tamu') ?>" method="get" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <input type="hidden" name="tab" value="<?= esc($tab_aktif) ?>">
 
@@ -119,7 +122,7 @@ $exportUrl = site_url('admin/tamu/export') . ($filterQueryString ? '?' . $filter
         <?php if ($tab_aktif === 'arsip'): ?>
             <div>
                 <label for="tahun" class="form-label">Tahun Kunjungan</label>
-                <input type="number" id="tahun" name="tahun" min="2020" max="<?= esc(date('Y')) ?>" value="<?= esc((string) ($filter_aktif['tahun'] ?? '')) ?>" class="form-field" placeholder="Semua Tahun">
+                <input type="number" id="tahun" name="tahun" min="2020" max="<?= esc(date('Y')) ?>" value="<?= esc((string) ($filter_aktif['tahun'] ?? '')) ?>" class="form-field tabular-nums" placeholder="Semua Tahun">
             </div>
         <?php endif; ?>
 
@@ -171,11 +174,11 @@ $exportUrl = site_url('admin/tamu/export') . ($filterQueryString ? '?' . $filter
 
 <!-- Guest Table -->
 <?php if (empty($tamu)): ?>
-    <div class="bg-surface border border-border p-10 text-center">
+    <div class="bg-surface border border-border p-10 text-center rounded-lg" data-ui>
         <p class="text-ink-muted">Belum ada data tamu pada tab ini.</p>
     </div>
 <?php else: ?>
-    <div class="overflow-x-auto bg-surface border border-border mb-6">
+    <div class="overflow-x-auto bg-surface border border-border mb-6 rounded-lg" data-ui>
         <table class="w-full text-left text-sm">
             <thead class="bg-surface-raised border-b border-border">
                 <tr>
@@ -192,7 +195,7 @@ $exportUrl = site_url('admin/tamu/export') . ($filterQueryString ? '?' . $filter
             <tbody class="divide-y divide-border">
                 <?php foreach ($tamu as $row): ?>
                     <tr class="hover:bg-surface-raised/50">
-                        <td class="px-4 py-3 text-ink-muted"><?= esc((string) ((int) $row['id'])) ?></td>
+                        <td class="px-4 py-3 text-ink-muted tabular-nums"><?= esc((string) ((int) $row['id'])) ?></td>
                         <td class="px-4 py-3">
                             <div class="flex items-center gap-2">
                                 <span class="font-medium text-ink"><?= esc((string) $row['nama']) ?></span>
@@ -209,11 +212,11 @@ $exportUrl = site_url('admin/tamu/export') . ($filterQueryString ? '?' . $filter
                         </td>
                         <td class="px-4 py-3 text-ink capitalize"><?= esc((string) ($row['asal_pengunjung'] ?? '')) ?></td>
                         <td class="px-4 py-3 text-ink"><?= esc((string) ($row['nama_instansi'] ?? '')) ?></td>
-                        <td class="px-4 py-3 text-ink"><?= esc((string) ($row['no_hp'] ?? '')) ?></td>
+                        <td class="px-4 py-3 text-ink tabular-nums"><?= esc((string) ($row['no_hp'] ?? '')) ?></td>
                         <td class="px-4 py-3 text-ink truncate max-w-xs" title="<?= esc((string) ($row['keperluan'] ?? '')) ?>">
                             <?= esc((string) ($row['keperluan'] ?? '')) ?>
                         </td>
-                        <td class="px-4 py-3 text-ink whitespace-nowrap">
+                        <td class="px-4 py-3 text-ink whitespace-nowrap tabular-nums">
                             <?php if (! empty($row['created_at'])): ?>
                                 <?= esc(date('d/m/Y H:i', strtotime((string) $row['created_at']))) ?>
                             <?php endif; ?>
@@ -315,7 +318,7 @@ $exportUrl = site_url('admin/tamu/export') . ($filterQueryString ? '?' . $filter
 
     <?php if ($pager->getPageCount() > 1): ?>
         <div class="flex justify-end">
-            <?= $pager->links('default') ?>
+            <?= $pager->links('default', 'admin_tailwind') ?>
         </div>
     <?php endif; ?>
 <?php endif; ?>

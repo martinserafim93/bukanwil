@@ -7,6 +7,8 @@ use CodeIgniter\View\View;
  * @var array<string, string> $pengaturan
  * @var int $unreadCount
  * @var array<string, mixed> $statistik
+ * @var bool $defaultPasswordWarning
+ * @var int|null $superadminId
  */
 
 $this->extend('layouts/admin');
@@ -51,8 +53,18 @@ foreach ($perJenis as $item) {
 
 ?>
 
+<div class="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+    <div>
+        <h1 class="text-2xl sm:text-3xl font-serif font-bold text-ink">Dashboard Statistik PTSP</h1>
+        <p class="text-base text-ink-muted mt-1">Ringkasan kehadiran pengunjung, tren harian, dan distribusi layanan buku tamu.</p>
+    </div>
+    <div class="flex items-center gap-3">
+        <a href="<?= site_url('admin/tamu') ?>" class="btn-secondary text-sm">Kelola Daftar Tamu</a>
+    </div>
+</div>
+
 <?php if (! empty($defaultPasswordWarning)): ?>
-    <div class="mb-6 p-4 bg-warning-bg border border-warning/30 flex items-start gap-3" role="alert">
+    <div class="mb-6 p-4 bg-warning-bg border border-warning/30 flex items-start gap-3 rounded-lg" role="alert">
         <svg class="w-5 h-5 mt-0.5 shrink-0 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
         </svg>
@@ -66,97 +78,163 @@ foreach ($perJenis as $item) {
                     Ganti Kata Sandi Sekarang &rarr;
                 </a>
             <?php else: ?>
-                <span class="text-xs text-ink-subtle italic">Silakan hubungi Super Administrator untuk memperbarui kata sandi utama sistem.</span>
+                <span class="text-xs text-ink-muted italic">Silakan hubungi Super Administrator untuk memperbarui kata sandi utama sistem.</span>
             <?php endif; ?>
         </div>
     </div>
 <?php endif; ?>
 
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<!-- Baris 4 Kartu KPI -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 items-stretch">
     <!-- Total Tamu -->
-    <div class="bg-surface-raised border border-border p-5">
-        <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted mb-1">Total Tamu</p>
-        <p class="text-3xl font-bold text-ink"><?= esc((string) ($statistik['total_tamu'] ?? 0)) ?></p>
+    <div class="bg-surface border border-border p-5 flex flex-col justify-between rounded-lg">
+        <div>
+            <p class="text-sm font-medium text-ink-muted mb-2">Total Kunjungan</p>
+            <p class="text-3xl font-bold text-ink tabular-nums"><?= esc((string) ($statistik['total_tamu'] ?? 0)) ?></p>
+        </div>
+        <p class="text-xs text-ink-muted mt-3 pt-3 border-t border-border/60">Akumulasi tamu aktif tercatat</p>
     </div>
 
     <!-- Tamu Hari Ini -->
-    <div class="bg-surface-raised border border-border p-5">
-        <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted mb-1">Tamu Hari Ini</p>
-        <p class="text-3xl font-bold text-ink"><?= esc((string) ($statistik['tamu_hari_ini'] ?? 0)) ?></p>
+    <div class="bg-surface border border-border p-5 flex flex-col justify-between rounded-lg">
+        <div>
+            <p class="text-sm font-medium text-ink-muted mb-2">Tamu Hari Ini</p>
+            <p class="text-3xl font-bold text-brand-700 tabular-nums"><?= esc((string) ($statistik['tamu_hari_ini'] ?? 0)) ?></p>
+        </div>
+        <p class="text-xs text-ink-muted mt-3 pt-3 border-t border-border/60">Kunjungan masuk hari ini (WITA)</p>
     </div>
 
-    <!-- Belum Dibaca -->
-    <div class="bg-surface-raised border border-border p-5">
-        <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted mb-1">Belum Dibaca</p>
-        <p class="text-3xl font-bold text-ink"><?= esc((string) ($statistik['unread_count'] ?? 0)) ?></p>
+    <!-- Belum Ditinjau -->
+    <div class="bg-surface border border-border p-5 flex flex-col justify-between rounded-lg">
+        <div>
+            <p class="text-sm font-medium text-ink-muted mb-2">Belum Ditinjau</p>
+            <p class="text-3xl font-bold <?= (($statistik['unread_count'] ?? 0) > 0) ? 'text-danger' : 'text-ink' ?> tabular-nums">
+                <?= esc((string) ($statistik['unread_count'] ?? 0)) ?>
+            </p>
+        </div>
+        <p class="text-xs text-ink-muted mt-3 pt-3 border-t border-border/60">Menunggu peninjauan petugas</p>
     </div>
 
     <!-- Rasio Jenis Kelamin -->
-    <div class="bg-surface-raised border border-border p-5">
-        <p class="text-xs font-semibold uppercase tracking-wide text-ink-muted mb-1">Rasio Jenis Kelamin</p>
-        <div class="flex items-baseline gap-2">
-            <span class="text-2xl font-bold text-brand-700"><?= esc((string) $lakiPercent) ?>%</span>
-            <span class="text-sm text-ink-muted">Laki-laki</span>
+    <div class="bg-surface border border-border p-5 flex flex-col justify-between rounded-lg">
+        <div>
+            <p class="text-sm font-medium text-ink-muted mb-2">Rasio Jenis Kelamin</p>
+            <div class="space-y-1">
+                <div class="flex items-baseline justify-between">
+                    <span class="text-xs text-ink-muted">Laki-laki</span>
+                    <span class="text-base font-bold text-brand-700 tabular-nums"><?= esc((string) $lakiPercent) ?>%</span>
+                </div>
+                <div class="flex items-baseline justify-between">
+                    <span class="text-xs text-ink-muted">Perempuan</span>
+                    <span class="text-base font-bold text-brand-gold tabular-nums"><?= esc((string) $perempuanPercent) ?>%</span>
+                </div>
+            </div>
         </div>
-        <div class="flex items-baseline gap-2">
-            <span class="text-2xl font-bold text-brand-gold"><?= esc((string) $perempuanPercent) ?>%</span>
-            <span class="text-sm text-ink-muted">Perempuan</span>
-        </div>
+        <p class="text-xs text-ink-muted mt-3 pt-3 border-t border-border/60">Proporsi demografi gender</p>
     </div>
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+<!-- Baris Grafik Tren & Proporsi -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 items-stretch">
     <!-- Line Chart: Tren 7 Hari -->
-    <div class="lg:col-span-2 bg-surface-raised border border-border p-5">
-        <h3 class="text-sm font-semibold uppercase tracking-wide text-ink-muted mb-4">Tren Kunjungan 7 Hari Terakhir</h3>
+    <div class="lg:col-span-2 bg-surface border border-border p-5 flex flex-col justify-between rounded-lg">
+        <div>
+            <h2 class="text-base font-bold text-ink mb-1">Tren Kunjungan 7 Hari Terakhir</h2>
+            <p class="text-xs text-ink-muted mb-4">Volume tamu per hari selama sepekan</p>
+        </div>
         <div class="relative h-72">
             <canvas id="trenChart"></canvas>
         </div>
     </div>
 
     <!-- Doughnut Chart: Per Jenis Kelamin -->
-    <div class="bg-surface-raised border border-border p-5">
-        <h3 class="text-sm font-semibold uppercase tracking-wide text-ink-muted mb-4">Jenis Kelamin</h3>
+    <div class="bg-surface border border-border p-5 flex flex-col justify-between rounded-lg">
+        <div>
+            <h2 class="text-base font-bold text-ink mb-1">Proporsi Jenis Kelamin</h2>
+            <p class="text-xs text-ink-muted mb-4">Perbandingan demografi pengunjung</p>
+        </div>
         <div class="relative h-64">
             <canvas id="jenisChart"></canvas>
         </div>
     </div>
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<!-- Baris Top 5 Keperluan & Asal Pengunjung -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
     <!-- Top 5 Keperluan -->
-    <div class="bg-surface-raised border border-border p-5">
-        <h3 class="text-sm font-semibold uppercase tracking-wide text-ink-muted mb-4">Top 5 Keperluan</h3>
+    <div class="bg-surface border border-border p-5 flex flex-col justify-between rounded-lg">
+        <div>
+            <h2 class="text-base font-bold text-ink mb-1">5 Keperluan Terbanyak</h2>
+            <p class="text-xs text-ink-muted mb-4">Tujuan kunjungan paling sering diajukan</p>
+        </div>
         <?php $topKeperluan = $statistik['top_keperluan'] ?? []; ?>
         <?php if (empty($topKeperluan)): ?>
-            <p class="text-sm text-ink-muted">Belum ada data keperluan.</p>
+            <p class="text-sm text-ink-muted py-4">Belum ada data keperluan.</p>
         <?php else: ?>
-            <ul class="divide-y divide-border">
+            <?php
+            $maxKeperluan = 1;
+            foreach ($topKeperluan as $item) {
+                if ((int) ($item['count'] ?? 0) > $maxKeperluan) {
+                    $maxKeperluan = (int) $item['count'];
+                }
+            }
+            ?>
+            <div class="space-y-3">
                 <?php foreach ($topKeperluan as $item): ?>
-                    <li class="py-3 flex items-center justify-between">
-                        <span class="text-sm text-ink truncate max-w-[70%]"><?= esc((string) ($item['keperluan'] ?? '')) ?></span>
-                        <span class="text-sm font-semibold text-ink-muted"><?= esc((string) ((int) ($item['count'] ?? 0))) ?></span>
-                    </li>
+                    <?php
+                    $itemCount = (int) ($item['count'] ?? 0);
+                    $pct = ($maxKeperluan > 0) ? round(($itemCount / $maxKeperluan) * 100) : 0;
+                    ?>
+                    <div>
+                        <div class="flex items-center justify-between text-sm mb-1">
+                            <span class="text-ink font-medium truncate max-w-[75%]"><?= esc((string) ($item['keperluan'] ?? '')) ?></span>
+                            <span class="font-bold text-ink tabular-nums"><?= esc((string) $itemCount) ?></span>
+                        </div>
+                        <div class="w-full bg-ground-warm h-2 rounded-full overflow-hidden">
+                            <div class="bg-brand-500 h-2 rounded-full" style="width: <?= $pct ?>%"></div>
+                        </div>
+                    </div>
                 <?php endforeach; ?>
-            </ul>
+            </div>
         <?php endif; ?>
     </div>
 
-    <!-- Per Asal -->
-    <div class="bg-surface-raised border border-border p-5">
-        <h3 class="text-sm font-semibold uppercase tracking-wide text-ink-muted mb-4">Asal Pengunjung</h3>
+    <!-- Asal Pengunjung -->
+    <div class="bg-surface border border-border p-5 flex flex-col justify-between rounded-lg">
+        <div>
+            <h2 class="text-base font-bold text-ink mb-1">Distribusi Asal Pengunjung</h2>
+            <p class="text-xs text-ink-muted mb-4">Kategori kedatangan tamu PTSP</p>
+        </div>
         <?php $perAsal = $statistik['per_asal'] ?? []; ?>
         <?php if (empty($perAsal)): ?>
-            <p class="text-sm text-ink-muted">Belum ada data asal pengunjung.</p>
+            <p class="text-sm text-ink-muted py-4">Belum ada data asal pengunjung.</p>
         <?php else: ?>
-            <ul class="divide-y divide-border">
+            <?php
+            $totalAsal = 0;
+            foreach ($perAsal as $item) {
+                $totalAsal += (int) ($item['count'] ?? 0);
+            }
+            if ($totalAsal === 0) {
+                $totalAsal = 1;
+            }
+            ?>
+            <div class="space-y-3">
                 <?php foreach ($perAsal as $item): ?>
-                    <li class="py-3 flex items-center justify-between">
-                        <span class="text-sm text-ink capitalize"><?= esc((string) ($item['label'] ?? '')) ?></span>
-                        <span class="text-sm font-semibold text-ink-muted"><?= esc((string) ((int) ($item['count'] ?? 0))) ?></span>
-                    </li>
+                    <?php
+                    $itemCount = (int) ($item['count'] ?? 0);
+                    $pct = round(($itemCount / $totalAsal) * 100);
+                    ?>
+                    <div>
+                        <div class="flex items-center justify-between text-sm mb-1">
+                            <span class="text-ink font-medium capitalize"><?= esc((string) ($item['label'] ?? '')) ?></span>
+                            <span class="font-bold text-ink tabular-nums"><?= esc((string) $itemCount) ?> (<?= $pct ?>%)</span>
+                        </div>
+                        <div class="w-full bg-ground-warm h-2 rounded-full overflow-hidden">
+                            <div class="bg-brand-gold h-2 rounded-full" style="width: <?= $pct ?>%"></div>
+                        </div>
+                    </div>
                 <?php endforeach; ?>
-            </ul>
+            </div>
         <?php endif; ?>
     </div>
 </div>
@@ -176,7 +254,7 @@ foreach ($perJenis as $item) {
                     label: 'Jumlah Tamu',
                     data: <?= json_encode($trenData, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>,
                     borderColor: '#006B2E',
-                    backgroundColor: 'rgba(0, 107, 46, 0.1)',
+                    backgroundColor: 'rgba(0, 107, 46, 0.08)',
                     borderWidth: 2,
                     fill: true,
                     tension: 0.3,

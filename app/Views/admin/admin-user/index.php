@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin user list — BUKANWIL
+ * Admin user list - BUKANWIL
  *
  * @var array<int, array<string, mixed>> $admins
  * @var int $jumlahSuperadmin
@@ -16,14 +16,17 @@ Kelola Admin
 
 <?php $this->section('content'); ?>
 
-<div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-    <h1 class="text-xl font-bold">Kelola Admin</h1>
+<div class="mb-6 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+    <div>
+        <h1 class="text-2xl sm:text-3xl font-serif font-bold text-ink">Kelola Akun Admin</h1>
+        <p class="text-base text-ink-muted mt-1">Daftar pengguna dengan hak akses petugas PTSP dan Super Administrator.</p>
+    </div>
     <a href="<?= site_url('admin/admin-user/buat') ?>" class="btn-primary text-sm">
         Tambah Admin
     </a>
 </div>
 
-<div class="bg-surface border border-border overflow-x-auto">
+<div class="bg-surface border border-border overflow-x-auto rounded-lg" data-ui>
     <table class="w-full text-left text-sm">
         <thead class="bg-surface-raised border-b border-border">
             <tr>
@@ -43,7 +46,7 @@ Kelola Admin
                         : 'bg-surface-raised text-ink-muted border border-border';
                 ?>
                 <tr class="hover:bg-surface-raised/50">
-                    <td class="px-4 py-3 text-ink-muted"><?= esc((string) ((int) $index + 1)) ?></td>
+                    <td class="px-4 py-3 text-ink-muted tabular-nums"><?= esc((string) ((int) $index + 1)) ?></td>
                     <td class="px-4 py-3 font-medium text-ink"><?= esc((string) ($row['nama'] ?? '')) ?></td>
                     <td class="px-4 py-3 text-ink"><?= esc((string) ($row['username'] ?? '')) ?></td>
                     <td class="px-4 py-3">
